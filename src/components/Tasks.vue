@@ -190,7 +190,7 @@ export default {
       <select name = "taskStartsAt" id = "taskStartsAt">
         <template v-for = "n in shiftTime">
           <template v-if = "n  >= getTaskHourStartLimit && n  <= getTaskHourEnd">
-            <option v-if = "!breakTime.includes(n)" :selected="getTaskHourStart === n" :value = 'n' >{{ formattedTime[n / timeScale] }}</option>
+            <option v-if = "!breakTime.includes(n)" :selected="getTaskHourStart === n" :value = 'n' >{{ formattedTime[parseInt(n / timeScale)] }}</option>
           </template>
         </template>
       </select><br>
@@ -198,7 +198,7 @@ export default {
       <select name = "taskEndsAt" id = "taskEndsAt">
         <template v-for = "n in shiftTime">
           <template v-if = "n >= getTaskHourStart && n <= getTaskHourEndLimit">
-            <option v-if = "!breakTime.includes(n)" :selected="getTaskHourEnd === n" :value = 'n + timeScale' >{{ formattedTime[n / time + 1] }}</option>
+            <option v-if = "!breakTime.includes(n)" :selected="getTaskHourEnd === n" :value = 'n + timeScale' >{{ formattedTime[n / timeScale + 1] }}</option>
           </template>
         </template>
       </select><br>
