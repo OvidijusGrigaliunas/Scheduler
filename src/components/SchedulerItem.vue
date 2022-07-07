@@ -67,7 +67,7 @@ export default {
   <div v-if = "breakTime.includes(hour) || !person.workDays.includes(day)" :class = "{biggerItem: timeScale >= 1}" class = "item break" ></div>
   <div v-else-if = "!hasTasks" class = "item" :class = "{biggerItem: timeScale >= 1}" @click = "selectedTime" ></div>
   <div v-else class = "item" :class = "{biggerItem: timeScale >= 1}" :style = "taskImportanceColor" @click = "selectedTime">
-    <h2>{{   findTask[0].taskName }}</h2>
+    <h2>{{ findTask[0].taskName }}</h2>
   </div>
 </template>
 

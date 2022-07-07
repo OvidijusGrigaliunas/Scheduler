@@ -15,8 +15,10 @@ export default {
                 // Jei rašo nuo 10:00 iki 15:00, tai reiškia , kad nuo 15:00 jau laisvas
                 {taskName: 'task1',  taskDesc: 'task1 desc',  taskDay: "2022/07/05", taskHourStart: 9,     taskHourEnd: 10,     taskTarget: 'Vardenis',     taskImportance: 5},
                 {taskName: 'task2',  taskDesc: 'task2 desc',  taskDay: "2022/07/05", taskHourStart: 10,    taskHourEnd: 15,     taskTarget: 'Vardenis',     taskImportance: 4},
-                {taskName: 'task3',  taskDesc: 'task3 desc',  taskDay: "2022/07/06", taskHourStart: 11,    taskHourEnd: 15.5,   taskTarget: 'Vardenis',     taskImportance: 2},
-                {taskName: 'task4',  taskDesc: 'task4 desc',  taskDay: "2022/07/07", taskHourStart: 11,    taskHourEnd: 15,  taskTarget: 'Vardenis',        taskImportance: 2},
+                {taskName: 'task3',  taskDesc: 'task3 desc',  taskDay: "2022/07/06", taskHourStart: 11,    taskHourEnd: 15.5,   taskTarget: 'Vardenis',     taskImportance: 3},
+                {taskName: 'task4',  taskDesc: 'task4 desc',  taskDay: "2022/07/07", taskHourStart: 8,     taskHourEnd: 8.75,   taskTarget: 'Vardenis',     taskImportance: 2},
+                {taskName: 'task5',  taskDesc: 'task5 desc',  taskDay: "2022/07/07", taskHourStart: 9,     taskHourEnd: 11,     taskTarget: 'Vardenis',     taskImportance: 3},
+                {taskName: 'task6',  taskDesc: 'task6 desc',  taskDay: "2022/07/07", taskHourStart: 11,    taskHourEnd: 15,     taskTarget: 'Vardenis',     taskImportance: 2},
             ],
             people: [
                 {name: "Vardenis",  shiftStart: 8,  shiftEnd: 17, breakStart: 12, breakEnd: 13, workDays: [1, 2, 3, 4, 5]},
@@ -33,8 +35,8 @@ export default {
             // Jei 0.25, laiko tarpai yra 15min
             // 0.5 - 30 min; 1 - 1h
             // su vertėmis didesnėmis negu 1 neveikia
-            // Pagal viską turėtų veikti su 0.1 ir 0.2 (6min ir 12min), bet vertės gaunamos su daug skaičių po kablelio,
-            // todėl nėra gaunamos geros vertės.
+            // Pagal viską turėtų veikti su 0.1 ir 0.2 (6min ir 12min), bet vertės gaunamos su daug skaičių po kablelio
+            // Jei timeScale yra 0 susidaro infinite loop
             timeScale: 0.25
         }
     },
@@ -91,8 +93,6 @@ export default {
         },
         formatTime() {
             let timeArray = [];
-            // Būtų įmanoma padaryti, kad pats vartotojas galėtų nustatyti
-            // laiko tarpus
             let text;
             for(let i = 0; i < 10; i = i + this.timeScale) {
                 text = ('0' + (i - ( i % 1)) + ':' + (60 * (i % 1)));

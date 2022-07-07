@@ -189,7 +189,7 @@ export default {
       <label for = "taskStartsAt">Task starts: </label><br>
       <select name = "taskStartsAt" id = "taskStartsAt">
         <template v-for = "n in shiftTime">
-          <template v-if = "n  >= getTaskHourStartLimit && n  <= getTaskHourEnd">
+          <template v-if = "n  >= getTaskHourStartLimit && n <= getTaskHourEnd" >
             <option v-if = "!breakTime.includes(n)" :selected="getTaskHourStart === n" :value = 'n' >{{ formattedTime[parseInt(n / timeScale)] }}</option>
           </template>
         </template>
