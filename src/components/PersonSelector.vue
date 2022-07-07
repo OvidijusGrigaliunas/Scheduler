@@ -5,11 +5,12 @@ export default {
     
   },
   methods: {
-    findNeighbour(direction) {
+    findNeighbour(direction) {        
         if(!this.peopleList[this.selectedIndex + direction]) {
-            return this.peopleList[this.peopleList.length - ((this.selectedIndex + direction) * direction)];
+            return this.peopleList[this.peopleList.length - ((this.selectedIndex + direction) * direction)].name;
+
         } else {
-            return this.peopleList[this.selectedIndex + direction];
+            return this.peopleList[this.selectedIndex + direction].name;
         }
     }
   }
@@ -22,7 +23,7 @@ export default {
             <h2 @click = "$emit('personChange', -1)" class="nextName">{{ findNeighbour(-1) }}</h2>
         </div>
         <div class="currentName">
-            <h1>{{ peopleList[selectedIndex] }}</h1>
+            <h1>{{ peopleList[selectedIndex].name }}</h1>
         </div>
         <div class="nextName">
             <h2 @click = "$emit('personChange', 1)" class="nextName">{{ findNeighbour(1) }}</h2>

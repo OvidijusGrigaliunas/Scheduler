@@ -7,51 +7,58 @@ import PersonSelector from './PersonSelector.vue';
 </script>
 
 <script>
-
+// Čia yra parent, visi kiti jo child
 export default {
     data() {
         return {
             taskArray: [
-            {taskName: 'task1',  taskDesc: 'task1 desc',  taskDay: "2022/07/05", taskHourStart: 7,    taskHourEnd: 9,   taskPerson: 'Vardenis',     taskImportance: 5},
-            {taskName: 'task2',  taskDesc: 'task2 desc',  taskDay: "2022/07/05", taskHourStart: 3,    taskHourEnd: 5,   taskPerson: 'Vardenis',     taskImportance: 1},
-            {taskName: 'task3',  taskDesc: 'task3 desc',  taskDay: "2022/06/29", taskHourStart: 0,    taskHourEnd: 9.5, taskPerson: 'Hobbs',        taskImportance: 2},
-            {taskName: 'task4',  taskDesc: 'task4 desc',  taskDay: "2022/06/26", taskHourStart: 12,   taskHourEnd: 21,  taskPerson: 'Hobbs',        taskImportance: 5},
-            {taskName: 'task5',  taskDesc: 'task5 desc',  taskDay: "2022/06/29", taskHourStart: 13,   taskHourEnd: 21,  taskPerson: 'Pavardenis',   taskImportance: 4},
-            {taskName: 'task6',  taskDesc: 'task6 desc',  taskDay: "2022/07/10", taskHourStart: 8,    taskHourEnd: 10,  taskPerson: 'Vardenis',     taskImportance: 5},
-            {taskName: 'task7',  taskDesc: 'task7 desc',  taskDay: "2022/06/27", taskHourStart: 10.5, taskHourEnd: 21,  taskPerson: 'Hobbs',        taskImportance: 4},
-            {taskName: 'task8',  taskDesc: 'task8 desc',  taskDay: "2022/06/29", taskHourStart: 11,   taskHourEnd: 12,  taskPerson: 'Pavardenis',   taskImportance: 5},
-            {taskName: 'task9',  taskDesc: 'task9 desc',  taskDay: "2022/06/29", taskHourStart: 8,    taskHourEnd: 21,  taskPerson: 'Bonilla',      taskImportance: 1},
-            {taskName: 'task10', taskDesc: 'task10 desc', taskDay: "2022/06/29", taskHourStart: 0.5,  taskHourEnd: 3,   taskPerson: 'Pavardenis',   taskImportance: 3},
-            {taskName: 'task11', taskDesc: 'task11 desc', taskDay: "2022/12/19", taskHourStart: 20,   taskHourEnd: 23,  taskPerson: 'Vardenis',     taskImportance: 1},
-            {taskName: 'task12', taskDesc: 'task12 desc', taskDay: "2022/06/30", taskHourStart: 21,   taskHourEnd: 23,  taskPerson: 'Vardenis',     taskImportance: 2},
-            {taskName: 'task13', taskDesc: 'task13 desc', taskDay: "2022/07/06", taskHourStart: 8,    taskHourEnd: 10,  taskPerson: 'Vardenis',     taskImportance: 3},
-            {taskName: 'task14', taskDesc: 'task14 desc', taskDay: "2022/07/06", taskHourStart: 10.5, taskHourEnd: 13,  taskPerson: 'Vardenis',     taskImportance: 2},
-            {taskName: 'task15', taskDesc: 'task15 desc', taskDay: "2022/07/07", taskHourStart: 6.5,  taskHourEnd: 13,  taskPerson: 'Vardenis',     taskImportance: 1},
-            {taskName: 'task16', taskDesc: 'task16 desc', taskDay: "2022/07/08", taskHourStart: 8,    taskHourEnd: 8,   taskPerson: 'Vardenis',     taskImportance: 3},
-            {taskName: 'task17', taskDesc: 'task17 desc', taskDay: "2022/07/08", taskHourStart: 9,    taskHourEnd: 13,  taskPerson: 'Vardenis',     taskImportance: 4},
-            {taskName: 'task18', taskDesc: 'task18 desc', taskDay: "2022/07/09", taskHourStart: 5,    taskHourEnd: 20,  taskPerson: 'Vardenis',     taskImportance: 5},
-            {taskName: 'task19', taskDesc: 'task19 desc', taskDay: "2022/07/08", taskHourStart: 0,    taskHourEnd: 2,   taskPerson: 'Vardenis',     taskImportance: 2},
-            {taskName: 'task20', taskDesc: 'task20 desc', taskDay: "2022/07/10", taskHourStart: 5,    taskHourEnd: 7,   taskPerson: 'Vardenis',     taskImportance: 2},
-            {taskName: 'task21', taskDesc: 'task21 desc', taskDay: "2022/07/08", taskHourStart: 2,    taskHourEnd: 5,   taskPerson: 'Vardenis',     taskImportance: 4},
-            {taskName: 'task22', taskDesc: 'task22 desc', taskDay: "2022/07/09", taskHourStart: 2,    taskHourEnd: 4,   taskPerson: 'Vardenis',     taskImportance: 3},
-            {taskName: 'task23', taskDesc: 'task23 desc', taskDay: "2022/07/04", taskHourStart: 2,    taskHourEnd: 5,   taskPerson: 'Vardenis',     taskImportance: 4},
-            {taskName: 'task24', taskDesc: 'task24 desc', taskDay: "2022/07/04", taskHourStart: 9,    taskHourEnd: 12,  taskPerson: 'Vardenis',     taskImportance: 3},
-            {taskName: 'task25', taskDesc: 'task25 desc', taskDay: "2022/07/08", taskHourStart: 2,    taskHourEnd: 5,   taskPerson: 'Pavardenis',   taskImportance: 4},
-            {taskName: 'task26', taskDesc: 'task26 desc', taskDay: "2022/07/09", taskHourStart: 2,    taskHourEnd: 4,   taskPerson: 'Pavardenis',   taskImportance: 3},
-            {taskName: 'task27', taskDesc: 'task27 desc', taskDay: "2022/07/04", taskHourStart: 2,    taskHourEnd: 5,   taskPerson: 'Pavardenis',   taskImportance: 4},
-            {taskName: 'task28', taskDesc: 'task28 desc', taskDay: "2022/07/04", taskHourStart: 9,    taskHourEnd: 12,  taskPerson: 'Pavardenis',   taskImportance: 3},
+                // Jei rašo nuo 10:00 iki 15:00, tai reiškia , kad nuo 15:00 jau laisvas
+                {taskName: 'task1',  taskDesc: 'task1 desc',  taskDay: "2022/07/05", taskHourStart: 9,     taskHourEnd: 10,     taskTarget: 'Vardenis',     taskImportance: 5},
+                {taskName: 'task2',  taskDesc: 'task2 desc',  taskDay: "2022/07/05", taskHourStart: 10,    taskHourEnd: 15,     taskTarget: 'Vardenis',     taskImportance: 4},
+                {taskName: 'task3',  taskDesc: 'task3 desc',  taskDay: "2022/07/06", taskHourStart: 11,    taskHourEnd: 15.5,   taskTarget: 'Vardenis',     taskImportance: 2},
+                {taskName: 'task4',  taskDesc: 'task4 desc',  taskDay: "2022/07/07", taskHourStart: 11,    taskHourEnd: 15,  taskTarget: 'Vardenis',        taskImportance: 2},
             ],
-            people: ["Vardenis", "Pavardenis", "Hobbs", "Bonilla"],
-            selectedHour: 0,
+            people: [
+                {name: "Vardenis",  shiftStart: 8,  shiftEnd: 17, breakStart: 12, breakEnd: 13, workDays: [1, 2, 3, 4, 5]},
+                {name: "Pavardenis",shiftStart: 9,  shiftEnd: 18, breakStart: 12, breakEnd: 13, workDays: [1, 2, 3, 4, 5, 6]}, 
+                {name: "Bonilla",   shiftStart: 10, shiftEnd: 19, breakStart: 11, breakEnd: 13, workDays: [1, 2, 3, 7]}, 
+                {name: "Hobbs",     shiftStart: 7,  shiftEnd: 16, breakStart: 10, breakEnd: 11, workDays: [1, 2, 3, 5, 6]}
+            ],
+            selectedHour: new Date().getHours(),
             selectedDate: new Date(),
             selectedDay: new Date().getDay(),
             selectedPersonIndex: 0,
-            gridAnimationRight: false,
-            gridAnimationLeft: false,
-            windowHeight: window.screen.availHeight - 197
+            windowHeight: window.screen.availHeight - 197,
+            // Veikia su 0.25, 0.5 ir 1
+            // Jei 0.25, laiko tarpai yra 15min
+            // 0.5 - 30 min; 1 - 1h
+            // su vertėmis didesnėmis negu 1 neveikia
+            // Pagal viską turėtų veikti su 0.1 ir 0.2 (6min ir 12min), bet vertės gaunamos su daug skaičių po kablelio,
+            // todėl nėra gaunamos geros vertės.
+            timeScale: 0.25
         }
     },
     computed: {
+        getShiftTimeArray() {
+            let result = [];
+            this.people.forEach((person, index) => {
+                result[index] = [];
+                for (let i = person.shiftStart; i < person.shiftEnd; i = i + this.timeScale) {
+                    result[index].push(i)
+                }
+            });
+            return result;
+        },
+        getBreakTimeArray() {
+            let result = [];
+            this.people.forEach((person, index) => {
+                result[index] = [];
+                for (let i = person.breakStart; i < person.breakEnd; i = i + this.timeScale) {
+                    result[index].push(i)
+                }
+            });
+            return result;
+        },
         selectedDateFormatting() {
             let result = this.selectedDate.getFullYear() + "/"
             let month = this.selectedDate.getMonth() + 1;
@@ -78,19 +85,28 @@ export default {
             }          
             return height;
         },
-        setHeight(){
+        setHeight() {
             let height = this.getResolutionHeight + 'px';
             return {height: height}
         },
-        formatTime(){
+        formatTime() {
             let timeArray = [];
-            for(let i = 0; i < 10; i++) {
-                timeArray.push('0' + i + ':00');
-                timeArray.push('0' + i + ':30');
+            // Būtų įmanoma padaryti, kad pats vartotojas galėtų nustatyti
+            // laiko tarpus
+            let text;
+            for(let i = 0; i < 10; i = i + this.timeScale) {
+                text = ('0' + (i - ( i % 1)) + ':' + (60 * (i % 1)));
+                if(text.length != 5){
+                    text =  text.substring(0, 4) + 0 + text.substring(4);
+                }
+                timeArray.push(text)
             }
-            for(let i = 10; i < 24; i++) {
-                timeArray.push(i + ':00');
-                timeArray.push(i + ':30');
+            for(let i = 10; i < 24; i = i + this.timeScale) {
+                text = ((i - (i % 1)) + ':' + (60 * (i % 1)));
+                if(text.length != 5){
+                    text =  text.substring(0, 4) + 0 + text.substring(4);
+                }
+                timeArray.push(text)
             }
             return timeArray;
         }
@@ -101,16 +117,27 @@ export default {
         }
     },
     methods: {
-        createNewTask(name, desc, day, hour, importance, taskEndsAt) {
+        // Keičiant vartotoją dažnai pasirinkta valanda išeidavo iš darbo laiko ribų
+        // Ši funkcija tai pataiso
+        getSelectedHour(){
+            if(
+                !this.getShiftTimeArray[this.selectedPersonIndex].includes(this.selectedHour) ||
+                this.getBreakTimeArray[this.selectedPersonIndex].includes(this.selectedHour)
+            ) {
+                this.selectedHour = this.people[this.selectedPersonIndex].shiftStart;
+            }
+        },
+        createNewTask(name, desc, day, startsAt, importance, endsAt) {
             let object = {
                 taskName: name, 
                 taskDesc: desc, 
                 taskDay: day, 
-                taskHourStart: hour,
-                taskHourEnd: taskEndsAt, 
-                taskPerson: this.people[this.selectedPersonIndex], 
+                taskHourStart: startsAt,
+                taskHourEnd: endsAt, 
+                taskTarget: this.people[this.selectedPersonIndex].name, 
                 taskImportance: importance
             }
+            this.selectedHour = startsAt;
             this.taskArray.push(object);
         },
         deleteTask(taskToDelete) {   
@@ -145,6 +172,7 @@ export default {
                 // (Monday, tuesday ir t.t.)
                 selectedWeekDates.push(this.addDays(date, i - currentWeekDay))
             }
+            this.getSelectedHour();
             return selectedWeekDates;
         },
         // Sutrumpinta createWeek funkcija
@@ -157,11 +185,7 @@ export default {
             return this.addDays(date, day - currentWeekDay);
         },
         changeWeek(direction) {
-            this.animateGridHorizontal(direction);
-            setTimeout(() => {
-                this.selectedDate = this.addDays(this.selectedDate, direction);
-            }, 150)
-            
+            this.selectedDate = this.addDays(this.selectedDate, direction);
         },
         changePerson(direction) {
             this.selectedPersonIndex = this.selectedPersonIndex + direction
@@ -170,20 +194,9 @@ export default {
             if(!this.people[this.selectedPersonIndex]) {
                 this.selectedPersonIndex = this.people.length - (this.selectedPersonIndex * direction);
             }
-        },
-        animateGridHorizontal(direction) { 
-            if (direction < 0) {
-                this.gridAnimationLeft = true
-            } else {
-                this.gridAnimationRight = true;
-            }
-            setTimeout(() => {
-                this.gridAnimationRight = false
-                this.gridAnimationLeft = false
-            }, 300)
+            this.getSelectedHour();
         },
     }
-  
 }
 </script>
 
@@ -195,40 +208,41 @@ export default {
                 <div class = "selectContainer" >
                     <WeekSelector :weekRange = 'createWeek(selectedDate)' @weekChange="changeWeek" />
                 </div>
-                <div class = "grid" :style = "setHeight" :class = "{slideRight: gridAnimationRight, slideLeft: gridAnimationLeft, }">
-                    <div class = "time"></div>
-                    <div class = "weekDay"> <p>Monday</p></div>
-                    <div class = "weekDay"> <p>Tuesday</p></div>
-                    <div class = "weekDay"> <p>Wednesday</p></div>
-                    <div class = "weekDay"> <p>Thursday</p></div>
-                    <div class = "weekDay"> <p>Friday</p></div>
-                    <div class = "weekDay"> <p>Saturday</p></div>
-                    <div class = "weekDay"> <p>Sunday</p></div>
-                    <!--- 48 laiko tarpai 7 dienom.
-                    (i - 1) reikalingas, kad laikas būtų nuo 00:00 iki 23:59.
-                    Dalyba iš 2 reikalinga, kad gautume 30min laiko tarpus.--->
-                    <template v-for = 'i in 48'>
-                        <div class="time">
-                            <h1>{{ formatTime[i - 1] }}</h1>
+                <div class = "grid" :style = "setHeight">
+                    <div class = "time blankRectangle"></div>
+                    <div class = "weekDay"> <p>Monday</p> </div>
+                    <div class = "weekDay"> <p>Tuesday</p> </div>
+                    <div class = "weekDay"> <p>Wednesday</p> </div>
+                    <div class = "weekDay"> <p>Thursday</p> </div>
+                    <div class = "weekDay"> <p>Friday</p> </div>
+                    <div class = "weekDay"> <p>Saturday</p> </div>
+                    <div class = "weekDay"> <p>Sunday</p> </div>
+                    <template v-for = 'i in getShiftTimeArray[selectedPersonIndex]'>
+                        <div :class = "{biggerTime: timeScale >= 1}" class="time">
+                            <h1>{{ formatTime[parseInt(i / timeScale)] }}</h1>
                         </div>
                         <template v-for = "n in 7">
                             <SchedulerItem 
-                            v-if = "n === selectedDay && (i - 1) / 2 === selectedHour" 
+                            v-if = "n === selectedDay && i === selectedHour" 
                             class = "selected"
                             :day = 'n' 
                             :date = 'createWeekDay(selectedDate, n)' 
-                            :hour = '(i - 1) / 2' 
+                            :hour = 'i' 
                             :tasks = 'taskArray'
-                            :name = 'people[selectedPersonIndex]' 
+                            :person = 'people[selectedPersonIndex]' 
+                            :breakTime = 'getBreakTimeArray[selectedPersonIndex]'
+                            :timeScale = 'timeScale'
                             @timeSelected = "timeSelection" 
                             @taskDeletion = "deleteTask" />
                             <SchedulerItem 
                             v-else 
                             :day = 'n' 
                             :date = 'createWeekDay(selectedDate, n)'
-                            :hour = '(i - 1) / 2'
+                            :hour = 'i'
                             :tasks = 'taskArray' 
-                            :name = 'people[selectedPersonIndex]'
+                            :person = 'people[selectedPersonIndex]'
+                            :breakTime = 'getBreakTimeArray[selectedPersonIndex]'
+                            :timeScale = 'timeScale'
                             @timeSelected = "timeSelection"
                             @taskDeletion = "deleteTask" />
                         </template>
@@ -241,8 +255,11 @@ export default {
             :date = 'selectedDateFormatting' 
             :tasks = 'taskArray' 
             :hour = 'selectedHour' 
-            :name = 'people[selectedPersonIndex]'
+            :target = 'people[selectedPersonIndex].name'
             :formattedTime = 'formatTime'
+            :breakTime = 'getBreakTimeArray[selectedPersonIndex]'
+            :shiftTime = 'getShiftTimeArray[selectedPersonIndex]'
+            :timeScale = 'timeScale'
             @NewTask = "createNewTask" 
             @taskDeletion = "deleteTask" />
         </div>
@@ -276,7 +293,7 @@ export default {
 .selectContainer {
     display: flex;
     align-content: center;
-    width:  100%;
+    width: 100%;
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
     -khtml-user-select: none; /* Konqueror HTML */
@@ -296,9 +313,9 @@ export default {
 .grid::-webkit-scrollbar {
     display: none;
 }
-.time{
+.time {
     width: 100%;
-    height: 30px;
+    height: 50px;
     border: solid #555B6E;
     border-width: 1px;
     text-align: center;
@@ -307,8 +324,14 @@ export default {
     overflow: hidden;
     color: white;
 }
-.time h1{
-    line-height: 26px;
+.blankRectangle {
+    height: 30px;
+}
+.biggerTime{
+    height: 150px;
+}
+.time h1 {
+    line-height: 40px;
     font-size: 20px;
 }
 .weekDay {
@@ -326,51 +349,17 @@ export default {
 .selected {
     background-color: #277DA1;
 }
-.slideRight {
-    animation: slideRight 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-}
-@keyframes slideRight {
-  10%,30% {
-    transform: translate3d(100%, 0, 0); 
-  }
-  40% {
-   opacity: 0;  
-  }
-  50% {
-    transform: translate3d(-200%, 0, 0);
-  }
-  60%, 100%{
-   opacity: 1;
-  }
-}
-.slideLeft {
-    animation: slideLeft 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-}
-@keyframes slideLeft {
-  10%,30% {
-    transform: translate3d(-100%, 0, 0); 
-  }
-  40% {
-   opacity: 0;  
-  }
-  50%{
-    transform: translate3d(200%, 0, 0);
-  }
-  60%, 100%{
-   opacity: 1;
-  }
-}
 
 @media (max-width: 800px) {
     .time h1{
-        line-height: 25px;
+        line-height: 36px;
         font-size: 16px;
     }
 }
 
 @media (max-width: 600px) {
     .time h1{
-        line-height: 25px;
+        line-height: 30px;
         font-size: 10px;
     }
 }

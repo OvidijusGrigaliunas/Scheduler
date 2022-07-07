@@ -1,6 +1,6 @@
 <script>
 export default {
-  props:['resolution', 'day','hour', 'date', 'tasks', 'name', 'formattedTime'],
+  props:['resolution', 'day','hour', 'date', 'tasks', 'target', 'formattedTime', 'shiftTime', 'breakTime', 'timeScale'],
   data() {
     return {
       showTaskEdit: false,
@@ -22,8 +22,8 @@ export default {
       return this.tasks.filter(task => 
         task.taskDay === this.date &&
         task.taskHourStart <= this.hour &&
-        task.taskHourEnd >= this.hour &&
-        task.taskPerson === this.name);
+        task.taskHourEnd - this.timeScale >= this.hour &&
+        task.taskTarget === this.target);
     },
     getTaskImportanceText() {
       switch(this.findTask[0].taskImportance) {
@@ -50,7 +50,7 @@ export default {
     },
     getTaskHourEnd() { 
       if(this.findTask[0]) {
-        return this.findTask[0].taskHourEnd;
+        return this.findTask[0].taskHourEnd - this.timeScale;
       } else {
         return this.hour;
       }
@@ -80,7 +80,7 @@ export default {
     getTaskHourEndLimit() {
       let hourEndLimit = this.getTaskHourStart;
       // Mums reikalingos užduotis, kurios prasideda vėliau negu dabartinis laikas
-      let filteredTasks = this.tasks.filter(task => task.taskDay === this.date && task.taskPerson === this.name && task.taskHourStart > hourEndLimit);
+      let filteredTasks = this.tasks.filter(task => task.taskDay === this.date && task.taskTarget === this.target && task.taskHourStart > hourEndLimit);
       
       if(filteredTasks.length > 0) {
         let filteredTasksStartHours = [];
@@ -89,26 +89,25 @@ export default {
         }
         // Surandame arčiausiai esančią užduotį nuo mūsų užduoties pradžios
         let lowestValueIndex = filteredTasksStartHours.indexOf(Math.min(...filteredTasksStartHours));
-        return filteredTasks[lowestValueIndex].taskHourStart - 0.5;
+        return filteredTasks[lowestValueIndex].taskHourStart - this.timeScale;
       } else {
-        // Jei nėra daugiau užduočių po pasirinktos valandos, tai galime tiesiog gražinti 23.5
-        return 23.5;
+        return  Math.max(...this.shiftTime);
       }
       
     },
     getTaskHourStartLimit(){
       let taskStart = this.getTaskHourStart;
       // Mums reikalingos užduotis, kurios baigiasi anksčiau negu prasideda naujoji
-      let filteredTasks = this.tasks.filter(task => task.taskDay === this.date && task.taskPerson === this.name && task.taskHourEnd < taskStart);
+      let filteredTasks = this.tasks.filter(task => task.taskDay === this.date && task.taskTarget === this.target && task.taskHourEnd - this.timeScale < taskStart);
       if(filteredTasks.length > 0) {
         let filteredTasksEndHours = [];
         for(let i = 0; i < filteredTasks.length; i++) {
           filteredTasksEndHours.push(filteredTasks[i].taskHourEnd);
         }
         let lowestValueIndex = filteredTasksEndHours.indexOf(Math.max(...filteredTasksEndHours));
-        return filteredTasks[lowestValueIndex].taskHourEnd + 0.5;
+        return filteredTasks[lowestValueIndex].taskHourEnd;
       } else {
-        return 0;
+        return Math.min(...this.shiftTime);
       }
     },
     setTextAreaHeight() { 
@@ -151,7 +150,7 @@ export default {
       if(tname.value.length > 64 ) {
         errorList = errorList + 'Name - maximum characters allowed: 64. \r\n'
       } 
-      if(parseFloat(taskStartsAt.value) > parseFloat(taskEndsAt.value)) {
+      if(parseFloat(taskStartsAt.value) >= parseFloat(taskEndsAt.value)) {
         errorList = errorList + "Task can't end before it starts."
       } 
       return errorList;
@@ -184,22 +183,22 @@ export default {
       <h1>{{ date }}</h1>
     </div>
     <div v-if="!hasTasks || showTaskEdit">
-      <!--- Užduoties kurimas/keitimas  --->
-      <label for = "fname">Task name: </label><br>
+      <!--- Užduoties kūrimas/keitimas  --->
+      <label for = "tname">Task name: </label><br>
       <input :value = "getTaskName" type = "text" id = "tname" name = "tname" ><br>
       <label for = "taskStartsAt">Task starts: </label><br>
       <select name = "taskStartsAt" id = "taskStartsAt">
-        <template v-for = "n in 48">
-          <template v-if = "(n - 1) / 2 >= getTaskHourStartLimit && (n - 1) / 2 <= getTaskHourEnd">
-            <option :selected="getTaskHourStart === (n - 1) / 2" :value = '(n - 1) / 2' >{{ formattedTime[n - 1] }}</option>
+        <template v-for = "n in shiftTime">
+          <template v-if = "n  >= getTaskHourStartLimit && n  <= getTaskHourEnd">
+            <option v-if = "!breakTime.includes(n)" :selected="getTaskHourStart === n" :value = 'n' >{{ formattedTime[n / timeScale] }}</option>
           </template>
         </template>
       </select><br>
       <label for = "taskEndsAt">Task ends: </label><br>
       <select name = "taskEndsAt" id = "taskEndsAt">
-        <template v-for = "n in 48">
-          <template v-if = "(n - 1) / 2 >= getTaskHourStart && (n - 1) / 2 <= getTaskHourEndLimit">
-            <option :selected="getTaskHourEnd === (n - 1) / 2" :value = '(n - 1) / 2' >{{ formattedTime[n - 1] }}</option>
+        <template v-for = "n in shiftTime">
+          <template v-if = "n >= getTaskHourStart && n <= getTaskHourEndLimit">
+            <option v-if = "!breakTime.includes(n)" :selected="getTaskHourEnd === n" :value = 'n + timeScale' >{{ formattedTime[n / time + 1] }}</option>
           </template>
         </template>
       </select><br>
@@ -220,7 +219,7 @@ export default {
       <!--- Informacija apie užduotį  --->
         <div :style ="setTaskTextHeight" class="taskContainer">
           <h2 style = "font-size: 40px">{{ getTaskName }}</h2>
-          <h1>{{ formattedTime[getTaskHourStart * 2] }} - {{ formattedTime[getTaskHourEnd * 2] }}</h1>
+          <h1>{{ formattedTime[getTaskHourStart / timeScale] }} - {{ formattedTime[getTaskHourEnd / timeScale + 1] }}</h1>
           <h1>Importance: {{ getTaskImportanceText }}</h1>
           <p>{{ getTaskDesc }}</p>
         </div>
@@ -367,6 +366,5 @@ button:hover {
   textarea{
     font-size: 0.6rem;
   }
-  
 }
 </style>

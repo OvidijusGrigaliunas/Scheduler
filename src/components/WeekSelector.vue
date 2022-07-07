@@ -3,7 +3,6 @@ export default {
   props:['weekRange'],
   computed:{
     weekRangeFormat(){
-        // Būtų galima vėliau supaprastinti.
         let result = this.weekRange[0].getFullYear() + "/"
         let month = this.weekRange[0].getMonth() + 1;
         // Su if nustatome ar reikia pridėti 0 pradžioje,

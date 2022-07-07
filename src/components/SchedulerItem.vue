@@ -1,11 +1,12 @@
 <script>
 export default {
-  props:['day', 'hour', 'date', 'tasks', 'name'],
+  props:['day', 'hour', 'date', 'tasks', 'person', 'breakTime', 'timeScale'],
   data() { 
     return {
     }
   },
   computed: {
+
         dateFormat() {
           let result = this.date.getFullYear() + "/"
           let month = this.date.getMonth() + 1;
@@ -23,7 +24,7 @@ export default {
           }
           return result;
       },
-        dayHasTasks() {
+        hasTasks() {
           if (this.findTask.length > 0) {
             return true;
           } else {
@@ -34,8 +35,8 @@ export default {
           return this.tasks.filter(task => 
           task.taskDay === this.dateFormat && 
           task.taskHourStart <= this.hour &&
-          task.taskHourEnd >= this.hour &&
-          task.taskPerson === this.name);
+          task.taskHourEnd - this.timeScale >= this.hour &&
+          task.taskTarget === this.person.name);
         },
         taskImportanceColor() {
           switch(this.findTask[0].taskImportance) {
@@ -50,7 +51,7 @@ export default {
             case 5:
               return {background: '#F94144'};
             default:
-              return {background: '#DAF7A6'}
+              return {background: '#DAF7A6'};
           }
         }
     },
@@ -63,9 +64,10 @@ export default {
 </script>
 
 <template>
-  <div v-if = "!dayHasTasks" class = "item" @click = "selectedTime" ></div>
-  <div v-else class = "item" :style = "taskImportanceColor" @click = "selectedTime">
-    <h2>{{ findTask[0].taskName }}</h2>
+  <div v-if = "breakTime.includes(hour) || !person.workDays.includes(day)" :class = "{biggerItem: timeScale >= 1}" class = "item break" ></div>
+  <div v-else-if = "!hasTasks" class = "item" :class = "{biggerItem: timeScale >= 1}" @click = "selectedTime" ></div>
+  <div v-else class = "item" :class = "{biggerItem: timeScale >= 1}" :style = "taskImportanceColor" @click = "selectedTime">
+    <h2>{{   findTask[0].taskName }}</h2>
   </div>
 </template>
 
@@ -73,14 +75,20 @@ export default {
 .item {
   display: inline-block;
   width: 100%;
-  height: 30px;
+  height: 50px;
   border: solid #555B6E;
   border-width: 1px;
   cursor: pointer;
   text-align: center;
   background-color: #FAF9F9;
   overflow: hidden;
-  white-space: nowrap;
+}
+.break{
+  cursor: default;
+  background-color: #D3D3D3;
+}
+.biggerItem{
+  height: 150px;
 }
 .item h2 {
   font-size: 14px;
