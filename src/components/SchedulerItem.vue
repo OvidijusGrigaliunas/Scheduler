@@ -4,29 +4,23 @@ export default {
     hour: Number,
     date: Date,
     tasks: Array,
-    person: Object,
+    workDays: Array,
     breakTime: Array,
     timeScale: Number,
   },
   data() {
-    return {};
+    return {
+      foundTask: {}
+    };
   },
   computed: {
-    hasTasks() {
-      if (this.findTask.length > 0) {
-        return true;
-      }
-      return false;
-    },
-    findTask() {
-      return this.tasks.filter(
-        (task) =>
-          task.taskHourStart <= this.hour &&
-          task.taskHourEnd - this.timeScale >= this.hour
-      );
-    },
+    
+  },
+  mounted() {
+  },
+  methods: {
     taskImportanceColor() {
-      switch (this.findTask[0].taskImportance) {
+      switch (this.foundTask.taskImportance) {
         case 1:
           return { background: "#43AA8B" };
         case 2:
@@ -41,8 +35,15 @@ export default {
           return { background: "#DAF7A6" };
       }
     },
-  },
-  methods: {
+    hasTasks() {
+      let found = this.findTask(); 
+      if (found.length > 0) {
+        this.foundTask = found[0];
+        return true;
+      }
+      this.foundTask = {};
+      return false;
+    },
     selectedTime() {
       this.$emit("timeSelected", this.date, this.hour);
     },
@@ -55,16 +56,23 @@ export default {
       }
       return date;
     },
+    findTask() {
+      return this.tasks.filter(
+        (task) =>
+          task.taskHourStart <= this.hour &&
+          task.taskHourEnd - this.timeScale >= this.hour
+      );
+    },
   },
 };
 </script>
 
 <template>
-  <div v-if="breakTime.includes(hour) || !person.workDays.includes(getDayLT(date))"
+  <div v-if="breakTime.includes(hour) || !workDays.includes(getDayLT(date))"
     :class="{ biggerItem: timeScale >= 1 }" class="item break"></div>
-  <div v-else-if="!hasTasks" class="item" :class="{ biggerItem: timeScale >= 1 }" @click="selectedTime"></div>
-  <div v-else class="item" :class="{ biggerItem: timeScale >= 1 }" :style="taskImportanceColor" @click="selectedTime">
-    <h2>{{ findTask[0].taskName }}</h2>
+  <div v-else-if="!hasTasks()" class="item" :class="{ biggerItem: timeScale >= 1 }" @click="selectedTime"></div>
+  <div v-else class="item" :class="{ biggerItem: timeScale >= 1 }" :style="taskImportanceColor()" @click="selectedTime">
+    <h2>{{ foundTask.taskName }}</h2>
   </div>
 </template>
 
