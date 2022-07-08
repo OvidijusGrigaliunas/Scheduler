@@ -22,6 +22,7 @@ export default {
         <div class="nextName">
             <h2 @click = "$emit('personChange', -1)" class="nextName">{{ findNeighbour(-1) }}</h2>
         </div>
+        <!-- pakeisti stilius--->
         <div class="currentName">
             <h1>{{ peopleList[selectedIndex].name }}</h1>
         </div>

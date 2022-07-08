@@ -1,12 +1,20 @@
 <script>
 export default {
-  props:['day', 'hour', 'date', 'tasks', 'person', 'breakTime', 'timeScale'],
+  // pridėti types: https://vuejs.org/guide/components/props.html#props-declaration
+  props:{
+    hour: Number, 
+    date: Date, 
+    tasks: Array, 
+    person: Object, 
+    breakTime: Array, 
+    timeScale: Number},
   data() { 
     return {
     }
   },
   computed: {
-
+        // perkelti į methods
+        // computed daugiau resursų naudoja
         dateFormat() {
           let result = this.date.getFullYear() + "/"
           let month = this.date.getMonth() + 1;
@@ -27,16 +35,14 @@ export default {
         hasTasks() {
           if (this.findTask.length > 0) {
             return true;
-          } else {
-            return false;
           }
+          return false;
         },
         findTask() {
           return this.tasks.filter(task => 
-          task.taskDay === this.dateFormat && 
           task.taskHourStart <= this.hour &&
-          task.taskHourEnd - this.timeScale >= this.hour &&
-          task.taskTarget === this.person.name);
+          task.taskHourEnd - this.timeScale >= this.hour
+          );
         },
         taskImportanceColor() {
           switch(this.findTask[0].taskImportance) {
@@ -57,14 +63,23 @@ export default {
     },
     methods: {
       selectedTime() {
-        this.$emit('timeSelected', this.day, this.date, this.hour);
+        this.$emit('timeSelected', this.getDayLT(this.date), this.date, this.hour);
+      },
+      // getDay savaitė prasideda nuo sekmadienio
+      // o reikia, kad prasidėtų nuo pirmadienio
+      getDayLT(date){
+        date = date.getDay()
+        if(date === 0){
+          return 7;
+        }
+        return date;
       }
     }
 }
 </script>
 
 <template>
-  <div v-if = "breakTime.includes(hour) || !person.workDays.includes(day)" :class = "{biggerItem: timeScale >= 1}" class = "item break" ></div>
+  <div v-if = "breakTime.includes(hour) || !person.workDays.includes(getDayLT(date))" :class = "{biggerItem: timeScale >= 1}" class = "item break" ></div>
   <div v-else-if = "!hasTasks" class = "item" :class = "{biggerItem: timeScale >= 1}" @click = "selectedTime" ></div>
   <div v-else class = "item" :class = "{biggerItem: timeScale >= 1}" :style = "taskImportanceColor" @click = "selectedTime">
     <h2>{{ findTask[0].taskName }}</h2>

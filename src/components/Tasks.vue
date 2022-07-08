@@ -1,6 +1,16 @@
 <script>
 export default {
-  props:['resolution', 'day','hour', 'date', 'tasks', 'target', 'formattedTime', 'shiftTime', 'breakTime', 'timeScale'],
+  props: {
+  resolution: Number, 
+  day: Number,
+  hour: Number, 
+  date: String, 
+  tasks: Array, 
+  formattedTime: Array, 
+  shiftTime: Array, 
+  breakTime: Array, 
+  timeScale: Number
+  },
   data() {
     return {
       showTaskEdit: false,
@@ -20,10 +30,9 @@ export default {
       // Suranda užduotį pagal pasirinktą langelį,
       // kuris gali būti užduoties diapazone
       return this.tasks.filter(task => 
-        task.taskDay === this.date &&
         task.taskHourStart <= this.hour &&
-        task.taskHourEnd - this.timeScale >= this.hour &&
-        task.taskTarget === this.target);
+        task.taskHourEnd - this.timeScale >= this.hour
+        );
     },
     getTaskImportanceText() {
       switch(this.findTask[0].taskImportance) {
@@ -44,44 +53,38 @@ export default {
     getTaskHourStart() { 
       if(this.findTask[0]) {
         return this.findTask[0].taskHourStart;
-      } else {
-        return this.hour;
-      }
+      } 
+      return this.hour;  
     },
     getTaskHourEnd() { 
       if(this.findTask[0]) {
         return this.findTask[0].taskHourEnd - this.timeScale;
-      } else {
-        return this.hour;
       }
+      return this.hour;
     },
     getTaskImportance() { 
       if(this.findTask[0]) {
         return this.findTask[0].taskImportance;
-      } else {
-        return 3;
-      }
+      } 
+       return 3;
     },
     getTaskName() { 
       if(this.findTask[0]) {
         return this.findTask[0].taskName;
-      } else {
-        return '';
       }
+      return '';
     },
     getTaskDesc() { 
       if(this.findTask[0]) {
         return this.findTask[0].taskDesc;
-      } else {
-        return '';
       }
+      return '';
     },
     // Kad nebūtų kelių užduočių tuo metų, reikia, kad šita funkcija aptiktų galimą laiko pasirinkimo diapazoną
     getTaskHourEndLimit() {
       let hourEndLimit = this.getTaskHourStart;
       // Mums reikalingos užduotis, kurios prasideda vėliau negu dabartinis laikas
-      let filteredTasks = this.tasks.filter(task => task.taskDay === this.date && task.taskTarget === this.target && task.taskHourStart > hourEndLimit);
-      
+      let filteredTasks = this.tasks.filter(task => task.taskHourStart > hourEndLimit);
       if(filteredTasks.length > 0) {
         let filteredTasksStartHours = [];
         for(let i = 0; i < filteredTasks.length; i++) {
@@ -90,15 +93,14 @@ export default {
         // Surandame arčiausiai esančią užduotį nuo mūsų užduoties pradžios
         let lowestValueIndex = filteredTasksStartHours.indexOf(Math.min(...filteredTasksStartHours));
         return filteredTasks[lowestValueIndex].taskHourStart - this.timeScale;
-      } else {
-        return  Math.max(...this.shiftTime);
       }
+      return  Math.max(...this.shiftTime);
       
     },
     getTaskHourStartLimit(){
       let taskStart = this.getTaskHourStart;
       // Mums reikalingos užduotis, kurios baigiasi anksčiau negu prasideda naujoji
-      let filteredTasks = this.tasks.filter(task => task.taskDay === this.date && task.taskTarget === this.target && task.taskHourEnd - this.timeScale < taskStart);
+      let filteredTasks = this.tasks.filter(task => task.taskHourEnd - this.timeScale < taskStart);
       if(filteredTasks.length > 0) {
         let filteredTasksEndHours = [];
         for(let i = 0; i < filteredTasks.length; i++) {
@@ -106,9 +108,8 @@ export default {
         }
         let lowestValueIndex = filteredTasksEndHours.indexOf(Math.max(...filteredTasksEndHours));
         return filteredTasks[lowestValueIndex].taskHourEnd;
-      } else {
-        return Math.min(...this.shiftTime);
       }
+      return Math.min(...this.shiftTime);
     },
     setTextAreaHeight() { 
       let textAreaHeight = this.resolution * 0.5;
@@ -141,6 +142,7 @@ export default {
   methods: {
     requirementsCheck(){
       let errorList = '';
+      // pakeisti i array 
       if (tname.value.length === 0 || tdesc.value.length === 0) {
         errorList = errorList + 'Please fill in all fields \r\n'
       } 
@@ -164,7 +166,6 @@ export default {
       } 
     },   
     saveEdit(){
-      console.log(this.date)
       let errorList = this.requirementsCheck();
       if(errorList.length > 0) {
         alert(errorList)      

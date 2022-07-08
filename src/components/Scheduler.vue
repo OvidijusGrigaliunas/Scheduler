@@ -31,6 +31,9 @@ export default {
             selectedDay: new Date().getDay(),
             selectedPersonIndex: 0,
             windowHeight: window.screen.availHeight - 197,
+            filteredTasksByUsers: [],
+            filteredTasks: [],
+            currentWeek: [],
             // Veikia su 0.25, 0.5 ir 1
             // Jei 0.25, laiko tarpai yra 15min
             // 0.5 - 30 min; 1 - 1h
@@ -116,6 +119,10 @@ export default {
             this.windowHeight = window.screen.availHeight - 197;
         }
     },
+    created() {
+        this.createWeek(this.selectedDate)
+        this.filterTaskByUsers();
+    },
     methods: {
         // Keičiant vartotoją dažnai pasirinkta valanda išeidavo iš darbo laiko ribų
         // Ši funkcija tai pataiso
@@ -139,6 +146,7 @@ export default {
             }
             this.selectedHour = startsAt;
             this.taskArray.push(object);
+            this.filterTaskByUsers();
         },
         deleteTask(taskToDelete) {   
             for (let i = 0; i < this.taskArray.length; i++) {
@@ -147,6 +155,7 @@ export default {
                     break;
                 }
             }
+            this.filterTaskByUsers();
         },
         timeSelection(day, date, hour) {    
             this.selectedDay = day;
@@ -173,19 +182,12 @@ export default {
                 selectedWeekDates.push(this.addDays(date, i - currentWeekDay))
             }
             this.getSelectedHour();
-            return selectedWeekDates;
-        },
-        // Sutrumpinta createWeek funkcija
-        // Naudojama jei reikalinga tik viena diena
-        createWeekDay(date, day){
-            let currentWeekDay = date.getDay(); 
-            if (currentWeekDay === 0){
-                currentWeekDay = 7;
-            }
-            return this.addDays(date, day - currentWeekDay);
+            this.currentWeek = selectedWeekDates;
         },
         changeWeek(direction) {
             this.selectedDate = this.addDays(this.selectedDate, direction);
+            this.createWeek(this.selectedDate)
+            this.filterTasksByWeek(this.currentWeek);
         },
         changePerson(direction) {
             this.selectedPersonIndex = this.selectedPersonIndex + direction
@@ -195,7 +197,49 @@ export default {
                 this.selectedPersonIndex = this.people.length - (this.selectedPersonIndex * direction);
             }
             this.getSelectedHour();
+            this.filterTaskByUsers();
         },
+        filterTasksByWeek() {
+            let formattedWeek = this.dateFormatting(this.currentWeek);
+            for(let i = 0; i < 7; i++){
+                this.filteredTasks[i] = []
+            }
+            this.filteredTasksByUsers.forEach(task => {
+                for(let i = 0; i < 7; i++){
+                    if(task.taskDay === formattedWeek[i]){
+                        this.filteredTasks[i].push(task)
+                        break;
+                    }
+                }
+            });
+        },
+        filterTaskByUsers() {
+            this.filteredTasksByUsers = this.taskArray.filter(task => task.taskTarget === this.people[this.selectedPersonIndex].name);
+            this.filterTasksByWeek();
+        },
+        dateFormatting(week) {
+            let result = [];
+            let formattedDay = '';
+            let month;
+            week.forEach(day => {
+                formattedDay = day.getFullYear() + "/"
+                month = day.getMonth() + 1;
+                // Su if nustatome ar reikia pridėti 0 pradžioje,
+                // kad gautume yyyy/mm/dd datos formatą
+                if (month < 10) {
+                    formattedDay = formattedDay + 0 + month + "/";
+                } else {
+                    formattedDay = formattedDay + month + "/";
+                }
+                if (day.getDate() < 10) {
+                    formattedDay = formattedDay + 0 + day.getDate()
+                } else { 
+                    formattedDay = formattedDay + day.getDate();
+                }
+                result.push(formattedDay)
+            });
+            return result;
+        }
     }
 }
 </script>
@@ -206,7 +250,7 @@ export default {
         <div class = "gridContainer">
             <div class = "gridAndDateContainer">
                 <div class = "selectContainer" >
-                    <WeekSelector :weekRange = 'createWeek(selectedDate)' @weekChange="changeWeek" />
+                    <WeekSelector :weekRange = 'currentWeek' @weekChange="changeWeek" />
                 </div>
                 <div class = "grid" :style = "setHeight">
                     <div class = "time blankRectangle"></div>
@@ -225,10 +269,9 @@ export default {
                             <SchedulerItem 
                             v-if = "n === selectedDay && i === selectedHour" 
                             class = "selected"
-                            :day = 'n' 
-                            :date = 'createWeekDay(selectedDate, n)' 
+                            :date = 'currentWeek[n - 1]' 
                             :hour = 'i' 
-                            :tasks = 'taskArray'
+                            :tasks = 'filteredTasks[n - 1]'
                             :person = 'people[selectedPersonIndex]' 
                             :breakTime = 'getBreakTimeArray[selectedPersonIndex]'
                             :timeScale = 'timeScale'
@@ -236,10 +279,9 @@ export default {
                             @taskDeletion = "deleteTask" />
                             <SchedulerItem 
                             v-else 
-                            :day = 'n' 
-                            :date = 'createWeekDay(selectedDate, n)'
+                            :date = 'currentWeek[n - 1]'
                             :hour = 'i'
-                            :tasks = 'taskArray' 
+                            :tasks = 'filteredTasks[n - 1]' 
                             :person = 'people[selectedPersonIndex]'
                             :breakTime = 'getBreakTimeArray[selectedPersonIndex]'
                             :timeScale = 'timeScale'
@@ -253,9 +295,8 @@ export default {
             :resolution = 'getResolutionHeight'
             :day = 'selectedDay' 
             :date = 'selectedDateFormatting' 
-            :tasks = 'taskArray' 
+            :tasks = 'filteredTasks[selectedDay - 1]' 
             :hour = 'selectedHour' 
-            :target = 'people[selectedPersonIndex].name'
             :formattedTime = 'formatTime'
             :breakTime = 'getBreakTimeArray[selectedPersonIndex]'
             :shiftTime = 'getShiftTimeArray[selectedPersonIndex]'
