@@ -46,6 +46,7 @@ export default {
             // su vertėmis didesnėmis negu 1 neveikia
             // Pagal viską turėtų veikti su 0.1 ir 0.2 (6min ir 12min), bet vertės gaunamos su daug skaičių po kablelio
             // Jei timeScale yra 0 susidaro infinite loop
+            // Turi didelę įtaką ant performance
             timeScale: 0.25
         }
     },
@@ -89,9 +90,7 @@ export default {
         },
         getResolutionHeight() {
             let height = this.windowHeight;
-            if (height < 750) {
-                height = height + 85;
-            } else if (height > 1000) {
+            if (height < 750 && height > 1000) {
                 height = height + 85;
             }
             return height;
@@ -167,7 +166,6 @@ export default {
             }
             this.filterTaskByUsers();
             this.updateSchedulerColumn();
-
         },
         editTask(taskToChange, name, desc, day, startsAt, importance, endsAt) {
             let taskIndex = this.taskArray.indexOf(taskToChange[0]);
@@ -238,7 +236,6 @@ export default {
                     this.currentWeek[i].id = this.currentWeek[i].id * (-1);
                 }
             }
-
         },
         filterTasksByWeek() {
             let formattedWeek = this.dateFormatting(this.currentWeek);

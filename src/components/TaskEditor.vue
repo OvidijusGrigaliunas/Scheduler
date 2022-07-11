@@ -49,39 +49,28 @@ export default {
           return 'Unimportant'
       }
     },
-    getTaskHourStart() {
+    getTaskInfo() {
       if (this.findTask[0]) {
-        return this.findTask[0].taskHourStart;
+        return {
+          taskName: this.findTask[0].taskName,
+          taskDesc: this.findTask[0].taskDesc,
+          taskHourStart: this.findTask[0].taskHourStart,
+          taskHourEnd: this.findTask[0].taskHourEnd - this.timeScale,
+          taskImportance: this.findTask[0].taskImportance
+        }
       }
-      return this.hour;
-    },
-    getTaskHourEnd() {
-      if (this.findTask[0]) {
-        return this.findTask[0].taskHourEnd - this.timeScale;
+      return {
+        taskName: '',
+        taskDesc: '',
+        taskHourStart: this.hour,
+        taskHourEnd: this.hour,
+        taskImportance: 3
       }
-      return this.hour;
-    },
-    getTaskImportance() {
-      if (this.findTask[0]) {
-        return this.findTask[0].taskImportance;
-      }
-      return 3;
-    },
-    getTaskName() {
-      if (this.findTask[0]) {
-        return this.findTask[0].taskName;
-      }
-      return '';
-    },
-    getTaskDesc() {
-      if (this.findTask[0]) {
-        return this.findTask[0].taskDesc;
-      }
-      return '';
+
     },
     // Kad nebūtų kelių užduočių tuo pačiu metu, reikia, kad šita funkcija aptiktų galimą laiko pasirinkimo diapazoną
     getTaskHourEndLimit() {
-      let hourEndLimit = this.getTaskHourStart;
+      let hourEndLimit = this.getTaskInfo.taskHourStart;
       // Mums reikalingos užduotis, kurios prasideda vėliau negu dabartinis laikas
       let filteredTasks = this.tasks.filter(task => task.taskHourStart > hourEndLimit);
       if (filteredTasks.length > 0) {
@@ -97,7 +86,7 @@ export default {
 
     },
     getTaskHourStartLimit() {
-      let taskStart = this.getTaskHourStart;
+      let taskStart = this.getTaskInfo.taskHourStart;
       // Mums reikalingos užduotis, kurios baigiasi anksčiau negu prasideda naujoji
       let filteredTasks = this.tasks.filter(task => task.taskHourEnd - this.timeScale < taskStart);
       if (filteredTasks.length > 0) {
@@ -184,12 +173,12 @@ export default {
     <div v-if="!hasTasks || showTaskEdit">
       <!--- Užduoties kūrimas/keitimas  --->
       <label for="tname">Task name: </label><br>
-      <input :value="getTaskName" type="text" id="tname" name="tname"><br>
+      <input :value="getTaskInfo.taskName" type="text" id="tname" name="tname"><br>
       <label for="taskStartsAt">Task starts: </label><br>
       <select name="taskStartsAt" id="taskStartsAt">
         <template v-for="n in shiftTime">
-          <template v-if="n >= getTaskHourStartLimit && n <= getTaskHourEnd">
-            <option v-if="!breakTime.includes(n)" :selected="getTaskHourStart === n" :value='n'>{{
+          <template v-if="n >= getTaskHourStartLimit && n <= getTaskInfo.taskHourEnd">
+            <option v-if="!breakTime.includes(n)" :selected="getTaskInfo.taskHourStart === n" :value='n'>{{
                 formattedTime[parseInt(n / timeScale)]
             }}</option>
           </template>
@@ -198,8 +187,8 @@ export default {
       <label for="taskEndsAt">Task ends: </label><br>
       <select name="taskEndsAt" id="taskEndsAt">
         <template v-for="n in shiftTime">
-          <template v-if="n >= getTaskHourStart && n <= getTaskHourEndLimit">
-            <option v-if="!breakTime.includes(n)" :selected="getTaskHourEnd === n" :value='n + timeScale'>{{
+          <template v-if="n >= getTaskInfo.taskHourStart && n <= getTaskHourEndLimit">
+            <option v-if="!breakTime.includes(n)" :selected="getTaskInfo.taskHourEnd === n" :value='n + timeScale'>{{
                 formattedTime[n / timeScale + 1]
             }}</option>
           </template>
@@ -207,25 +196,27 @@ export default {
       </select><br>
       <label for="importanceSelect">Importance level: </label><br>
       <select name="importanceSelect" id="importanceSelect">
-        <option :selected="getTaskImportance === 1" :value='1'>Very low</option>
-        <option :selected="getTaskImportance === 2" :value='2'>Low</option>
-        <option :selected="getTaskImportance === 3" :value='3'>Moderate</option>
-        <option :selected="getTaskImportance === 4" :value='4'>High</option>
-        <option :selected="getTaskImportance === 5" :value='5'>Very high</option>
+        <option :selected="getTaskInfo.taskImportance === 1" :value='1'>Very low</option>
+        <option :selected="getTaskInfo.taskImportance === 2" :value='2'>Low</option>
+        <option :selected="getTaskInfo.taskImportance === 3" :value='3'>Moderate</option>
+        <option :selected="getTaskInfo.taskImportance === 4" :value='4'>High</option>
+        <option :selected="getTaskInfo.taskImportance === 5" :value='5'>Very high</option>
       </select><br>
       <label for="tdesc">Task description: </label><br>
-      <textarea :value="getTaskDesc" :style="setTextAreaHeight" type="text" id="tdesc" name="tdesc"></textarea><br
-        class="lineBreak"><br class="lineBreak">
+      <textarea :value="getTaskInfo.taskDesc" :style="setTextAreaHeight" type="text" id="tdesc"
+        name="tdesc"></textarea><br class="lineBreak"><br class="lineBreak">
       <button v-if="!showTaskEdit" @click="newTask">Create new task</button>
       <button v-else @click="saveEdit">Save edit</button>
     </div>
     <div v-else>
       <!--- Informacija apie užduotį  --->
       <div :style="setTaskTextHeight" class="taskContainer">
-        <h2 style="font-size: 40px">{{ getTaskName }}</h2>
-        <h1>{{ formattedTime[getTaskHourStart / timeScale] }} - {{ formattedTime[getTaskHourEnd / timeScale + 1] }}</h1>
+        <h2 style="font-size: 40px">{{ getTaskInfo.taskName }}</h2>
+        <h1>{{ formattedTime[getTaskInfo.taskHourStart / timeScale] }} - {{ formattedTime[getTaskInfo.taskHourEnd /
+            timeScale + 1]
+        }}</h1>
         <h1>Importance: {{ getTaskImportanceText }}</h1>
-        <p>{{ getTaskDesc }}</p>
+        <p>{{ getTaskInfo.getTaskDesc }}</p>
       </div>
       <button type="button" @click="showTaskEdit = true;">Edit task</button><br class="lineBreak"><br class="lineBreak">
       <button type="button" @click="$emit('taskDeletion', findTask)">Delete task</button>

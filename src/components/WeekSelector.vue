@@ -61,7 +61,6 @@ export default {
   border: solid #555B6E;
   border-width: 0 0px 1px 1px;
   color: white;
-
 }
 
 .selectionContainer p {
@@ -87,7 +86,6 @@ export default {
   border-width: 0 7px 7px 0;
   padding: 14px;
   margin-top: 7px;
-
 }
 
 .right {
