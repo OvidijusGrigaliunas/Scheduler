@@ -2,7 +2,7 @@
 export default {
   props: {
     hour: Number,
-    date: Date,
+    date: Object,
     tasks: Array,
     workDays: Array,
     breakTime: Array,
@@ -10,13 +10,21 @@ export default {
   },
   data() {
     return {
-      foundTask: {}
+      foundTask: {},
+      hasTask: true,
+      color: { background: "#43AA8B" }
     };
   },
   computed: {
-    
+    test(){
+      return this.foundTask;
+    }
   },
   mounted() {
+    this.hasTasks();
+    if(this.hasTask){
+      this.color = this.taskImportanceColor();
+    }
   },
   methods: {
     taskImportanceColor() {
@@ -36,13 +44,14 @@ export default {
       }
     },
     hasTasks() {
-      let found = this.findTask(); 
+      let found = this.findTask();
       if (found.length > 0) {
         this.foundTask = found[0];
-        return true;
+        this.hasTask = true;
+        return;
       }
       this.foundTask = {};
-      return false;
+      this.hasTask = false;
     },
     selectedTime() {
       this.$emit("timeSelected", this.date, this.hour);
@@ -50,7 +59,7 @@ export default {
     // getDay savaitė prasideda nuo sekmadienio
     // o reikia, kad prasidėtų nuo pirmadienio
     getDayLT(date) {
-      date = date.getDay();
+      date = date.day.getDay();
       if (date === 0) {
         return 7;
       }
@@ -70,8 +79,8 @@ export default {
 <template>
   <div v-if="breakTime.includes(hour) || !workDays.includes(getDayLT(date))"
     :class="{ biggerItem: timeScale >= 1 }" class="item break"></div>
-  <div v-else-if="!hasTasks()" class="item" :class="{ biggerItem: timeScale >= 1 }" @click="selectedTime"></div>
-  <div v-else class="item" :class="{ biggerItem: timeScale >= 1 }" :style="taskImportanceColor()" @click="selectedTime">
+  <div v-else-if="!hasTask" class="item" :class="{ biggerItem: timeScale >= 1 }" @click="selectedTime"></div>
+  <div v-else class="item" :class="{ biggerItem: timeScale >= 1 }" :style="color" @click="selectedTime">
     <h2>{{ foundTask.taskName }}</h2>
   </div>
 </template>

@@ -13,12 +13,18 @@ export default {
         return {
             taskArray: [
                 // Jei rašo nuo 10:00 iki 15:00, tai reiškia , kad nuo 15:00 jau laisvas
-                { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/05", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 5 },
-                { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/05", taskHourStart: 10, taskHourEnd: 15, taskTarget: 'Vardenis', taskImportance: 4 },
-                { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/06", taskHourStart: 11, taskHourEnd: 15.5, taskTarget: 'Vardenis', taskImportance: 3 },
-                { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/07", taskHourStart: 8, taskHourEnd: 8.75, taskTarget: 'Vardenis', taskImportance: 2 },
-                { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/07", taskHourStart: 9, taskHourEnd: 11, taskTarget: 'Vardenis', taskImportance: 3 },
-                { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/07", taskHourStart: 11, taskHourEnd: 15, taskTarget: 'Vardenis', taskImportance: 2 },
+                { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/05", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Vardenis', taskImportance: 5 },
+                { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/05", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 4 },
+                { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/06", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskImportance: 3 },
+                { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/07", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskImportance: 2 },
+                { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/07", taskHourStart: 12, taskHourEnd: 13, taskTarget: 'Vardenis', taskImportance: 3 },
+                { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/07", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Vardenis', taskImportance: 2 },
+                { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/05", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Vardenis', taskImportance: 5 },
+                { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/05", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Vardenis', taskImportance: 4 },
+                { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/06", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Vardenis', taskImportance: 3 },
+                { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/07", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Vardenis', taskImportance: 2 },
+                { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/07", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Vardenis', taskImportance: 3 },
+                { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/07", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Vardenis', taskImportance: 2 },
             ],
             people: [
                 { name: "Vardenis", shiftStart: 8, shiftEnd: 17, breakStart: 12, breakEnd: 13, workDays: [1, 2, 3, 4, 5] },
@@ -75,7 +81,7 @@ export default {
                 result = result + month + "/";
             }
             if (this.selectedDate.getDate() < 10) {
-                result = result + 0 + this.selectedDate.getDate()
+                result = result + 0 + this.selectedDate.getDate();
             } else {
                 result = result + this.selectedDate.getDate();
             }
@@ -120,6 +126,9 @@ export default {
         }
     },
     created() {
+        for (let i = 1; i < 8; i++) {
+            this.currentWeek.push({day: null, id: i})
+        }
         this.createWeek(this.selectedDate)
         this.filterTaskByUsers();
     },
@@ -147,6 +156,7 @@ export default {
             this.selectedHour = startsAt;
             this.taskArray.push(object);
             this.filterTaskByUsers();
+            this.updateSchedulerGrid();
         },
         deleteTask(taskToDelete) {
             for (let i = 0; i < this.taskArray.length; i++) {
@@ -156,14 +166,19 @@ export default {
                 }
             }
             this.filterTaskByUsers();
+            this.updateSchedulerGrid(taskToDelete.taskDay);
+
+        },
+        updateSchedulerGrid() {
+            this.currentWeek[this.selectedDay - 1].id = this.currentWeek[this.selectedDay - 1].id * (-1);
         },
         timeSelection(date, hour) {
-            this.selectedDay = date.getDay();
+            this.selectedDay = date.day.getDay();
             if (this.selectedDay === 0) {
                 this.selectedDay === 7;
             }
             this.selectedHour = hour;
-            this.selectedDate = date;
+            this.selectedDate = date.day;
         },
         addDays(date, days) {
             let newDate = new Date(date);
@@ -172,25 +187,25 @@ export default {
         },
         // Sudarome savaitę pagal pasirinktą diena
         createWeek(date) {
-            let selectedWeekDates = [];
             let currentWeekDay = date.getDay();
             // kai yra sekmadienis, vertė būna 0
             // tokiu atveju 0 reikia pasiversti į 7
             if (currentWeekDay === 0) {
                 currentWeekDay = 7;
             }
-            for (let i = 1; i < 8; i++) {
+            for (let i = 0; i < 7; i++) {
                 // "i - currentWeekDay" reikalingas, kad savaitės dienos eitų iš eilės
                 // (Monday, tuesday ir t.t.)
-                selectedWeekDates.push(this.addDays(date, i - currentWeekDay))
+                this.currentWeek[i].day = this.addDays(date, i + 1 - currentWeekDay);
             }
             this.getSelectedHour();
-            this.currentWeek = selectedWeekDates;
         },
         changeWeek(direction) {
             this.selectedDate = this.addDays(this.selectedDate, direction);
             this.createWeek(this.selectedDate)
             this.filterTasksByWeek(this.currentWeek);
+            this.reloadGrid();
+
         },
         changePerson(direction) {
             this.selectedPersonIndex = this.selectedPersonIndex + direction
@@ -201,6 +216,10 @@ export default {
             }
             this.getSelectedHour();
             this.filterTaskByUsers();
+            this.reloadGrid();
+        },
+        reloadGrid() {
+            this.currentWeek.map(day => day.id = day.id * (-1));
         },
         filterTasksByWeek() {
             let formattedWeek = this.dateFormatting(this.currentWeek);
@@ -227,8 +246,8 @@ export default {
             let formattedDay = '';
             let month;
             week.forEach(day => {
-                formattedDay = day.getFullYear() + "/"
-                month = day.getMonth() + 1;
+                formattedDay = day.day.getFullYear() + "/"
+                month = day.day.getMonth() + 1;
                 // Su if nustatome ar reikia pridėti 0 pradžioje,
                 // kad gautume yyyy/mm/dd datos formatą
                 if (month < 10) {
@@ -236,10 +255,10 @@ export default {
                 } else {
                     formattedDay = formattedDay + month + "/";
                 }
-                if (day.getDate() < 10) {
-                    formattedDay = formattedDay + 0 + day.getDate()
+                if (day.day.getDate() < 10) {
+                    formattedDay = formattedDay + 0 + day.day.getDate()
                 } else {
-                    formattedDay = formattedDay + day.getDate();
+                    formattedDay = formattedDay + day.day.getDate();
                 }
                 result.push(formattedDay)
             });
@@ -284,16 +303,16 @@ export default {
                         <div :class="{ biggerTime: timeScale >= 1 }" class="time">
                             <h1>{{ formatTime[parseInt(i / timeScale)] }}</h1>
                         </div>
-                        <template v-for="n in 7">
-                            <SchedulerItem v-if="n != selectedDay || i != selectedHour" 
-                                :date='currentWeek[n - 1]' :hour='i' :tasks='filteredTasks[n - 1]'
+                        <template v-for="(day, index) in currentWeek">
+                            <SchedulerItem v-if="index + 1 != selectedDay || i != selectedHour"
+                                :date='currentWeek[index]' :hour='i' :tasks='filteredTasks[index]'
                                 :workDays='people[selectedPersonIndex].workDays'
                                 :breakTime='getBreakTimeArray[selectedPersonIndex]' :timeScale='timeScale'
-                                @timeSelected="timeSelection" @taskDeletion="deleteTask" />
-                            <SchedulerItem v-else class="selected" :date='currentWeek[n - 1]' :hour='i' :tasks='filteredTasks[n - 1]'
-                                :workDays='people[selectedPersonIndex].workDays'
+                                @timeSelected="timeSelection" @taskDeletion="deleteTask" :key='-day.id' />
+                            <SchedulerItem v-else class="selected" :date='currentWeek[index]' :hour='i'
+                                :tasks='filteredTasks[index]' :workDays='people[selectedPersonIndex].workDays'
                                 :breakTime='getBreakTimeArray[selectedPersonIndex]' :timeScale='timeScale'
-                                @timeSelected="timeSelection" @taskDeletion="deleteTask" />
+                                @timeSelected="timeSelection" @taskDeletion="deleteTask" :key='day.id' />
                         </template>
                     </template>
                 </div>
