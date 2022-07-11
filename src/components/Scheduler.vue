@@ -1,6 +1,6 @@
 <script setup>
 import SchedulerItem from './SchedulerItem.vue'
-import Tasks from './Tasks.vue'
+import TaskEditor from './TaskEditor.vue'
 import WeekSelector from './WeekSelector.vue';
 import PersonSelector from './PersonSelector.vue';
 
@@ -13,24 +13,24 @@ export default {
         return {
             taskArray: [
                 // Jei rašo nuo 10:00 iki 15:00, tai reiškia , kad nuo 15:00 jau laisvas
-                { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/05", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Vardenis', taskImportance: 5 },
-                { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/05", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 4 },
-                { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/06", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskImportance: 3 },
-                { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/07", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskImportance: 2 },
-                { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/07", taskHourStart: 12, taskHourEnd: 13, taskTarget: 'Vardenis', taskImportance: 3 },
-                { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/07", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Vardenis', taskImportance: 2 },
-                { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/05", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Vardenis', taskImportance: 5 },
-                { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/05", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Vardenis', taskImportance: 4 },
-                { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/06", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Vardenis', taskImportance: 3 },
-                { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/07", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Vardenis', taskImportance: 2 },
-                { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/07", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Vardenis', taskImportance: 3 },
-                { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/07", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Vardenis', taskImportance: 2 },
+                { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/11", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Vardenis', taskImportance: 5 },
+                { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/11", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 4 },
+                { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/11", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskImportance: 3 },
+                { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/11", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskImportance: 2 },
+                { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/11", taskHourStart: 12, taskHourEnd: 13, taskTarget: 'Vardenis', taskImportance: 3 },
+                { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/11", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Vardenis', taskImportance: 2 },
+                { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/11", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Vardenis', taskImportance: 5 },
+                { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/11", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Vardenis', taskImportance: 4 },
+                { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/11", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Vardenis', taskImportance: 3 },
+                { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/11", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Vardenis', taskImportance: 2 },
+                { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/11", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Vardenis', taskImportance: 3 },
+                { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/11", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Vardenis', taskImportance: 2 },
             ],
             people: [
-                { name: "Vardenis", shiftStart: 8, shiftEnd: 17, breakStart: 12, breakEnd: 13, workDays: [1, 2, 3, 4, 5] },
-                { name: "Pavardenis", shiftStart: 9, shiftEnd: 18, breakStart: 12, breakEnd: 13, workDays: [1, 2, 3, 4, 5, 6] },
-                { name: "Bonilla", shiftStart: 10, shiftEnd: 19, breakStart: 11, breakEnd: 13, workDays: [1, 2, 3, 7] },
-                { name: "Hobbs", shiftStart: 7, shiftEnd: 16, breakStart: 10, breakEnd: 11, workDays: [1, 2, 3, 5, 6] }
+                { name: "Vardenis", shiftStart: 8, shiftEnd: 17, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
+                { name: "Pavardenis", shiftStart: 9, shiftEnd: 18, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
+                { name: "Bonilla", shiftStart: 10, shiftEnd: 19, breakStart: 11, breakEnd: 13, workDays: [true, true, true, true, true, false, true] },
+                { name: "Hobbs", shiftStart: 7, shiftEnd: 16, breakStart: 10, breakEnd: 11, workDays: [true, false, true, true, true, false, false] }
             ],
             selectedHour: new Date().getHours(),
             selectedDate: new Date(),
@@ -127,7 +127,7 @@ export default {
     },
     created() {
         for (let i = 1; i < 8; i++) {
-            this.currentWeek.push({day: null, id: i})
+            this.currentWeek.push({ day: null, id: i })
         }
         this.createWeek(this.selectedDate)
         this.filterTaskByUsers();
@@ -156,7 +156,7 @@ export default {
             this.selectedHour = startsAt;
             this.taskArray.push(object);
             this.filterTaskByUsers();
-            this.updateSchedulerGrid();
+            this.updateSchedulerColumn();
         },
         deleteTask(taskToDelete) {
             for (let i = 0; i < this.taskArray.length; i++) {
@@ -166,10 +166,24 @@ export default {
                 }
             }
             this.filterTaskByUsers();
-            this.updateSchedulerGrid(taskToDelete.taskDay);
+            this.updateSchedulerColumn();
 
         },
-        updateSchedulerGrid() {
+        editTask(taskToChange, name, desc, day, startsAt, importance, endsAt) {
+            let taskIndex = this.taskArray.indexOf(taskToChange[0]);
+            this.taskArray[taskIndex] = {
+                taskName: name,
+                taskDesc: desc,
+                taskDay: day,
+                taskHourStart: startsAt,
+                taskHourEnd: endsAt,
+                taskTarget: this.people[this.selectedPersonIndex].name,
+                taskImportance: importance
+            };
+            this.filterTaskByUsers();
+            this.updateSchedulerColumn();
+        },
+        updateSchedulerColumn() {
             this.currentWeek[this.selectedDay - 1].id = this.currentWeek[this.selectedDay - 1].id * (-1);
         },
         timeSelection(date, hour) {
@@ -205,7 +219,6 @@ export default {
             this.createWeek(this.selectedDate)
             this.filterTasksByWeek(this.currentWeek);
             this.reloadGrid();
-
         },
         changePerson(direction) {
             this.selectedPersonIndex = this.selectedPersonIndex + direction
@@ -219,7 +232,13 @@ export default {
             this.reloadGrid();
         },
         reloadGrid() {
-            this.currentWeek.map(day => day.id = day.id * (-1));
+            for (let i = 0; i < 7; i++) {
+                // jei ne darbo dieną, ignuorajami stulpeliai
+                if (this.people[this.selectedPersonIndex].workDays[i]) {
+                    this.currentWeek[i].id = this.currentWeek[i].id * (-1);
+                }
+            }
+
         },
         filterTasksByWeek() {
             let formattedWeek = this.dateFormatting(this.currentWeek);
@@ -303,24 +322,20 @@ export default {
                         <div :class="{ biggerTime: timeScale >= 1 }" class="time">
                             <h1>{{ formatTime[parseInt(i / timeScale)] }}</h1>
                         </div>
-                        <template v-for="(day, index) in currentWeek">
-                            <SchedulerItem v-if="index + 1 != selectedDay || i != selectedHour"
+                        <template v-for="(day, index) in currentWeek" :key='day.id'>
+                            <SchedulerItem :class='{ selected: index + 1 == selectedDay && i == selectedHour }'
                                 :date='currentWeek[index]' :hour='i' :tasks='filteredTasks[index]'
-                                :workDays='people[selectedPersonIndex].workDays'
-                                :breakTime='getBreakTimeArray[selectedPersonIndex]' :timeScale='timeScale'
-                                @timeSelected="timeSelection" @taskDeletion="deleteTask" :key='-day.id' />
-                            <SchedulerItem v-else class="selected" :date='currentWeek[index]' :hour='i'
-                                :tasks='filteredTasks[index]' :workDays='people[selectedPersonIndex].workDays'
-                                :breakTime='getBreakTimeArray[selectedPersonIndex]' :timeScale='timeScale'
-                                @timeSelected="timeSelection" @taskDeletion="deleteTask" :key='day.id' />
+                                :isWorkDay='people[selectedPersonIndex].workDays[index]'
+                                :isBreakTime='getBreakTimeArray[selectedPersonIndex].includes(i)' :timeScale='timeScale'
+                                @timeSelected="timeSelection" @taskDeletion="deleteTask" />
                         </template>
                     </template>
                 </div>
             </div>
-            <Tasks :resolution='getResolutionHeight' :date='selectedDateFormatting'
+            <TaskEditor :resolution='getResolutionHeight' :date='selectedDateFormatting'
                 :tasks='filteredTasks[selectedDay - 1]' :hour='selectedHour' :formattedTime='formatTime'
                 :breakTime='getBreakTimeArray[selectedPersonIndex]' :shiftTime='getShiftTimeArray[selectedPersonIndex]'
-                :timeScale='timeScale' @NewTask="createNewTask" @taskDeletion="deleteTask" />
+                :timeScale='timeScale' @NewTask="createNewTask" @taskDeletion="deleteTask" @taskEdit='editTask' />
         </div>
     </div>
 </template>

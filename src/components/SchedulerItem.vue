@@ -4,8 +4,8 @@ export default {
     hour: Number,
     date: Object,
     tasks: Array,
-    workDays: Array,
-    breakTime: Array,
+    isWorkDay: Boolean,
+    isBreakTime: Boolean,
     timeScale: Number,
   },
   data() {
@@ -16,13 +16,10 @@ export default {
     };
   },
   computed: {
-    test(){
-      return this.foundTask;
-    }
   },
   mounted() {
     this.hasTasks();
-    if(this.hasTask){
+    if (this.hasTask) {
       this.color = this.taskImportanceColor();
     }
   },
@@ -56,15 +53,6 @@ export default {
     selectedTime() {
       this.$emit("timeSelected", this.date, this.hour);
     },
-    // getDay savaitė prasideda nuo sekmadienio
-    // o reikia, kad prasidėtų nuo pirmadienio
-    getDayLT(date) {
-      date = date.day.getDay();
-      if (date === 0) {
-        return 7;
-      }
-      return date;
-    },
     findTask() {
       return this.tasks.filter(
         (task) =>
@@ -77,8 +65,7 @@ export default {
 </script>
 
 <template>
-  <div v-if="breakTime.includes(hour) || !workDays.includes(getDayLT(date))"
-    :class="{ biggerItem: timeScale >= 1 }" class="item break"></div>
+  <div v-if="isBreakTime || !isWorkDay" :class="{ biggerItem: timeScale >= 1 }" class="item break"></div>
   <div v-else-if="!hasTask" class="item" :class="{ biggerItem: timeScale >= 1 }" @click="selectedTime"></div>
   <div v-else class="item" :class="{ biggerItem: timeScale >= 1 }" :style="color" @click="selectedTime">
     <h2>{{ foundTask.taskName }}</h2>
