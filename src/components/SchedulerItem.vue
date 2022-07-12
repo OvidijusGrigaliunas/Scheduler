@@ -11,16 +11,15 @@ export default {
   data() {
     return {
       foundTask: {},
-      hasTask: true,
-      color: { background: "#43AA8B" }
+      hasTask: false,
     };
   },
   computed: {
   },
+
   mounted() {
-    this.hasTasks();
-    if (this.hasTask) {
-      this.color = this.taskImportanceColor();
+    if (this.tasks.length > 0) {
+      this.hasTasks();
     }
   },
   methods: {
@@ -67,7 +66,7 @@ export default {
 <template>
   <div v-if="isBreakTime || !isWorkDay" :class="{ biggerItem: timeScale >= 1 }" class="item break"></div>
   <div v-else-if="!hasTask" class="item" :class="{ biggerItem: timeScale >= 1 }" @click="selectedTime"></div>
-  <div v-else class="item" :class="{ biggerItem: timeScale >= 1 }" :style="color" @click="selectedTime">
+  <div v-else class="item" :class="{ biggerItem: timeScale >= 1 }" :style="taskImportanceColor()" @click="selectedTime">
     <h2>{{ foundTask.taskName }}</h2>
   </div>
 </template>

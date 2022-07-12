@@ -13,28 +13,23 @@ export default {
   data() {
     return {
       showTaskEdit: false,
+      foundTask: []
     }
   },
+  mounted() {
+    this.findTask();
+  },
   computed: {
-    hasTasks() {
-      if (this.findTask.length > 0) {
+    hasTasksEditor() {
+      if (this.foundTask.length > 0) {
         this.showTaskEdit = false;
         return true;
-      } else {
-        this.showTaskEdit = false;
-        return false;
       }
-    },
-    findTask() {
-      // Suranda užduotį pagal pasirinktą langelį,
-      // kuris gali būti užduoties diapazone
-      return this.tasks.filter(task =>
-        task.taskHourStart <= this.hour &&
-        task.taskHourEnd - this.timeScale >= this.hour
-      );
+      this.showTaskEdit = false;
+      return false;
     },
     getTaskImportanceText() {
-      switch (this.findTask[0].taskImportance) {
+      switch (this.foundTask[0].taskImportance) {
         case 1:
           return 'Very low'
         case 2:
@@ -50,13 +45,13 @@ export default {
       }
     },
     getTaskInfo() {
-      if (this.findTask[0]) {
+      if (this.foundTask[0]) {
         return {
-          taskName: this.findTask[0].taskName,
-          taskDesc: this.findTask[0].taskDesc,
-          taskHourStart: this.findTask[0].taskHourStart,
-          taskHourEnd: this.findTask[0].taskHourEnd - this.timeScale,
-          taskImportance: this.findTask[0].taskImportance
+          taskName: this.foundTask[0].taskName,
+          taskDesc: this.foundTask[0].taskDesc,
+          taskHourStart: this.foundTask[0].taskHourStart,
+          taskHourEnd: this.foundTask[0].taskHourEnd - this.timeScale,
+          taskImportance: this.foundTask[0].taskImportance
         }
       }
       return {
@@ -66,9 +61,36 @@ export default {
         taskHourEnd: this.hour,
         taskImportance: 3
       }
-
     },
     // Kad nebūtų kelių užduočių tuo pačiu metu, reikia, kad šita funkcija aptiktų galimą laiko pasirinkimo diapazoną
+
+    setTextAreaHeight() {
+      let textAreaHeight = this.resolution * 0.5;
+      if (textAreaHeight <= 380) {
+        // kuo yra maženis textAreaHeigth, tuo labiau turime jį mažinti
+        // naudojame -1 pakelimo laipsnį, kad didesni skaičiai taptų mažesni už kitus 
+        // pvz.: 2^-1 > 7^-1, 1/2 > 1/7
+        let exponent = Math.pow((textAreaHeight / 70), -1) * 27;
+        textAreaHeight = textAreaHeight * Math.pow(0.9, exponent);
+      } else if (textAreaHeight > 500) {
+        let exponent = Math.pow((textAreaHeight / 70), 2) / 20;
+        textAreaHeight = textAreaHeight * Math.pow(1.7, exponent);
+      }
+      textAreaHeight = textAreaHeight + 'px';
+      return { height: textAreaHeight };
+    },
+    setTaskTextHeight() {
+      let textAreaHeight = this.resolution * 0.8;
+      if (textAreaHeight <= 400) {
+        let exponent = Math.pow((textAreaHeight / 70), -1) * 2;
+        textAreaHeight = textAreaHeight * Math.pow(0.9, exponent);
+      } else if (textAreaHeight > 500) {
+        let exponent = Math.pow((textAreaHeight / 70), 1) / 100;
+        textAreaHeight = textAreaHeight * Math.pow(1.7, exponent);
+      }
+      textAreaHeight = textAreaHeight + 'px';
+      return { height: textAreaHeight };
+    },
     getTaskHourEndLimit() {
       let hourEndLimit = this.getTaskInfo.taskHourStart;
       // Mums reikalingos užduotis, kurios prasideda vėliau negu dabartinis laikas
@@ -99,56 +121,29 @@ export default {
       }
       return this.shiftTime[0];
     },
-    setTextAreaHeight() {
-      let textAreaHeight = this.resolution * 0.5;
-      if (textAreaHeight <= 380) {
-        // kuo yra maženis textAreaHeigth, tuo labiau turime jį mažinti
-        // naudojame -1 pakelimo laipsnį, kad didesni skaičiai taptų mažesni už kitus 
-        // pvz.: 2^-1 > 7^-1, 1/2 > 1/7
-        let exponent = Math.pow((textAreaHeight / 70), -1) * 27;
-        textAreaHeight = textAreaHeight * Math.pow(0.9, exponent);
-      } else if (textAreaHeight > 500) {
-        let exponent = Math.pow((textAreaHeight / 70), 2) / 20;
-        textAreaHeight = textAreaHeight * Math.pow(1.7, exponent);
-      }
-      textAreaHeight = textAreaHeight + 'px';
-      return { height: textAreaHeight };
-    },
-    setTaskTextHeight() {
-      let textAreaHeight = this.resolution * 0.8;
-      if (textAreaHeight <= 400) {
-        let exponent = Math.pow((textAreaHeight / 70), -1) * 2;
-        textAreaHeight = textAreaHeight * Math.pow(0.9, exponent);
-      } else if (textAreaHeight > 500) {
-        let exponent = Math.pow((textAreaHeight / 70), 1) / 100;
-        textAreaHeight = textAreaHeight * Math.pow(1.7, exponent);
-      }
-      textAreaHeight = textAreaHeight + 'px';
-      return { height: textAreaHeight };
-    }
   },
   methods: {
     requirementsCheck() {
-      let errorList = '';
+      let errorList = [];
       // pakeisti i array 
       if (tname.value.length === 0 || tdesc.value.length === 0) {
-        errorList = errorList + 'Please fill in all fields \r\n'
+        errorList.push('Please fill in all fields');
       }
       if (tdesc.value.length > 1024) {
-        errorList = errorList + 'Description - maximum characters allowed: 1024. \r\n'
+        errorList.push('Description - maximum characters allowed: 1024');
       }
       if (tname.value.length > 64) {
-        errorList = errorList + 'Name - maximum characters allowed: 64. \r\n'
+        errorList.push('Name - maximum characters allowed: 64');
       }
       if (parseFloat(taskStartsAt.value) >= parseFloat(taskEndsAt.value)) {
-        errorList = errorList + "Task can't end before it starts."
+        errorList.push("Task can't end before it starts");
       }
       return errorList;
     },
     newTask() {
       let errorList = this.requirementsCheck();
       if (errorList.length > 0) {
-        alert(errorList)
+        alert(errorList.join('. '))
       } else {
         this.$emit('NewTask', tname.value, tdesc.value, this.date, parseFloat(taskStartsAt.value), parseInt(importanceSelect.value), parseFloat(taskEndsAt.value));
       }
@@ -156,11 +151,20 @@ export default {
     saveEdit() {
       let errorList = this.requirementsCheck();
       if (errorList.length > 0) {
-        alert(errorList)
+        alert(errorList.join('. '))
       } else {
-        this.$emit('taskEdit', this.findTask, tname.value, tdesc.value, this.date, parseFloat(taskStartsAt.value), parseInt(importanceSelect.value), parseFloat(taskEndsAt.value));
+        this.$emit('taskEdit', this.foundTask, tname.value, tdesc.value, this.date, parseFloat(taskStartsAt.value), parseInt(importanceSelect.value), parseFloat(taskEndsAt.value));
       }
-    }
+    },
+    findTask() {
+      // Suranda užduotį pagal pasirinktą langelį,
+      // kuris gali būti užduoties diapazone
+      this.foundTask = this.tasks.filter(task =>
+        task.taskHourStart <= this.hour &&
+        task.taskHourEnd - this.timeScale >= this.hour
+      );
+    },
+
   },
 }
 
@@ -170,7 +174,7 @@ export default {
     <div class="taskDate">
       <h1>{{ date }}</h1>
     </div>
-    <div v-if="!hasTasks || showTaskEdit">
+    <div v-if="!hasTasksEditor || showTaskEdit">
       <!--- Užduoties kūrimas/keitimas  --->
       <label for="tname">Task name: </label><br>
       <input :value="getTaskInfo.taskName" type="text" id="tname" name="tname"><br>
@@ -219,7 +223,7 @@ export default {
         <p>{{ getTaskInfo.getTaskDesc }}</p>
       </div>
       <button type="button" @click="showTaskEdit = true;">Edit task</button><br class="lineBreak"><br class="lineBreak">
-      <button type="button" @click="$emit('taskDeletion', findTask)">Delete task</button>
+      <button type="button" @click="$emit('taskDeletion', foundTask)">Delete task</button>
     </div>
 
   </div>
