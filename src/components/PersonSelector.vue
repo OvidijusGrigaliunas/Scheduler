@@ -55,9 +55,6 @@ export default {
   height: 60px;
 }
 
-.selectionContainer p {
-  font-size: 30px;
-}
 
 .currentName {
   font-weight: 600;

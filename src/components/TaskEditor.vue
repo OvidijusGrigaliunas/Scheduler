@@ -13,7 +13,7 @@ export default {
   data() {
     return {
       showTaskEdit: false,
-      foundTask: []
+      foundTask: null
     }
   },
   mounted() {
@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     hasTasksEditor() {
-      if (this.foundTask.length > 0) {
+      if (this.foundTask != null) {
         this.showTaskEdit = false;
         return true;
       }
@@ -29,7 +29,7 @@ export default {
       return false;
     },
     getTaskImportanceText() {
-      switch (this.foundTask[0].taskImportance) {
+      switch (this.foundTask.taskImportance) {
         case 1:
           return 'Very low'
         case 2:
@@ -45,13 +45,13 @@ export default {
       }
     },
     getTaskInfo() {
-      if (this.foundTask[0]) {
+      if (this.foundTask) {
         return {
-          taskName: this.foundTask[0].taskName,
-          taskDesc: this.foundTask[0].taskDesc,
-          taskHourStart: this.foundTask[0].taskHourStart,
-          taskHourEnd: this.foundTask[0].taskHourEnd - this.timeScale,
-          taskImportance: this.foundTask[0].taskImportance
+          taskName: this.foundTask.taskName,
+          taskDesc: this.foundTask.taskDesc,
+          taskHourStart: this.foundTask.taskHourStart,
+          taskHourEnd: this.foundTask.taskHourEnd - this.timeScale,
+          taskImportance: this.foundTask.taskImportance
         }
       }
       return {
@@ -97,7 +97,8 @@ export default {
       let filteredTasks = this.tasks.filter(task => task.taskHourStart > hourEndLimit);
       if (filteredTasks.length > 0) {
         let filteredTasksStartHours = [];
-        for (let i = 0; i < filteredTasks.length; i++) {
+        let filLength = filteredTasks.length;
+        for (let i = 0; i < filLength; i++) {
           filteredTasksStartHours.push(filteredTasks[i].taskHourStart)
         }
         // Surandame arčiausiai esančią užduotį nuo mūsų užduoties pradžios
@@ -113,7 +114,8 @@ export default {
       let filteredTasks = this.tasks.filter(task => task.taskHourEnd - this.timeScale < taskStart);
       if (filteredTasks.length > 0) {
         let filteredTasksEndHours = [];
-        for (let i = 0; i < filteredTasks.length; i++) {
+        let filLength = filteredTasks.length;
+        for (let i = 0; i < filLength; i++) {
           filteredTasksEndHours.push(filteredTasks[i].taskHourEnd);
         }
         let lowestValueIndex = filteredTasksEndHours.indexOf(Math.max(...filteredTasksEndHours));
@@ -158,7 +160,7 @@ export default {
     findTask() {
       // Suranda užduotį pagal pasirinktą langelį,
       // kuris gali būti užduoties diapazone
-      this.foundTask = this.tasks.filter(task =>
+      this.foundTask = this.tasks.find(task =>
         task.taskHourStart <= this.hour &&
         task.taskHourEnd - this.timeScale >= this.hour
       );
@@ -219,7 +221,7 @@ export default {
             timeScale + 1]
         }}</h1>
         <h1>Importance: {{ getTaskImportanceText }}</h1>
-        <p>{{ getTaskInfo.getTaskDesc }}</p>
+        <p>{{ getTaskInfo.taskDesc }}</p>
       </div>
       <button type="button" @click="showTaskEdit = true;">Edit task</button><br class="lineBreak"><br class="lineBreak">
       <button type="button" @click="$emit('taskDeletion', foundTask)">Delete task</button>
