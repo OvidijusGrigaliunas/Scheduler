@@ -5,8 +5,7 @@ export default {
     date: Object,
     taskName: String,
     taskImportance: Number,
-    hasWork: Boolean,
-    timeScale: Number,
+    noWork: Boolean,
   },
   data() {
     return {
@@ -43,9 +42,9 @@ export default {
 </script>
 
 <template>
-  <div v-if="!hasWork" :class="{ biggerItem: timeScale >= 1 }" class="item break"></div>
-  <div v-else-if="taskName==null" class="item" :class="{ biggerItem: timeScale >= 1 }" @click="selectedTime"></div>
-  <div v-else class="item" :class="{ biggerItem: timeScale >= 1 }" :style="taskImportanceColor()" @click="selectedTime">
+  <div v-if="noWork" class="item break"></div>
+  <div v-else-if="taskName == null" class="item" @click="selectedTime"></div>
+  <div v-else class="item" :style="taskImportanceColor()" @click="selectedTime">
     <h2>{{ taskName }}</h2>
   </div>
 </template>
@@ -68,9 +67,6 @@ export default {
   background-color: #d3d3d3;
 }
 
-.biggerItem {
-  height: 150px;
-}
 
 .item h2 {
   font-size: 14px;

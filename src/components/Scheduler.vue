@@ -164,7 +164,7 @@ export default {
     },
     deleteTask(taskToDelete) {
       for (let i = 0; i < this.taskArray.length; i++) {
-        if (taskToDelete[0] === this.taskArray[i]) {
+        if (taskToDelete === this.taskArray[i]) {
           this.taskArray.splice(i, 1);
           break;
         }
@@ -174,7 +174,7 @@ export default {
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
     editTask(taskToChange, name, desc, day, startsAt, importance, endsAt) {
-      let taskIndex = this.taskArray.indexOf(taskToChange[0]);
+      let taskIndex = this.taskArray.indexOf(taskToChange);
       this.taskArray[taskIndex] = {
         taskName: name,
         taskDesc: desc,
@@ -344,27 +344,23 @@ export default {
           <div class="weekDay">
             <p>Sunday</p>
           </div>
-          <template v-for='i in getShiftTimeArray[selectedPersonIndex]'>
-            <div :class="{ biggerTime: timeScale >= 1 }" class="time">
-              <h1>{{ formatTime[parseInt(i / timeScale)] }}</h1>
+          <template v-for='(i, ind) in getShiftTimeArray[selectedPersonIndex]'>
+            <div class="time">
+              <h1>{{ formatTime[i / timeScale] }}</h1>
             </div>
             <template v-for="(day, index) in currentWeek">
               <template
                 v-if="!people[selectedPersonIndex].workDays[index] || getBreakTimeArray[selectedPersonIndex].includes(i)">
-                <SchedulerItem :date='currentWeek[index]' :hour='i' :hasWork='false' :timeScale='timeScale'
-                  @timeSelected="timeSelection" />
+                <SchedulerItem :noWork='true' @timeSelected="timeSelection" />
               </template>
-              <template
-                v-else-if="itemTaskInfo[index][(i - getShiftTimeArray[selectedPersonIndex][0]) / timeScale].name != null">
+              <template v-else-if="itemTaskInfo[index][ind].name != null">
                 <SchedulerItem :key='day.id' :date='currentWeek[index]' :hour='i'
-                  :taskName='itemTaskInfo[index][(i - getShiftTimeArray[selectedPersonIndex][0]) / timeScale].name'
-                  :taskImportance='itemTaskInfo[index][(i - getShiftTimeArray[selectedPersonIndex][0]) / timeScale].importance'
-                  :hasWork='true' :timeScale='timeScale' @timeSelected="timeSelection" />
+                  :taskName='itemTaskInfo[index][ind].name' :taskImportance='itemTaskInfo[index][ind].importance'
+                  @timeSelected="timeSelection" />
               </template>
               <template v-else>
                 <SchedulerItem :class='{ selected: index + 1 == selectedDay && i == selectedHour }' :key='day.id'
-                  :date='currentWeek[index]' :hour='i' :hasWork='true' :timeScale='timeScale'
-                  @timeSelected="timeSelection" />
+                  :date='currentWeek[index]' :hour='i' @timeSelected="timeSelection" />
               </template>
             </template>
           </template>
@@ -459,10 +455,6 @@ export default {
 
 .blankRectangle {
   height: 30px;
-}
-
-.biggerTime {
-  height: 150px;
 }
 
 .time h1 {
