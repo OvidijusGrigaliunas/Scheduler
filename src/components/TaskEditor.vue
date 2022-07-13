@@ -125,7 +125,6 @@ export default {
   methods: {
     requirementsCheck() {
       let errorList = [];
-      // pakeisti i array 
       if (tname.value.length === 0 || tdesc.value.length === 0) {
         errorList.push('Please fill in all fields');
       }

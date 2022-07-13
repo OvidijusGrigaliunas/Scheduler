@@ -28,7 +28,7 @@ export default {
       ],
       people: [
         { name: "Vardenis", shiftStart: 8, shiftEnd: 17, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
-        { name: "Pavardenis", shiftStart: 9, shiftEnd: 18, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
+        { name: "Pavardenis", shiftStart: 9, shiftEnd: 19, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
         { name: "Bonilla", shiftStart: 10, shiftEnd: 19, breakStart: 11, breakEnd: 13, workDays: [true, true, true, true, true, false, true] },
         { name: "Hobbs", shiftStart: 7, shiftEnd: 16, breakStart: 10, breakEnd: 11, workDays: [true, false, true, true, true, false, false] }
       ],
@@ -40,6 +40,7 @@ export default {
       filteredTasksByUsers: [],
       filteredTasks: [],
       currentWeek: [],
+      itemTaskInfo: [],
       taskEditorKey: 30,
       // Veikia su 0.25, 0.5 ir 1
       // Jei 0.25, laiko tarpai yra 15min
@@ -126,6 +127,7 @@ export default {
     }
   },
   created() {
+    this.taskInfoArray = new Array(7).fill({ name: null, importance: null }).map(() => new Array(this.getShiftTimeArray[0].length).fill({ name: null, importance: null }));
     for (let i = 1; i < 8; i++) {
       this.currentWeek.push({ day: null, id: i })
     }
@@ -260,6 +262,7 @@ export default {
           }
         }
       });
+      this.generateTaskInfoForItems();
     },
     filterTaskByUsers() {
       this.filteredTasksByUsers = this.taskArray.filter(task => task.taskTarget === this.people[this.selectedPersonIndex].name);
@@ -288,7 +291,24 @@ export default {
       });
       return result;
     },
-
+    // Sugeneruoja 2d array, pagal kurią galime žinoti ar langelis turi užduotį.
+    generateTaskInfoForItems() {
+      let taskInfoArray = new Array(7).fill({ name: null, importance: null }).map(() => new Array(this.getShiftTimeArray[this.selectedPersonIndex].length).fill({ name: null, importance: null }));
+      for (let i = 0; i < 7; i++) {
+        this.filteredTasks[i].forEach(task => {
+          taskInfoArray[i] = this.updateColumnTaskInfo(taskInfoArray[i], task)
+        })
+      }
+      this.itemTaskInfo = taskInfoArray;
+    },
+    updateColumnTaskInfo(taskArray, task) {
+      let taskHourEndIndex = (task.taskHourEnd - this.people[this.selectedPersonIndex].shiftStart) / this.timeScale;
+      let taskHourStartIndex = (task.taskHourStart - this.people[this.selectedPersonIndex].shiftStart) / this.timeScale;
+      for (let i = taskHourStartIndex; i < taskHourEndIndex; i++) {
+        taskArray[i] = { name: task.taskName, importance: task.taskImportance }
+      }
+      return taskArray;
+    }
   }
 }
 </script>
@@ -329,17 +349,22 @@ export default {
               <h1>{{ formatTime[parseInt(i / timeScale)] }}</h1>
             </div>
             <template v-for="(day, index) in currentWeek">
-              <!-- Galima pameginti padaryti, kad parent component žinotų kurie childs turi turėtų užduotis.
-                            Tai galėtų sumažinti memory ir apmažinti darbo apkrova(galbut) --->
               <template
                 v-if="!people[selectedPersonIndex].workDays[index] || getBreakTimeArray[selectedPersonIndex].includes(i)">
-                <SchedulerItem :date='currentWeek[index]' :hour='i' :tasks="[]" :isWorkDay='false' :isBreakTime='false'
-                  :timeScale='timeScale' @timeSelected="timeSelection" />
+                <SchedulerItem :date='currentWeek[index]' :hour='i' :hasWork='false' :timeScale='timeScale'
+                  @timeSelected="timeSelection" />
+              </template>
+              <template
+                v-else-if="itemTaskInfo[index][(i - getShiftTimeArray[selectedPersonIndex][0]) / timeScale].name != null">
+                <SchedulerItem :key='day.id' :date='currentWeek[index]' :hour='i'
+                  :taskName='itemTaskInfo[index][(i - getShiftTimeArray[selectedPersonIndex][0]) / timeScale].name'
+                  :taskImportance='itemTaskInfo[index][(i - getShiftTimeArray[selectedPersonIndex][0]) / timeScale].importance'
+                  :hasWork='true' :timeScale='timeScale' @timeSelected="timeSelection" />
               </template>
               <template v-else>
-                <SchedulerItem :key='day.id' :class='{ selected: index + 1 == selectedDay && i == selectedHour }'
-                  :date='currentWeek[index]' :hour='i' :tasks='filteredTasks[index]' :isWorkDay='true'
-                  :isBreakTime='false' :timeScale='timeScale' @timeSelected="timeSelection" />
+                <SchedulerItem :class='{ selected: index + 1 == selectedDay && i == selectedHour }' :key='day.id'
+                  :date='currentWeek[index]' :hour='i' :hasWork='true' :timeScale='timeScale'
+                  @timeSelected="timeSelection" />
               </template>
             </template>
           </template>
