@@ -99,14 +99,13 @@ export default {
         let filteredTasksStartHours = [];
         let filLength = filteredTasks.length;
         for (let i = 0; i < filLength; i++) {
-          filteredTasksStartHours.push(filteredTasks[i].taskHourStart)
+          filteredTasksStartHours[i] = filteredTasks[i].taskHourStart;
         }
         // Surandame arčiausiai esančią užduotį nuo mūsų užduoties pradžios
         let lowestValueIndex = filteredTasksStartHours.indexOf(Math.min(...filteredTasksStartHours));
         return filteredTasks[lowestValueIndex].taskHourStart - this.timeScale;
       }
       return this.shiftTime[this.shiftTime.length - 1];
-
     },
     getTaskHourStartLimit() {
       let taskStart = this.getTaskInfo.taskHourStart;
@@ -116,13 +115,25 @@ export default {
         let filteredTasksEndHours = [];
         let filLength = filteredTasks.length;
         for (let i = 0; i < filLength; i++) {
-          filteredTasksEndHours.push(filteredTasks[i].taskHourEnd);
+          filteredTasksEndHours[i] = filteredTasks[i].taskHourEnd;
         }
         let lowestValueIndex = filteredTasksEndHours.indexOf(Math.max(...filteredTasksEndHours));
         return filteredTasks[lowestValueIndex].taskHourEnd;
       }
       return this.shiftTime[0];
     },
+    // Padalina shiftTime į dvi dalis.
+    // Pirmoji dalis yra skirta Task starts select vertes gauti,
+    // o antroji Task Ends select.
+    cutShiftTimeForSelect() {
+      let timeLength = (this.getTaskInfo.taskHourEnd - this.shiftTime[0]) / this.timeScale;
+      let timeLength2 = (this.getTaskInfo.taskHourStart - this.shiftTime[0]) / this.timeScale;
+      let timeCut = [];
+      timeCut[0] = [...this.shiftTime];
+      timeCut[0].length = timeLength + 1;
+      timeCut[1] = [...this.shiftTime].slice(timeLength2);
+      return timeCut;
+    }
   },
   methods: {
     requirementsCheck() {
@@ -165,7 +176,6 @@ export default {
         task.taskHourEnd - this.timeScale >= this.hour
       );
     },
-
   },
 }
 
@@ -181,8 +191,8 @@ export default {
       <input :value="getTaskInfo.taskName" type="text" id="tname" name="tname"><br>
       <label for="taskStartsAt">Task starts: </label><br>
       <select name="taskStartsAt" id="taskStartsAt">
-        <template v-for="n in shiftTime">
-          <template v-if="n >= getTaskHourStartLimit && n <= getTaskInfo.taskHourEnd">
+        <template v-for="n in cutShiftTimeForSelect[0]">
+          <template v-if="n >= getTaskHourStartLimit">
             <option v-if="!breakTime.includes(n)" :selected="getTaskInfo.taskHourStart === n" :value='n'>{{
                 formattedTime[parseInt(n / timeScale)]
             }}</option>
@@ -191,8 +201,8 @@ export default {
       </select><br>
       <label for="taskEndsAt">Task ends: </label><br>
       <select name="taskEndsAt" id="taskEndsAt">
-        <template v-for="n in shiftTime">
-          <template v-if="n >= getTaskInfo.taskHourStart && n <= getTaskHourEndLimit">
+        <template v-for="n in cutShiftTimeForSelect[1]">
+          <template v-if="n <= getTaskHourEndLimit">
             <option v-if="!breakTime.includes(n)" :selected="getTaskInfo.taskHourEnd === n" :value='n + timeScale'>{{
                 formattedTime[n / timeScale + 1]
             }}</option>

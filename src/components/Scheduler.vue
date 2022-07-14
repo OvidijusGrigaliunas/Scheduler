@@ -17,7 +17,7 @@ export default {
         { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/12", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 4 },
         { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/12", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskImportance: 3 },
         { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/12", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/12", taskHourStart: 12, taskHourEnd: 13, taskTarget: 'Vardenis', taskImportance: 3 },
+        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/12", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Vardenis', taskImportance: 3 },
         { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/12", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Vardenis', taskImportance: 2 },
         { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/12", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Vardenis', taskImportance: 5 },
         { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/12", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Vardenis', taskImportance: 4 },
@@ -188,7 +188,7 @@ export default {
     timeSelection(date, hour) {
       this.selectedDay = date.day.getDay();
       if (this.selectedDay === 0) {
-        this.selectedDay === 7;
+        this.selectedDay = 7;
       }
       this.selectedHour = hour;
       this.selectedDate = date.day;
@@ -328,23 +328,22 @@ export default {
           <div class="weekDay">
             <p>Sunday</p>
           </div>
-          <template v-for='(i, ind) in getShiftTimeArray[selectedPersonIndex]'>
+          <template v-for='(i, index) in getShiftTimeArray[selectedPersonIndex]'>
             <div class="time">
               <h1>{{ formatTime[i / timeScale] }}</h1>
             </div>
-            <template v-for="(day, index) in currentWeek">
+            <template v-for="(day, dayIndex) in currentWeek">
               <template
-                v-if="!people[selectedPersonIndex].workDays[index] || getBreakTimeArray[selectedPersonIndex].includes(i)">
-                <SchedulerItem :noWork='true' @timeSelected="timeSelection" />
+                v-if="!people[selectedPersonIndex].workDays[dayIndex] || getBreakTimeArray[selectedPersonIndex].includes(i)">
+                <SchedulerItem :noWork='true' />
               </template>
-              <template v-else-if="itemTaskInfo[index][ind].name != null">
-                <SchedulerItem :key='day.id' :date='currentWeek[index]' :hour='i'
-                  :taskName='itemTaskInfo[index][ind].name' :taskImportance='itemTaskInfo[index][ind].importance'
-                  @timeSelected="timeSelection" />
+              <template v-else-if="itemTaskInfo[dayIndex][index].name != null">
+                <SchedulerItem :date='day' :hour='i' :taskName='itemTaskInfo[dayIndex][index].name'
+                  :taskImportance='itemTaskInfo[dayIndex][index].importance' @timeSelected="timeSelection" />
               </template>
               <template v-else>
-                <SchedulerItem :class='{ selected: index + 1 == selectedDay && i == selectedHour }' :key='day.id'
-                  :date='currentWeek[index]' :hour='i' @timeSelected="timeSelection" />
+                <SchedulerItem :class='{ selected: dayIndex + 1 == selectedDay && i == selectedHour }' :date='day'
+                  :hour='i' @timeSelected="timeSelection" />
               </template>
             </template>
           </template>

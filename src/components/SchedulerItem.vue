@@ -7,10 +7,6 @@ export default {
     taskImportance: Number,
     noWork: Boolean,
   },
-  computed: {
-  },
-  mounted() {
-  },
   methods: {
     taskImportanceColor() {
       switch (this.taskImportance) {
