@@ -8,16 +8,24 @@ export default {
     formattedTime: Array,
     shiftTime: Array,
     breakTime: Array,
-    timeScale: Number
+    timeScale: Number,
   },
   data() {
     return {
       showTaskEdit: false,
-      foundTask: null
+      foundTask: [],
+      tName: '',
+      tDesc: '',
+      selectedImportance: 3,
+      selectedTimeStart: 5,
+      selectedTimeEnd: 5
+
     }
   },
   mounted() {
     this.findTask();
+    this.selectedTimeStart = this.hour;
+    this.selectedTimeEnd = this.hour + this.timeScale;
   },
   computed: {
     hasTasksEditor() {
@@ -128,22 +136,22 @@ export default {
     // sumažina if salygų kiekį html dalyje
     cutShiftTimeForSelect() {
       let timeCut = [];
-      let timeShiftWithoutBreaks =  [...this.shiftTime];
+      let timeShiftWithoutBreaks = [...this.shiftTime];
       // Pašalina laikus, kurie priklauso breakTime
       timeShiftWithoutBreaks.splice(timeShiftWithoutBreaks.indexOf(this.breakTime[0]), this.breakTime.length)
       // Apkarpome iki mūsų užduoties pabaigos (jei ne editinam, tada pasirinktas laikas imamas)
       timeCut[0] = [...timeShiftWithoutBreaks];
-      timeCut[0].length = timeCut[0].indexOf(this.getTaskInfo.taskHourEnd)+1;
+      timeCut[0].length = timeCut[0].indexOf(this.getTaskInfo.taskHourEnd) + 1;
       // Jei yra daugiau task juostoje prieš pasirinktą laiką,
       // mes vėl jį apkarpome nuo artimiausio task pabaigos
       if (this.getTaskHourStartLimit != this.shiftTime[0]) {
-        timeCut[0] =timeCut[0].slice(timeCut[0].indexOf(this.getTaskHourStartLimit));
+        timeCut[0] = timeCut[0].slice(timeCut[0].indexOf(this.getTaskHourStartLimit));
       }
       // Antroji dalis, praktiškai tas pats, tik apkarpome nuo priešingos pusės
       timeCut[1] = [...timeShiftWithoutBreaks];
       timeCut[1] = timeCut[1].slice(timeCut[1].indexOf(this.getTaskInfo.taskHourStart));
       if (this.getTaskHourEndLimit != this.shiftTime[this.shiftTime.length - 1]) {
-        timeCut[1].splice(timeCut[1].indexOf(this.getTaskHourEndLimit)+1, timeCut[1].length);
+        timeCut[1].splice(timeCut[1].indexOf(this.getTaskHourEndLimit) + 1, timeCut[1].length);
       }
       return timeCut;
     }
@@ -151,16 +159,16 @@ export default {
   methods: {
     requirementsCheck() {
       let errorList = [];
-      if (tname.value.length === 0 || tdesc.value.length === 0) {
+      if (this.tName.length === 0 || this.tDesclength === 0) {
         errorList.push('Please fill in all fields');
       }
-      if (tdesc.value.length > 1024) {
+      if (this.tDesc.length > 1024) {
         errorList.push('Description - maximum characters allowed: 1024');
       }
-      if (tname.value.length > 64) {
+      if (this.tName.length > 64) {
         errorList.push('Name - maximum characters allowed: 64');
       }
-      if (parseFloat(taskStartsAt.value) >= parseFloat(taskEndsAt.value)) {
+      if (this.selectedTimeStart >= this.selectedTimeEnd) {
         errorList.push("Task can't end before it starts");
       }
       return errorList;
@@ -170,7 +178,7 @@ export default {
       if (errorList.length > 0) {
         alert(errorList.join('. '))
       } else {
-        this.$emit('NewTask', tname.value, tdesc.value, parseFloat(taskStartsAt.value), parseInt(importanceSelect.value), parseFloat(taskEndsAt.value));
+        this.$emit('NewTask', this.tName, this.tDesc, this.selectedTimeStart, this.selectedImportance, this.selectedTimeEnd);
       }
     },
     saveEdit() {
@@ -178,7 +186,7 @@ export default {
       if (errorList.length > 0) {
         alert(errorList.join('. '))
       } else {
-        this.$emit('taskEdit', this.foundTask, tname.value, tdesc.value, parseFloat(taskStartsAt.value), parseInt(importanceSelect.value), parseFloat(taskEndsAt.value));
+        this.$emit('taskEdit', this.foundTask, this.tName, this.tDesc, this.selectedTimeStart, this.selectedImportance, this.selectedTimeEnd);
       }
     },
     findTask() {
@@ -189,6 +197,13 @@ export default {
         task.taskHourEnd - this.timeScale >= this.hour
       );
     },
+    showEditScreen() {
+      this.showTaskEdit = true;
+      this.tName = this.getTaskInfo.taskName;
+      this.tDesc = this.getTaskInfo.taskDesc;
+      this.selectedTimeStart = this.getTaskInfo.taskHourStart;
+      this.selectedTimeEnd = this.getTaskInfo.taskHourEnd + this.timeScale;
+    }
   },
 }
 
@@ -201,34 +216,34 @@ export default {
     <div v-if="!hasTasksEditor || showTaskEdit">
       <!--- Užduoties kūrimas/keitimas  --->
       <label for="tname">Task name: </label><br>
-      <input :value="getTaskInfo.taskName" type="text" id="tname" name="tname"><br>
+      <input type="text" v-model="tName"><br>
       <label for="taskStartsAt">Task starts: </label><br>
-      <select name="taskStartsAt" id="taskStartsAt">
+      <select v-model="selectedTimeStart">
         <template v-for="n in cutShiftTimeForSelect[0]">
-          <option :selected="getTaskInfo.taskHourStart === n" :value='n'>{{
-              formattedTime[parseInt(n / timeScale)]
+          <option :value="n">{{
+              formattedTime[n / timeScale]
           }}</option>
         </template>
       </select><br>
       <label for="taskEndsAt">Task ends: </label><br>
-      <select name="taskEndsAt" id="taskEndsAt">
+      <select v-model="selectedTimeEnd">
         <template v-for="n in cutShiftTimeForSelect[1]">
-          <option :selected="getTaskInfo.taskHourEnd === n" :value='n + timeScale'>{{
+          <option :value='n + timeScale'>{{
               formattedTime[n / timeScale + 1]
           }}</option>
         </template>
       </select><br>
       <label for="importanceSelect">Importance level: </label><br>
-      <select name="importanceSelect" id="importanceSelect">
-        <option :selected="getTaskInfo.taskImportance === 1" :value='1'>Very low</option>
-        <option :selected="getTaskInfo.taskImportance === 2" :value='2'>Low</option>
-        <option :selected="getTaskInfo.taskImportance === 3" :value='3'>Moderate</option>
-        <option :selected="getTaskInfo.taskImportance === 4" :value='4'>High</option>
-        <option :selected="getTaskInfo.taskImportance === 5" :value='5'>Very high</option>
+      <select v-model="selectedImportance">
+        <option :value='1'>Very low</option>
+        <option :value='2'>Low</option>
+        <option :value='3'>Moderate</option>
+        <option :value='4'>High</option>
+        <option :value='5'>Very high</option>
       </select><br>
       <label for="tdesc">Task description: </label><br>
-      <textarea :value="getTaskInfo.taskDesc" :style="setTextAreaHeight" type="text" id="tdesc"
-        name="tdesc"></textarea><br class="lineBreak"><br class="lineBreak">
+      <textarea :style="setTextAreaHeight" type="text" id="tdesc" v-model="tDesc" name="tesc"></textarea><br
+        class="lineBreak"><br class="lineBreak">
       <button v-if="!showTaskEdit" @click="newTask">Create new task</button>
       <button v-else @click="saveEdit">Save edit</button>
     </div>
@@ -242,7 +257,7 @@ export default {
         <h1>Importance: {{ getTaskImportanceText }}</h1>
         <p>{{ getTaskInfo.taskDesc }}</p>
       </div>
-      <button type="button" @click="showTaskEdit = true;">Edit task</button><br class="lineBreak"><br class="lineBreak">
+      <button type="button" @click="showEditScreen()">Edit task</button><br class="lineBreak"><br class="lineBreak">
       <button type="button" @click="$emit('taskDeletion', foundTask)">Delete task</button>
     </div>
 

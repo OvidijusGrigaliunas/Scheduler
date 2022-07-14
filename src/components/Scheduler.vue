@@ -257,7 +257,7 @@ export default {
       let formattedDay = '';
       let month;
       week.forEach(day => {
-        formattedDay = day.day.getFullYear() + "/"
+        formattedDay = day.day.getFullYear() + "/";
         month = day.day.getMonth() + 1;
         // Su if nustatome ar reikia pridėti 0 pradžioje,
         // kad gautume yyyy/mm/dd datos formatą
