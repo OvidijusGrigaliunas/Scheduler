@@ -7,12 +7,6 @@ export default {
     taskImportance: Number,
     noWork: Boolean,
   },
-  data() {
-    return {
-      foundTask: {},
-      hasTask: false,
-    };
-  },
   computed: {
   },
   mounted() {

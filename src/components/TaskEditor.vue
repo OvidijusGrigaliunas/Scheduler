@@ -146,7 +146,7 @@ export default {
       if (errorList.length > 0) {
         alert(errorList.join('. '))
       } else {
-        this.$emit('NewTask', tname.value, tdesc.value, this.date, parseFloat(taskStartsAt.value), parseInt(importanceSelect.value), parseFloat(taskEndsAt.value));
+        this.$emit('NewTask', tname.value, tdesc.value, parseFloat(taskStartsAt.value), parseInt(importanceSelect.value), parseFloat(taskEndsAt.value));
       }
     },
     saveEdit() {
@@ -154,7 +154,7 @@ export default {
       if (errorList.length > 0) {
         alert(errorList.join('. '))
       } else {
-        this.$emit('taskEdit', this.foundTask, tname.value, tdesc.value, this.date, parseFloat(taskStartsAt.value), parseInt(importanceSelect.value), parseFloat(taskEndsAt.value));
+        this.$emit('taskEdit', this.foundTask, tname.value, tdesc.value, parseFloat(taskStartsAt.value), parseInt(importanceSelect.value), parseFloat(taskEndsAt.value));
       }
     },
     findTask() {

@@ -127,7 +127,7 @@ export default {
     }
   },
   created() {
-    this.taskInfoArray = new Array(7).fill({ name: null, importance: null }).map(() => new Array(this.getShiftTimeArray[0].length).fill({ name: null, importance: null }));
+    this.taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[0].length).fill({ name: null, importance: null }));
     for (let i = 1; i < 8; i++) {
       this.currentWeek.push({ day: null, id: i })
     }
@@ -146,11 +146,11 @@ export default {
         this.taskEditorKey = this.taskEditorKey * (-1);
       }
     },
-    createNewTask(name, desc, day, startsAt, importance, endsAt) {
+    createNewTask(name, desc, startsAt, importance, endsAt) {
       let object = {
         taskName: name,
         taskDesc: desc,
-        taskDay: day,
+        taskDay: this.selectedDateFormatting,
         taskHourStart: startsAt,
         taskHourEnd: endsAt,
         taskTarget: this.people[this.selectedPersonIndex].name,
@@ -159,7 +159,6 @@ export default {
       this.selectedHour = startsAt;
       this.taskArray.push(object);
       this.filterTaskByUsers();
-      this.updateSchedulerColumn();
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
     deleteTask(taskToDelete) {
@@ -170,26 +169,21 @@ export default {
         }
       }
       this.filterTaskByUsers();
-      this.updateSchedulerColumn();
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
-    editTask(taskToChange, name, desc, day, startsAt, importance, endsAt) {
+    editTask(taskToChange, name, desc, startsAt, importance, endsAt) {
       let taskIndex = this.taskArray.indexOf(taskToChange);
       this.taskArray[taskIndex] = {
         taskName: name,
         taskDesc: desc,
-        taskDay: day,
+        taskDay: this.selectedDateFormatting,
         taskHourStart: startsAt,
         taskHourEnd: endsAt,
         taskTarget: this.people[this.selectedPersonIndex].name,
         taskImportance: importance
       };
       this.filterTaskByUsers();
-      this.updateSchedulerColumn();
       this.taskEditorKey = this.taskEditorKey * (-1);
-    },
-    updateSchedulerColumn() {
-      this.currentWeek[this.selectedDay - 1].id = this.currentWeek[this.selectedDay - 1].id * (-1);
     },
     timeSelection(date, hour) {
       this.selectedDay = date.day.getDay();
@@ -224,7 +218,6 @@ export default {
       this.selectedDate = this.addDays(this.selectedDate, direction);
       this.createWeek(this.selectedDate);
       this.filterTasksByWeek(this.currentWeek);
-      this.reloadGrid();
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
     changePerson(direction) {
@@ -236,16 +229,7 @@ export default {
       }
       this.getSelectedHour();
       this.filterTaskByUsers();
-      this.reloadGrid();
       this.taskEditorKey = this.taskEditorKey * (-1);
-    },
-    reloadGrid() {
-      for (let i = 0; i < 7; i++) {
-        //jei ne darbo dieną, ignuorajami stulpeliai
-        if (this.people[this.selectedPersonIndex].workDays[i]) {
-          this.currentWeek[i].id = this.currentWeek[i].id * (-1);
-        }
-      }
     },
     filterTasksByWeek() {
       let formattedWeek = this.dateFormatting(this.currentWeek);
@@ -293,7 +277,7 @@ export default {
     },
     // Sugeneruoja 2d array, pagal kurią galime žinoti ar langelis turi užduotį.
     generateTaskInfoForItems() {
-      let taskInfoArray = new Array(7).fill({ name: null, importance: null }).map(() => new Array(this.getShiftTimeArray[this.selectedPersonIndex].length).fill({ name: null, importance: null }));
+      let taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[this.selectedPersonIndex].length).fill({ name: null, importance: null }));
       for (let i = 0; i < 7; i++) {
         this.filteredTasks[i].forEach(task => {
           taskInfoArray[i] = this.updateColumnTaskInfo(taskInfoArray[i], task)
