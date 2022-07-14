@@ -1,6 +1,6 @@
 <script>
 export default {
-  props: ['weekRange'],
+  props: { weekRange: Array },
   computed: {
     weekRangeFormat() {
       let result = this.weekRange[0].day.getFullYear() + "/"

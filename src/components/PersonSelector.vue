@@ -1,6 +1,6 @@
 <script>
 export default {
-  props: ["peopleList", "selectedIndex"],
+  props: { peopleList: Array, selectedIndex: Number },
   computed: {},
   methods: {
     findNeighbour(direction) {
