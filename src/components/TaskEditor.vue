@@ -125,13 +125,26 @@ export default {
     // Padalina shiftTime į dvi dalis.
     // Pirmoji dalis yra skirta Task starts select vertes gauti,
     // o antroji Task Ends select.
+    // sumažina if salygų kiekį html dalyje
     cutShiftTimeForSelect() {
-      let timeLength = (this.getTaskInfo.taskHourEnd - this.shiftTime[0]) / this.timeScale;
-      let timeLength2 = (this.getTaskInfo.taskHourStart - this.shiftTime[0]) / this.timeScale;
       let timeCut = [];
-      timeCut[0] = [...this.shiftTime];
-      timeCut[0].length = timeLength + 1;
-      timeCut[1] = [...this.shiftTime].slice(timeLength2);
+      let timeShiftWithoutBreaks =  [...this.shiftTime];
+      // Pašalina laikus, kurie priklauso breakTime
+      timeShiftWithoutBreaks.splice(timeShiftWithoutBreaks.indexOf(this.breakTime[0]), this.breakTime.length)
+      // Apkarpome iki mūsų užduoties pabaigos (jei ne editinam, tada pasirinktas laikas imamas)
+      timeCut[0] = [...timeShiftWithoutBreaks];
+      timeCut[0].length = timeCut[0].indexOf(this.getTaskInfo.taskHourEnd)+1;
+      // Jei yra daugiau task juostoje prieš pasirinktą laiką,
+      // mes vėl jį apkarpome nuo artimiausio task pabaigos
+      if (this.getTaskHourStartLimit != this.shiftTime[0]) {
+        timeCut[0] =timeCut[0].slice(timeCut[0].indexOf(this.getTaskHourStartLimit));
+      }
+      // Antroji dalis, praktiškai tas pats, tik apkarpome nuo priešingos pusės
+      timeCut[1] = [...timeShiftWithoutBreaks];
+      timeCut[1] = timeCut[1].slice(timeCut[1].indexOf(this.getTaskInfo.taskHourStart));
+      if (this.getTaskHourEndLimit != this.shiftTime[this.shiftTime.length - 1]) {
+        timeCut[1].splice(timeCut[1].indexOf(this.getTaskHourEndLimit)+1, timeCut[1].length);
+      }
       return timeCut;
     }
   },
@@ -192,21 +205,17 @@ export default {
       <label for="taskStartsAt">Task starts: </label><br>
       <select name="taskStartsAt" id="taskStartsAt">
         <template v-for="n in cutShiftTimeForSelect[0]">
-          <template v-if="n >= getTaskHourStartLimit">
-            <option v-if="!breakTime.includes(n)" :selected="getTaskInfo.taskHourStart === n" :value='n'>{{
-                formattedTime[parseInt(n / timeScale)]
-            }}</option>
-          </template>
+          <option :selected="getTaskInfo.taskHourStart === n" :value='n'>{{
+              formattedTime[parseInt(n / timeScale)]
+          }}</option>
         </template>
       </select><br>
       <label for="taskEndsAt">Task ends: </label><br>
       <select name="taskEndsAt" id="taskEndsAt">
         <template v-for="n in cutShiftTimeForSelect[1]">
-          <template v-if="n <= getTaskHourEndLimit">
-            <option v-if="!breakTime.includes(n)" :selected="getTaskInfo.taskHourEnd === n" :value='n + timeScale'>{{
-                formattedTime[n / timeScale + 1]
-            }}</option>
-          </template>
+          <option :selected="getTaskInfo.taskHourEnd === n" :value='n + timeScale'>{{
+              formattedTime[n / timeScale + 1]
+          }}</option>
         </template>
       </select><br>
       <label for="importanceSelect">Importance level: </label><br>
