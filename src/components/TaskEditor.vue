@@ -22,8 +22,10 @@ export default {
 
     }
   },
-  mounted() {
+  created() {
+    // Su mounted kartais kelios funkcijos buvo atkartojamos 2 kartus, nes per vėlai atsinaujindavo foundTask
     this.findTask();
+    // Šitos dvi eilutės nustato pradines vertes, kad būtų patogiau naudotis puslapių
     this.selectedTimeStart = this.hour;
     this.selectedTimeEnd = this.hour + this.timeScale;
   },
@@ -71,7 +73,6 @@ export default {
       }
     },
     // Kad nebūtų kelių užduočių tuo pačiu metu, reikia, kad šita funkcija aptiktų galimą laiko pasirinkimo diapazoną
-
     setTextAreaHeight() {
       let textAreaHeight = this.resolution * 0.5;
       if (textAreaHeight <= 380) {
@@ -101,7 +102,7 @@ export default {
     },
     getTaskHourEndLimit() {
       let hourEndLimit = this.getTaskInfo.taskHourStart;
-      // Mums reikalingos užduotis, kurios prasideda vėliau negu dabartinis laikas
+      // Mums reikalingos užduotys, kurios prasideda vėliau negu dabartinis laikas
       let filteredTasks = this.tasks.filter(task => task.taskHourStart > hourEndLimit);
       if (filteredTasks.length > 0) {
         let filteredTasksStartHours = [];
@@ -117,7 +118,7 @@ export default {
     },
     getTaskHourStartLimit() {
       let taskStart = this.getTaskInfo.taskHourStart;
-      // Mums reikalingos užduotis, kurios baigiasi anksčiau negu prasideda naujoji
+      // Mums reikalingos užduotys, kurios baigiasi anksčiau negu prasideda naujoji
       let filteredTasks = this.tasks.filter(task => task.taskHourEnd - this.timeScale < taskStart);
       if (filteredTasks.length > 0) {
         let filteredTasksEndHours = [];
@@ -133,7 +134,7 @@ export default {
     // Padalina shiftTime į dvi dalis.
     // Pirmoji dalis yra skirta Task starts select vertes gauti,
     // o antroji Task Ends select.
-    // sumažina if salygų kiekį html dalyje
+    // Sumažina if salygų kiekį html dalyje
     cutShiftTimeForSelect() {
       let timeCut = [];
       let timeShiftWithoutBreaks = [...this.shiftTime];
@@ -190,8 +191,7 @@ export default {
       }
     },
     findTask() {
-      // Suranda užduotį pagal pasirinktą langelį,
-      // kuris gali būti užduoties diapazone
+      // Suranda užduotį pagal pasirinkto langelio laiką,
       this.foundTask = this.tasks.find(task =>
         task.taskHourStart <= this.hour &&
         task.taskHourEnd - this.timeScale >= this.hour
@@ -203,6 +203,7 @@ export default {
       this.tDesc = this.getTaskInfo.taskDesc;
       this.selectedTimeStart = this.getTaskInfo.taskHourStart;
       this.selectedTimeEnd = this.getTaskInfo.taskHourEnd + this.timeScale;
+      this.selectedImportance = this.getTaskInfo.taskImportance;
     }
   },
 }
@@ -215,9 +216,9 @@ export default {
     </div>
     <div v-if="!hasTasksEditor || showTaskEdit">
       <!--- Užduoties kūrimas/keitimas  --->
-      <label for="tname">Task name: </label><br>
+      <label for="tname">Task name:</label><br>
       <input type="text" v-model="tName"><br>
-      <label for="taskStartsAt">Task starts: </label><br>
+      <label for="taskStartsAt">Task starts:</label><br>
       <select v-model="selectedTimeStart">
         <template v-for="n in cutShiftTimeForSelect[0]">
           <option :value="n">{{
@@ -225,7 +226,7 @@ export default {
           }}</option>
         </template>
       </select><br>
-      <label for="taskEndsAt">Task ends: </label><br>
+      <label for="taskEndsAt">Task ends:</label><br>
       <select v-model="selectedTimeEnd">
         <template v-for="n in cutShiftTimeForSelect[1]">
           <option :value='n + timeScale'>{{
@@ -233,7 +234,7 @@ export default {
           }}</option>
         </template>
       </select><br>
-      <label for="importanceSelect">Importance level: </label><br>
+      <label for="importanceSelect">Importance level:</label><br>
       <select v-model="selectedImportance">
         <option :value='1'>Very low</option>
         <option :value='2'>Low</option>
@@ -241,9 +242,9 @@ export default {
         <option :value='4'>High</option>
         <option :value='5'>Very high</option>
       </select><br>
-      <label for="tdesc">Task description: </label><br>
-      <textarea :style="setTextAreaHeight" type="text" id="tdesc" v-model="tDesc" name="tesc"></textarea><br
-        class="lineBreak"><br class="lineBreak">
+      <label>Task description:</label><br>
+      <textarea :style="setTextAreaHeight" type="text" v-model="tDesc"></textarea><br class="lineBreak"><br
+        class="lineBreak">
       <button v-if="!showTaskEdit" @click="newTask">Create new task</button>
       <button v-else @click="saveEdit">Save edit</button>
     </div>
