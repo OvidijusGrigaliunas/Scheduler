@@ -540,7 +540,8 @@ export default {
           <div class="weekDay">
             <p>Sunday</p>
           </div>
-          <template v-for='(i, index) in getShiftTimeArray[selectedPersonIndex]'>
+          <template v-for='(i, index) in getShiftTimeArray[selectedPersonIndex]'
+            v-memo="[itemTaskInfo, selectedDay, selectedHour]">
             <div class="time">
               <h1>{{ formatTime[i / timeScale] }}</h1>
             </div>
