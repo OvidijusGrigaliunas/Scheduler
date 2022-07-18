@@ -541,6 +541,7 @@ export default {
             <p>Sunday</p>
           </div>
           <template v-for='(i, hourIndex) in getShiftTimeArray[selectedPersonIndex]'>
+
             <div class="time">
               <h1>{{ formatTime[i / timeScale] }}</h1>
             </div>
