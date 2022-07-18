@@ -21,7 +21,7 @@ export default {
         case 5:
           return { background: "#F94144" };
         default:
-          return { background: "#faf9f9" };
+          return;
       }
     },
   },
@@ -45,13 +45,13 @@ export default {
   cursor: pointer;
   text-align: center;
   overflow: hidden;
+  background-color: #faf9f9;
 }
 
 .break {
   cursor: default;
   background-color: #d3d3d3;
 }
-
 
 .item h2 {
   font-size: 14px;

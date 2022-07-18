@@ -543,7 +543,8 @@ export default {
               <SchedulerItem
                 v-if="!people[selectedPersonIndex].workDays[dayIndex] || getBreakTimeArray[selectedPersonIndex].includes(i)"
                 :noWork='true' />
-              <SchedulerItem v-else :dateIndex='dayIndex' :hour='i' :taskName='itemTaskInfo[dayIndex][hourIndex].name'
+              <SchedulerItem :class="{ selected: selectedDay === dayIndex + 1 && selectedHour === i }" v-else
+                :dateIndex='dayIndex' :hour='i' :taskName='itemTaskInfo[dayIndex][hourIndex].name'
                 :taskImportance='itemTaskInfo[dayIndex][hourIndex].importance' @timeSelected="timeSelection" />
             </template>
           </template>
