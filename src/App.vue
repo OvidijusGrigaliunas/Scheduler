@@ -4,7 +4,6 @@ import Scheduler from './components/Scheduler.vue';
 </script>
 
 <template>
-  
   <main>
     <Scheduler />
   </main>

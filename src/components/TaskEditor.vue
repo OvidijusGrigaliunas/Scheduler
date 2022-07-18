@@ -261,7 +261,6 @@ export default {
       <button type="button" @click="showEditScreen()">Edit task</button><br class="lineBreak"><br class="lineBreak">
       <button type="button" @click="$emit('taskDeletion', foundTask)">Delete task</button>
     </div>
-
   </div>
 </template>
 <style scoped>
