@@ -2,7 +2,7 @@
 export default {
   props: {
     hour: Number,
-    date: Object,
+    dateIndex: Number,
     taskName: String,
     taskImportance: Number,
     noWork: Boolean,
@@ -21,11 +21,8 @@ export default {
         case 5:
           return { background: "#F94144" };
         default:
-          return { background: "#DAF7A6" };
+          return { background: "#faf9f9" };
       }
-    },
-    selectedTime() {
-      this.$emit("timeSelected", this.date, this.hour);
     },
   },
 };
@@ -33,8 +30,7 @@ export default {
 
 <template>
   <div v-if="noWork" class="item break"></div>
-  <div v-else-if="taskName == null" class="item" @click="selectedTime"></div>
-  <div v-else class="item" :style="taskImportanceColor()" @click="selectedTime">
+  <div v-else class="item" :style="taskImportanceColor()" @click="$emit('timeSelected', this.dateIndex, this.hour)">
     <h2>{{ taskName }}</h2>
   </div>
 </template>
@@ -48,7 +44,6 @@ export default {
   border-width: 1px;
   cursor: pointer;
   text-align: center;
-  background-color: #faf9f9;
   overflow: hidden;
 }
 

@@ -3,8 +3,8 @@ export default {
   props: { weekRange: Array },
   computed: {
     weekRangeFormat() {
-      let result = this.weekRange[0].day.getFullYear() + "/"
-      let month = this.weekRange[0].day.getMonth() + 1;
+      let result = this.weekRange[0].getFullYear() + "/"
+      let month = this.weekRange[0].getMonth() + 1;
       // Su if nustatome ar reikia pridėti 0 pradžioje,
       // kad gautume yyyy/mm/dd datos formatą
       if (month < 10) {
@@ -12,23 +12,23 @@ export default {
       } else {
         result = result + month + "/";
       }
-      if (this.weekRange[0].day.getDate() < 10) {
-        result = result + 0 + this.weekRange[0].day.getDate()
+      if (this.weekRange[0].getDate() < 10) {
+        result = result + 0 + this.weekRange[0].getDate()
       } else {
-        result = result + this.weekRange[0].day.getDate();
+        result = result + this.weekRange[0].getDate();
       }
       // antroji data
-      result = result + ' - ' + this.weekRange[6].day.getFullYear() + "/";
-      month = this.weekRange[6].day.getMonth() + 1;
+      result = result + ' - ' + this.weekRange[6].getFullYear() + "/";
+      month = this.weekRange[6].getMonth() + 1;
       if (month < 10) {
         result = result + 0 + month + "/";
       } else {
         result = result + month + "/";
       }
-      if (this.weekRange[6].day.getDate() < 10) {
-        result = result + 0 + this.weekRange[6].day.getDate()
+      if (this.weekRange[6].getDate() < 10) {
+        result = result + 0 + this.weekRange[6].getDate()
       } else {
-        result = result + this.weekRange[6].day.getDate();
+        result = result + this.weekRange[6].getDate();
       }
       return result;
     }

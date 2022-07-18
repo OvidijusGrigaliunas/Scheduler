@@ -140,7 +140,7 @@ export default {
       let timeShiftWithoutBreaks = [...this.shiftTime];
       // Pašalina laikus, kurie priklauso breakTime
       timeShiftWithoutBreaks.splice(timeShiftWithoutBreaks.indexOf(this.breakTime[0]), this.breakTime.length)
-      // Apkarpome iki mūsų užduoties pabaigos (jei ne editinam, tada pasirinktas laikas imamas)
+      // Apkarpome iki mūsų užduoties pabaigos (jei ne editinam, tada pasirinktas laikas įmamas)
       timeCut[0] = [...timeShiftWithoutBreaks];
       timeCut[0].length = timeCut[0].indexOf(this.getTaskInfo.taskHourEnd) + 1;
       // Jei yra daugiau task juostoje prieš pasirinktą laiką,
@@ -160,7 +160,7 @@ export default {
   methods: {
     requirementsCheck() {
       let errorList = [];
-      if (this.tName.length === 0 || this.tDesclength === 0) {
+      if (this.tName.length === 0 || this.tDesc.length === 0) {
         errorList.push('Please fill in all fields');
       }
       if (this.tDesc.length > 1024) {

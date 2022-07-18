@@ -258,7 +258,8 @@ export default {
       // Jei 0.25, laiko tarpai yra 15min
       // 0.5 - 30 min; 1 - 1h
       // su vertėmis didesnėmis negu 1 neveikia
-      // Pagal viską turėtų veikti su 0.1 ir 0.2 (6min ir 12min), bet vertės gaunamos su daug skaičių po kablelio
+      // Pagal viską turėtų veikti su 0.1 ir 0.2 (6min ir 12min), bet vertės gaunamos su daug skaičių po kablelio.
+      // Turi veikti su 1/2^x vertėmis, tik reikėtų pataisyti laiko formativimą truputi
       // Jei timeScale yra 0 susidaro infinite loop
       // Turi didelę įtaką ant performance
       timeScale: 0.25
@@ -340,9 +341,6 @@ export default {
   },
   created() {
     this.taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[0].length).fill({ name: null, importance: null }));
-    for (let i = 1; i < 8; i++) {
-      this.currentWeek.push({ day: null, id: i })
-    }
     this.createWeek(this.selectedDate)
     this.filterTaskByUsers();
   },
@@ -397,13 +395,10 @@ export default {
       this.filterTaskByUsers();
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
-    timeSelection(date, hour) {
-      this.selectedDay = date.day.getDay();
-      if (this.selectedDay === 0) {
-        this.selectedDay = 7;
-      }
+    timeSelection(dateIndex, hour) {
+      this.selectedDay = dateIndex + 1;
       this.selectedHour = hour;
-      this.selectedDate = date.day;
+      this.selectedDate = this.currentWeek[dateIndex];
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
     addDays(date, days) {
@@ -422,7 +417,7 @@ export default {
       for (let i = 0; i < 7; i++) {
         // "i + 1 - currentWeekDay" reikalingas, kad savaitės dienos eitų iš eilės
         // (Monday, tuesday ir t.t.)
-        this.currentWeek[i].day = this.addDays(date, i + 1 - currentWeekDay);
+        this.currentWeek[i] = this.addDays(date, i + 1 - currentWeekDay);
       }
       this.getSelectedHour();
     },
@@ -469,8 +464,8 @@ export default {
       let formattedDay = '';
       let month;
       week.forEach(day => {
-        formattedDay = day.day.getFullYear() + "/";
-        month = day.day.getMonth() + 1;
+        formattedDay = day.getFullYear() + "/";
+        month = day.getMonth() + 1;
         // Su if nustatome ar reikia pridėti 0 pradžioje,
         // kad gautume yyyy/mm/dd datos formatą
         if (month < 10) {
@@ -478,10 +473,10 @@ export default {
         } else {
           formattedDay = formattedDay + month + "/";
         }
-        if (day.day.getDate() < 10) {
-          formattedDay = formattedDay + 0 + day.day.getDate()
+        if (day.getDate() < 10) {
+          formattedDay = formattedDay + 0 + day.getDate()
         } else {
-          formattedDay = formattedDay + day.day.getDate();
+          formattedDay = formattedDay + day.getDate();
         }
         result.push(formattedDay)
       });
@@ -541,23 +536,15 @@ export default {
             <p>Sunday</p>
           </div>
           <template v-for='(i, hourIndex) in getShiftTimeArray[selectedPersonIndex]'>
-
             <div class="time">
               <h1>{{ formatTime[i / timeScale] }}</h1>
             </div>
             <template v-for="(day, dayIndex) in currentWeek">
-              <template
-                v-if="!people[selectedPersonIndex].workDays[dayIndex] || getBreakTimeArray[selectedPersonIndex].includes(i)">
-                <SchedulerItem :noWork='true' />
-              </template>
-              <template v-else-if="itemTaskInfo[dayIndex][hourIndex].name != null">
-                <SchedulerItem :date='day' :hour='i' :taskName='itemTaskInfo[dayIndex][hourIndex].name'
-                  :taskImportance='itemTaskInfo[dayIndex][hourIndex].importance' @timeSelected="timeSelection" />
-              </template>
-              <template v-else>
-                <SchedulerItem :class='{ selected: dayIndex + 1 == selectedDay && i == selectedHour }' :date='day'
-                  :hour='i' @timeSelected="timeSelection" />
-              </template>
+              <SchedulerItem
+                v-if="!people[selectedPersonIndex].workDays[dayIndex] || getBreakTimeArray[selectedPersonIndex].includes(i)"
+                :noWork='true' />
+              <SchedulerItem v-else :dateIndex='dayIndex' :hour='i' :taskName='itemTaskInfo[dayIndex][hourIndex].name'
+                :taskImportance='itemTaskInfo[dayIndex][hourIndex].importance' @timeSelected="timeSelection" />
             </template>
           </template>
         </div>
