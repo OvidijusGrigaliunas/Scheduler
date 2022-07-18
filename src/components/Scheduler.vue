@@ -271,7 +271,7 @@ export default {
       this.people.forEach((person, index) => {
         result[index] = [];
         for (let i = person.shiftStart; i < person.shiftEnd; i = i + this.timeScale) {
-          result[index].push(i)
+          result[index].push(i);
         }
       });
       return result;
@@ -287,7 +287,7 @@ export default {
       return result;
     },
     selectedDateFormatting() {
-      let result = this.selectedDate.getFullYear() + "/"
+      let result = this.selectedDate.getFullYear() + "/";
       let month = this.selectedDate.getMonth() + 1;
       // Su if nustatome ar reikia pridėti 0 pradžioje,
       // kad gautume yyyy/mm/dd datos formatą
@@ -322,14 +322,14 @@ export default {
         if (text.length != 5) {
           text = text.substring(0, 4) + 0 + text.substring(4);
         }
-        timeArray.push(text)
+        timeArray.push(text);
       }
       for (let i = 10; i < 24; i = i + this.timeScale) {
         text = ((i - (i % 1)) + ':' + (60 * (i % 1)));
         if (text.length != 5) {
           text = text.substring(0, 4) + 0 + text.substring(4);
         }
-        timeArray.push(text)
+        timeArray.push(text);
       }
       return timeArray;
     }
@@ -341,7 +341,7 @@ export default {
   },
   created() {
     this.taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[0].length).fill({ name: null, importance: null }));
-    this.createWeek(this.selectedDate)
+    this.createWeek(this.selectedDate);
     this.filterTaskByUsers();
   },
   methods: {
@@ -428,7 +428,7 @@ export default {
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
     changePerson(direction) {
-      this.selectedPersonIndex = this.selectedPersonIndex + direction
+      this.selectedPersonIndex = this.selectedPersonIndex + direction;
       // Jei išeiname iš masyvo ribų, pagal direction nustatome ar turime peršokti į masyvo
       // pradžią ar pabaigą. Jei direction -1 - pabaiga, jei 1 - pradžia;
       if (!this.people[this.selectedPersonIndex]) {
@@ -443,7 +443,7 @@ export default {
       // Naudojame 2d array, kad galėtume lengvai paskirstyti užduotis į
       // dienas.
       for (let i = 0; i < 7; i++) {
-        this.filteredTasks[i] = []
+        this.filteredTasks[i] = [];
       }
       this.filteredTasksByUsers.forEach(task => {
         for (let i = 0; i < 7; i++) {
@@ -461,9 +461,9 @@ export default {
     },
     dateFormatting(week) {
       let result = [];
-      let formattedDay = '';
-      let month;
       week.forEach(day => {
+        let formattedDay = '';
+        let month;
         formattedDay = day.getFullYear() + "/";
         month = day.getMonth() + 1;
         // Su if nustatome ar reikia pridėti 0 pradžioje,
@@ -478,7 +478,7 @@ export default {
         } else {
           formattedDay = formattedDay + day.getDate();
         }
-        result.push(formattedDay)
+        result.push(formattedDay);
       });
       return result;
     },
@@ -487,7 +487,7 @@ export default {
       let taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[this.selectedPersonIndex].length).fill({ name: null, importance: null }));
       for (let i = 0; i < 7; i++) {
         this.filteredTasks[i].forEach(task => {
-          taskInfoArray[i] = this.updateColumnTaskInfo(taskInfoArray[i], task)
+          taskInfoArray[i] = this.updateColumnTaskInfo(taskInfoArray[i], task);
         })
       }
       this.itemTaskInfo = taskInfoArray;
@@ -561,26 +561,18 @@ export default {
 .gridContainer {
   display: flex;
   -webkit-touch-callout: none;
-  /* iOS Safari */
   -webkit-user-select: none;
-  /* Safari */
   -khtml-user-select: none;
-  /* Konqueror HTML */
   -moz-user-select: none;
-  /* Old versions of Firefox */
   -ms-user-select: none;
-  /* Internet Explorer/Edge */
   user-select: none;
-  /* Non-prefixed version, currently */
 
 }
 
 .gridAndDateContainer {
   width: 70%;
   -ms-overflow-style: none;
-  /* IE and Edge */
   scrollbar-width: none;
-  /* Firefox */
 }
 
 .container {
@@ -596,17 +588,11 @@ export default {
   align-content: center;
   width: 100%;
   -webkit-touch-callout: none;
-  /* iOS Safari */
   -webkit-user-select: none;
-  /* Safari */
   -khtml-user-select: none;
-  /* Konqueror HTML */
   -moz-user-select: none;
-  /* Old versions of Firefox */
   -ms-user-select: none;
-  /* Internet Explorer/Edge */
   user-select: none;
-  /* Non-prefixed version, currently*/
 }
 
 .grid {
@@ -616,7 +602,6 @@ export default {
   grid-template-columns: 9.1% repeat(7, 13%);
   overflow-y: scroll;
   -ms-overflow-style: none;
-  /* IE and Edge */
   scrollbar-width: none;
 }
 

@@ -13,7 +13,7 @@ export default {
         result = result + month + "/";
       }
       if (this.weekRange[0].getDate() < 10) {
-        result = result + 0 + this.weekRange[0].getDate()
+        result = result + 0 + this.weekRange[0].getDate();
       } else {
         result = result + this.weekRange[0].getDate();
       }
@@ -26,7 +26,7 @@ export default {
         result = result + month + "/";
       }
       if (this.weekRange[6].getDate() < 10) {
-        result = result + 0 + this.weekRange[6].getDate()
+        result = result + 0 + this.weekRange[6].getDate();
       } else {
         result = result + this.weekRange[6].getDate();
       }

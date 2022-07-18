@@ -41,17 +41,17 @@ export default {
     getTaskImportanceText() {
       switch (this.foundTask.taskImportance) {
         case 1:
-          return 'Very low'
+          return 'Very low';
         case 2:
-          return 'Low'
+          return 'Low';
         case 3:
-          return 'Moderate'
+          return 'Moderate';
         case 4:
-          return 'High'
+          return 'High';
         case 5:
-          return 'Very high'
+          return 'Very high';
         default:
-          return 'Unimportant'
+          return 'Unimportant';
       }
     },
     getTaskInfo() {
@@ -177,7 +177,7 @@ export default {
     newTask() {
       let errorList = this.requirementsCheck();
       if (errorList.length > 0) {
-        alert(errorList.join('. '))
+        alert(errorList.join('. '));
       } else {
         this.$emit('NewTask', this.tName, this.tDesc, this.selectedTimeStart, this.selectedImportance, this.selectedTimeEnd);
       }
@@ -185,7 +185,7 @@ export default {
     saveEdit() {
       let errorList = this.requirementsCheck();
       if (errorList.length > 0) {
-        alert(errorList.join('. '))
+        alert(errorList.join('. '));
       } else {
         this.$emit('taskEdit', this.foundTask, this.tName, this.tDesc, this.selectedTimeStart, this.selectedImportance, this.selectedTimeEnd);
       }
@@ -219,7 +219,7 @@ export default {
       <label for="tname">Task name:</label><br>
       <input type="text" v-model="tName"><br>
       <label for="taskStartsAt">Task starts:</label><br>
-      <select v-model="selectedTimeStart">
+      <select v-model.number="selectedTimeStart">
         <template v-for="n in cutShiftTimeForSelect[0]">
           <option :value="n">{{
               formattedTime[n / timeScale]
@@ -227,7 +227,7 @@ export default {
         </template>
       </select><br>
       <label for="taskEndsAt">Task ends:</label><br>
-      <select v-model="selectedTimeEnd">
+      <select v-model.number="selectedTimeEnd">
         <template v-for="n in cutShiftTimeForSelect[1]">
           <option :value='n + timeScale'>{{
               formattedTime[n / timeScale + 1]
@@ -235,7 +235,7 @@ export default {
         </template>
       </select><br>
       <label for="importanceSelect">Importance level:</label><br>
-      <select v-model="selectedImportance">
+      <select v-model.number="selectedImportance">
         <option :value='1'>Very low</option>
         <option :value='2'>Low</option>
         <option :value='3'>Moderate</option>
