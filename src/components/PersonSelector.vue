@@ -8,9 +8,8 @@ export default {
         return this.peopleList[
           this.peopleList.length - (this.selectedIndex + direction) * direction
         ].name;
-      } else {
-        return this.peopleList[this.selectedIndex + direction].name;
       }
+      return this.peopleList[this.selectedIndex + direction].name;
     },
   },
 };

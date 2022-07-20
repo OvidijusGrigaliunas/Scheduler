@@ -31,12 +31,8 @@ export default {
   },
   computed: {
     hasTasksEditor() {
-      if (this.foundTask != null) {
-        this.showTaskEdit = false;
-        return true;
-      }
       this.showTaskEdit = false;
-      return false;
+      return this.foundTask != null;
     },
     getTaskImportanceText() {
       switch (this.foundTask.taskImportance) {
@@ -72,7 +68,6 @@ export default {
         taskImportance: 3
       }
     },
-    // Kad nebūtų kelių užduočių tuo pačiu metu, reikia, kad šita funkcija aptiktų galimą laiko pasirinkimo diapazoną
     setTextAreaHeight() {
       let textAreaHeight = this.resolution * 0.5;
       if (textAreaHeight <= 380) {

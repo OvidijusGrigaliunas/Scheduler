@@ -5,36 +5,20 @@ export default {
     weekRangeFormat() {
       let result = this.weekRange[0].getFullYear() + "/"
       let month = this.weekRange[0].getMonth() + 1;
+      let day = this.weekRange[0].getDate()
       // Su if nustatome ar reikia pridėti 0 pradžioje,
       // kad gautume yyyy/mm/dd datos formatą
-      if (month < 10) {
-        result = result + 0 + month + "/";
-      } else {
-        result = result + month + "/";
-      }
-      if (this.weekRange[0].getDate() < 10) {
-        result = result + 0 + this.weekRange[0].getDate();
-      } else {
-        result = result + this.weekRange[0].getDate();
-      }
+      result = month < 10 ? `${result}0${month}/` : `${result}${month}/`;
+      result = day < 10 ? `${result}0${day}` : `${result}${day}`;
       // antroji data
-      result = result + ' - ' + this.weekRange[6].getFullYear() + "/";
+      result = `${result} - ${this.weekRange[6].getFullYear()}/`;
       month = this.weekRange[6].getMonth() + 1;
-      if (month < 10) {
-        result = result + 0 + month + "/";
-      } else {
-        result = result + month + "/";
-      }
-      if (this.weekRange[6].getDate() < 10) {
-        result = result + 0 + this.weekRange[6].getDate();
-      } else {
-        result = result + this.weekRange[6].getDate();
-      }
+      day = this.weekRange[6].getDate();
+      result = month < 10 ? `${result}0${month}/` : `${result}${month}/`;
+      result = day < 10 ? `${result}0${day}` : `${result}${day}`;
       return result;
     }
   },
-  methods: {
-  }
 }
 
 </script>

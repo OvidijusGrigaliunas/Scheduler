@@ -287,20 +287,13 @@ export default {
       return result;
     },
     selectedDateFormatting() {
-      let result = this.selectedDate.getFullYear() + "/";
+      let result = `${this.selectedDate.getFullYear()}/`;
       let month = this.selectedDate.getMonth() + 1;
+      let day = this.selectedDate.getDate();
       // Su if nustatome ar reikia pridėti 0 pradžioje,
       // kad gautume yyyy/mm/dd datos formatą
-      if (month < 10) {
-        result = result + 0 + month + "/";
-      } else {
-        result = result + month + "/";
-      }
-      if (this.selectedDate.getDate() < 10) {
-        result = result + 0 + this.selectedDate.getDate();
-      } else {
-        result = result + this.selectedDate.getDate();
-      }
+      result = month < 10 ? `${result}0${month}/` : `${result}${month}/`;
+      result = day < 10 ? `${result}0${day}` : `${result}${day}`;
       return result;
     },
     getResolutionHeight() {
@@ -316,20 +309,17 @@ export default {
     },
     formatTime() {
       let timeArray = [];
-      let text;
+      // 60 * (i % 1) atitinka minutes. Iš i % 1 galime gauti 0, 0.25, 0.5, 0.75 (priklauso nuo timeScale). Šitas vertes padauginus iš 60 gauname minučių skaičių.
+      // Jei tas skaičius yra mažesnis už 10, prie minučių reikia pridėti 0, kad būtų tvarkingai pateiktas laikas. 
       for (let i = 0; i < 10; i = i + this.timeScale) {
-        text = ('0' + (i - (i % 1)) + ':' + (60 * (i % 1)));
-        if (text.length != 5) {
-          text = text.substring(0, 4) + 0 + text.substring(4);
-        }
-        timeArray.push(text);
+        let minutes = 60 * (i % 1);
+        let hours = i - (i % 1);
+        timeArray.push(minutes > 10 ? `0${hours}:${minutes}` : `0${hours}:0${minutes}`);
       }
       for (let i = 10; i < 24; i = i + this.timeScale) {
-        text = ((i - (i % 1)) + ':' + (60 * (i % 1)));
-        if (text.length != 5) {
-          text = text.substring(0, 4) + 0 + text.substring(4);
-        }
-        timeArray.push(text);
+        let minutes = 60 * (i % 1);
+        let hours = i - (i % 1);
+        timeArray.push(minutes > 10 ? `${hours}:${minutes}` : `${hours}:0${minutes}`);
       }
       return timeArray;
     }
@@ -366,13 +356,13 @@ export default {
         taskTarget: this.people[this.selectedPersonIndex].name,
         taskImportance: importance
       }
-      this.selectedHour = startsAt;
       this.taskArray.push(object);
       this.filterTaskByUsers();
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
     deleteTask(taskToDelete) {
-      for (let i = 0; i < this.taskArray.length; i++) {
+      let arrLength = this.taskArray.length;
+      for (let i = 0; i < arrLength; i++) {
         if (taskToDelete === this.taskArray[i]) {
           this.taskArray.splice(i, 1);
           break;
@@ -382,8 +372,7 @@ export default {
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
     editTask(taskToChange, name, desc, startsAt, importance, endsAt) {
-      let taskIndex = this.taskArray.indexOf(taskToChange);
-      this.taskArray[taskIndex] = {
+      this.taskArray[this.taskArray.indexOf(taskToChange)] = {
         taskName: name,
         taskDesc: desc,
         taskDay: this.selectedDateFormatting,
@@ -392,6 +381,7 @@ export default {
         taskTarget: this.people[this.selectedPersonIndex].name,
         taskImportance: importance
       };
+      this.selectedHour = startsAt;
       this.filterTaskByUsers();
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
@@ -428,12 +418,10 @@ export default {
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
     changePerson(direction) {
-      this.selectedPersonIndex = this.selectedPersonIndex + direction;
+      let newIndex = this.selectedPersonIndex + direction;
       // Jei išeiname iš masyvo ribų, pagal direction nustatome ar turime peršokti į masyvo
       // pradžią ar pabaigą. Jei direction -1 - pabaiga, jei 1 - pradžia;
-      if (!this.people[this.selectedPersonIndex]) {
-        this.selectedPersonIndex = this.people.length - (this.selectedPersonIndex * direction);
-      }
+      this.selectedPersonIndex = this.people[newIndex] ? newIndex : this.people.length - newIndex * direction;
       this.getSelectedHour();
       this.filterTaskByUsers();
       this.taskEditorKey = this.taskEditorKey * (-1);
@@ -461,23 +449,11 @@ export default {
     },
     dateFormatting(week) {
       let result = [];
-      week.forEach(day => {
-        let formattedDay = '';
-        let month;
-        formattedDay = day.getFullYear() + "/";
-        month = day.getMonth() + 1;
-        // Su if nustatome ar reikia pridėti 0 pradžioje,
-        // kad gautume yyyy/mm/dd datos formatą
-        if (month < 10) {
-          formattedDay = formattedDay + 0 + month + "/";
-        } else {
-          formattedDay = formattedDay + month + "/";
-        }
-        if (day.getDate() < 10) {
-          formattedDay = formattedDay + 0 + day.getDate()
-        } else {
-          formattedDay = formattedDay + day.getDate();
-        }
+      week.forEach(date => {
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        let formattedDay = month < 10 ? `${date.getFullYear()}/0${month}/` : `${date.getFullYear()}/${month}/`;
+        formattedDay = day < 10 ? `${formattedDay}0${day}` : `${formattedDay}${day}`;
         result.push(formattedDay);
       });
       return result;
@@ -539,13 +515,13 @@ export default {
             <div class="time">
               <h1>{{ formatTime[i / timeScale] }}</h1>
             </div>
-            <template v-for="(day, dayIndex) in currentWeek">
+            <template v-for="dayIndex in 7">
               <SchedulerItem
-                v-if="!people[selectedPersonIndex].workDays[dayIndex] || getBreakTimeArray[selectedPersonIndex].includes(i)"
+                v-if="!people[selectedPersonIndex].workDays[dayIndex - 1] || getBreakTimeArray[selectedPersonIndex].includes(i)"
                 :noWork='true' />
-              <SchedulerItem :class="{ selected: selectedDay === dayIndex + 1 && selectedHour === i }" v-else
-                :dateIndex='dayIndex' :hour='i' :taskName='itemTaskInfo[dayIndex][hourIndex].name'
-                :taskImportance='itemTaskInfo[dayIndex][hourIndex].importance' @timeSelected="timeSelection" />
+              <SchedulerItem v-else :class="{ selected: selectedDay === dayIndex && selectedHour === i }"
+                :dateIndex='dayIndex - 1' :hour='i' :taskName='itemTaskInfo[dayIndex - 1][hourIndex].name'
+                :taskImportance='itemTaskInfo[dayIndex - 1][hourIndex].importance' @timeSelected="timeSelection" />
             </template>
           </template>
         </div>
