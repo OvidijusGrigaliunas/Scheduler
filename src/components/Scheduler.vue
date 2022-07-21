@@ -3,7 +3,6 @@ import SchedulerItem from './SchedulerItem.vue'
 import TaskEditor from './TaskEditor.vue'
 import WeekSelector from './WeekSelector.vue';
 import PersonSelector from './PersonSelector.vue';
-
 </script>
 
 <script>
@@ -239,7 +238,7 @@ export default {
         { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Pavardenis', taskImportance: 3 },
       ],
       people: [
-        { name: "Vardenis", shiftStart: 8, shiftEnd: 17, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
+        { name: "Vardenis", shiftStart: 7.75, shiftEnd: 17, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
         { name: "Pavardenis", shiftStart: 9, shiftEnd: 19, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
         { name: "Bonilla", shiftStart: 10, shiftEnd: 19, breakStart: 11, breakEnd: 13, workDays: [true, true, true, true, true, false, true] },
         { name: "Hobbs", shiftStart: 7, shiftEnd: 16, breakStart: 10, breakEnd: 11, workDays: [true, false, true, true, true, false, false] }
@@ -262,7 +261,6 @@ export default {
       // Pagal viską turėtų veikti su 0.1 ir 0.2 (6min ir 12min), bet vertės gaunamos su daug skaičių po kablelio.
       // Turi veikti su 1/2^x vertėmis, tik reikėtų pataisyti laiko formativimą truputi
       // Jei timeScale yra 0 susidaro infinite loop
-      // Turi didelę įtaką ant performance
       timeScale: 0.25
     }
   },
