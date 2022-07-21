@@ -254,6 +254,7 @@ export default {
       currentWeek: [],
       itemTaskInfo: [],
       taskEditorKey: 30,
+      weekDayStrArr: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       // Veikia su 0.25, 0.5 ir 1
       // Jei 0.25, laiko tarpai yra 15min
       // 0.5 - 30 min; 1 - 1h
@@ -286,6 +287,25 @@ export default {
       });
       return result;
     },
+    getWorkDaysNumb() {
+      let result = new Array();
+      for (let i = 0; i < 7; i++) {
+        if (this.people[this.selectedPersonIndex].workDays[i] === true) {
+          result.push(i);
+        }
+      }
+      return result;
+    },
+    getWeekGridStyle() {
+      return { gridTemplateColumns: '9.1% repeat(' + this.getWorkDaysNumb.length + ',' + 91 / this.getWorkDaysNumb.length + '%)' }
+    },
+    getGridStyle() {
+      return {
+        height: this.getResolutionHeight + 'px',
+        gridTemplateColumns: '9.1% repeat(' + this.getWorkDaysNumb.length + ',' + 91 / this.getWorkDaysNumb.length + '%)'
+      }
+    },
+
     selectedDateFormatting() {
       let result = `${this.selectedDate.getFullYear()}/`;
       let month = this.selectedDate.getMonth() + 1;
@@ -297,16 +317,13 @@ export default {
       return result;
     },
     getResolutionHeight() {
-      let height = this.windowHeight;
+      let height = this.windowHeight - 16;
       if (height < 750 && height > 1000) {
-        height = height + 85;
+        height = height + 80;
       }
       return height;
     },
-    setHeight() {
-      let height = this.getResolutionHeight + 'px';
-      return { height: height }
-    },
+
     formatTime() {
       let timeArray = [];
       // 60 * (i % 1) atitinka minutes. Iš i % 1 galime gauti 0, 0.25, 0.5, 0.75 (priklauso nuo timeScale). Šitas vertes padauginus iš 60 gauname minučių skaičių.
@@ -488,40 +505,24 @@ export default {
         <div class="selectContainer">
           <WeekSelector :weekRange='currentWeek' @weekChange="changeWeek" />
         </div>
-        <div class="grid" :style="setHeight">
+        <div class="grid" :style="getWeekGridStyle">
           <div class="time blankRectangle"></div>
-          <div class="weekDay">
-            <p>Monday</p>
-          </div>
-          <div class="weekDay">
-            <p>Tuesday</p>
-          </div>
-          <div class="weekDay">
-            <p>Wednesday</p>
-          </div>
-          <div class="weekDay">
-            <p>Thursday</p>
-          </div>
-          <div class="weekDay">
-            <p>Friday</p>
-          </div>
-          <div class="weekDay">
-            <p>Saturday</p>
-          </div>
-          <div class="weekDay">
-            <p>Sunday</p>
-          </div>
+          <template v-for="(bool, index) in people[selectedPersonIndex].workDays">
+            <div v-if="bool === true" class="weekDay">
+              <p>{{ weekDayStrArr[index] }}</p>
+            </div>
+          </template>
+        </div>
+        <div class="grid" :style="getGridStyle">
           <template v-for='(i, hourIndex) in getShiftTimeArray[selectedPersonIndex]'>
             <div class="time">
               <h1>{{ formatTime[i / timeScale] }}</h1>
             </div>
-            <template v-for="dayIndex in 7">
-              <SchedulerItem
-                v-if="!people[selectedPersonIndex].workDays[dayIndex - 1] || getBreakTimeArray[selectedPersonIndex].includes(i)"
-                :noWork='true' />
-              <SchedulerItem v-else :class="{ selected: selectedDay === dayIndex && selectedHour === i }"
-                :dateIndex='dayIndex - 1' :hour='i' :taskName='itemTaskInfo[dayIndex - 1][hourIndex].name'
-                :taskImportance='itemTaskInfo[dayIndex - 1][hourIndex].importance' @timeSelected="timeSelection" />
+            <template v-for="dayIndex in getWorkDaysNumb">
+              <SchedulerItem v-if="getBreakTimeArray[selectedPersonIndex].includes(i)" :noWork='true' />
+              <SchedulerItem v-else :class="{ selected: selectedDay === dayIndex + 1 && selectedHour === i }"
+                :dateIndex='dayIndex' :hour='i' :taskName='itemTaskInfo[dayIndex][hourIndex].name'
+                :taskImportance='itemTaskInfo[dayIndex][hourIndex].importance' @timeSelected="timeSelection" />
             </template>
           </template>
         </div>
@@ -543,7 +544,6 @@ export default {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-
 }
 
 .gridAndDateContainer {
@@ -576,7 +576,6 @@ export default {
   display: grid;
   width: 100%;
   row-gap: 0;
-  grid-template-columns: 9.1% repeat(7, 13%);
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
