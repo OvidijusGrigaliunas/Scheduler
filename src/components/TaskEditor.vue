@@ -134,7 +134,7 @@ export default {
       let timeCut = [];
       let timeShiftWithoutBreaks = [...this.shiftTime];
       // Pašalina laikus, kurie priklauso breakTime
-      timeShiftWithoutBreaks.splice(timeShiftWithoutBreaks.indexOf(this.breakTime[0]), this.breakTime.length)
+      timeShiftWithoutBreaks.splice(timeShiftWithoutBreaks.indexOf(this.breakTime[0]), this.breakTime.length);
       // Apkarpome iki mūsų užduoties pabaigos (jei ne editinam, tada pasirinktas laikas įmamas)
       timeCut[0] = [...timeShiftWithoutBreaks];
       timeCut[0].length = timeCut[0].indexOf(this.getTaskInfo.taskHourEnd) + 1;

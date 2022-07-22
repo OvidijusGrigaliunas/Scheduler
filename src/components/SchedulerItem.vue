@@ -1,15 +1,13 @@
 <script>
 export default {
   props: {
-    hour: Number,
-    dateIndex: Number,
-    taskName: String,
-    taskImportance: Number,
+    dateObj: Object,
+    taskInfo: Object,
     noWork: Boolean,
   },
   methods: {
     taskImportanceColor() {
-      switch (this.taskImportance) {
+      switch (this.taskInfo.importance) {
         case 1:
           return { background: "#43AA8B" };
         case 2:
@@ -30,8 +28,9 @@ export default {
 
 <template>
   <div v-if="noWork" class="item break"></div>
-  <div v-else class="item" :style="taskImportanceColor()" @click="$emit('timeSelected', this.dateIndex, this.hour)">
-    <h2>{{ taskName }}</h2>
+  <div v-else class="item" :style="taskImportanceColor()"
+    @click="$emit('timeSelected', this.dateObj.day, this.dateObj.hour)">
+    <h2>{{ taskInfo.name }}</h2>
   </div>
 </template>
 
