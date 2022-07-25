@@ -1,9 +1,25 @@
 <script>
 export default {
-  props: { peopleList: Array, selectedIndex: Number },
+  props: {
+    peopleList: Array,
+    selectedIndex: Number,
+    timeScale: Number,
+    formattedTime: Array
+  },
   data() {
     return {
       showSettings: false,
+    }
+  },
+  computed: {
+    getShiftTimeStartRange() {
+      return this.peopleList[this.selectedIndex].shiftEnd / this.timeScale;
+    },
+    getBreakTimeStartRange() {
+      if (this.peopleList[this.selectedIndex].breakEnd != null) {
+        return this.peopleList[this.selectedIndex].breakEnd / this.timeScale;
+      }
+      return 24 / this.timeScale;
     }
   },
   methods: {
@@ -20,16 +36,16 @@ export default {
 </script>
 <template>
   <div class="nameContainer">
-    <div>
+    <div class="nameDiv">
       <h2 @click="$emit('personChange', -1)" class="nextName">
         {{ findNeighbour(-1) }}
       </h2>
     </div>
-    <div>
+    <div class="nameDiv">
       <h1 @click="showSettings = !showSettings" class="currentName">{{ peopleList[selectedIndex].name }}</h1>
       <Transition name="slide">
         <div v-if="showSettings" class="settings">
-          <h2>Selected days</h2>
+          <h1>Selected days</h1>
           <div class="grid">
             <p>M</p>
             <p>T</p>
@@ -43,10 +59,50 @@ export default {
                 :true-value="true" :false-value="false" />
             </template>
           </div>
+          <h1>Show time</h1>
+          <label>From: </label>
+          <select v-model.number="peopleList[this.selectedIndex].shiftStart">
+            <template v-for="n in getShiftTimeStartRange">
+              <option :value='n * timeScale - timeScale'>{{
+                  formattedTime[n - 1]
+              }}</option>
+            </template>
+          </select>
+          <label> to: </label>
+          <select v-model.number="peopleList[this.selectedIndex].shiftEnd">
+            <template v-for="n in 24 / timeScale">
+              <option v-if="n * timeScale > peopleList[this.selectedIndex].shiftStart" :value='n * timeScale'>{{
+                  formattedTime[n]
+              }}</option>
+            </template>
+          </select><br><br>
+          <h1>Break time</h1>
+          <label>Has break: </label>
+          <input class="regular-checkbox" type="checkbox" v-model="peopleList[this.selectedIndex].hasBreak"
+            :true-value="true" :false-value="false" /><br>
+          <template v-if="peopleList[this.selectedIndex].hasBreak">
+            <label>From: </label>
+            <select v-model.number="peopleList[this.selectedIndex].breakStart">
+              <template v-for="n in getBreakTimeStartRange">
+                <option :value='n * timeScale - timeScale'>{{
+                    formattedTime[n - 1]
+                }}</option>
+              </template>
+            </select>
+            <label> to: </label>
+            <select v-model.number="peopleList[this.selectedIndex].breakEnd">
+              <template v-for="n in 24 / timeScale">
+                <option v-if="n * timeScale > peopleList[this.selectedIndex].breakStart" :value='n * timeScale'>{{
+                    formattedTime[n]
+                }}</option>
+              </template>
+            </select><br>
+          </template>
+
         </div>
       </Transition>
     </div>
-    <div>
+    <div class="nameDiv">
       <h2 @click="$emit('personChange', 1)" class="nextName">
         {{ findNeighbour(1) }}
       </h2>
@@ -70,13 +126,39 @@ export default {
   height: 60px;
 }
 
+select {
+  width: 25%;
+  border: 1px solid;
+  border-radius: 0.25em;
+  padding: 0.25em 0.5em;
+  font-size: 0.8rem;
+  cursor: pointer;
+  line-height: 1.1;
+  background-color: #fff;
+  background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
+}
+
+.nameDiv {
+  width: 60%;
+  margin-left: 20%;
+  background-color: #78a1bb;
+  border: 1px solid #555b6e;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+
+}
+
 .settings {
   position: absolute;
   z-index: 100;
-  width: 100%;
-  background-color: #ffaa00;
-  border: solid #555b6e;
-  border-width: 1px;
+  width: 250%;
+  margin-left: -75%;
+  background-color: #78a1bb;
+  border: 1px solid #555b6e;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  margin-top: 1px;
+  padding-bottom: 6px;
 }
 
 .grid {
@@ -89,19 +171,17 @@ export default {
 }
 
 .currentName {
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: underline;
+  font-size: 28px;
 }
 
 .currentName:hover {
-  font-size: 35px;
   cursor: pointer;
 }
 
 .nextName:hover {
-  margin: auto;
-  cursor: pointer;
-  font-size: 30px;
+  cursor: pointer
 }
 
 .regular-checkbox {
@@ -114,13 +194,11 @@ export default {
   display: inline-block;
   position: relative;
   margin: auto;
-
 }
 
 .regular-checkbox:active,
 .regular-checkbox:checked:active {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px 1px 3px rgba(0, 0, 0, 0.1);
-  margin: auto;
 
 }
 
@@ -129,7 +207,6 @@ export default {
   border: 1px solid #adb8c0;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05), inset 15px 10px -12px rgba(255, 255, 255, 0.1);
   color: #99a1a7;
-  margin: auto;
 }
 
 .regular-checkbox:checked:after {
@@ -142,12 +219,16 @@ export default {
 }
 
 @media only screen and (max-width: 800px) {
+  .nameDiv {
+    width: 70%;
+  }
+
   .nameContainer h1 {
-    font-size: 25px;
+    font-size: 15px;
   }
 
   .nameContainer h2 {
-    font-size: 15px;
+    font-size: 12px;
   }
 }
 
@@ -163,19 +244,19 @@ export default {
 }
 
 .slide-leave-active {
-  -moz-transition-duration: 0.3s;
-  -webkit-transition-duration: 0.3s;
-  -o-transition-duration: 0.3s;
-  transition-duration: 0.3s;
-  -moz-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-  -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-  -o-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  -moz-transition-duration: 0.6s;
+  -webkit-transition-duration: 0.6s;
+  -o-transition-duration: 0.6s;
+  transition-duration: 0.6s;
+  -moz-transition-timing-function: ease-in;
+  -webkit-transition-timing-function: ease-in;
+  -o-transition-timing-function: ease-in;
+  transition-timing-function: ease-in;
 }
 
 .slide-enter-to,
 .slide-leave-from {
-  max-height: 100px;
+  max-height: 250px;
   overflow: hidden;
 }
 

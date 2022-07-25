@@ -12,236 +12,17 @@ export default {
     return {
       taskArray: [
         // Jei rašo nuo 10:00 iki 15:00, tai reiškia , kad nuo 15:00 jau laisvas
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/19", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Vardenis', taskImportance: 5 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/19", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 4 },
-        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/19", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/19", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/19", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/19", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Vardenis', taskImportance: 5 },
-        { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/19", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Vardenis', taskImportance: 4 },
-        { taskName: 'task9', taskDesc: 'task3 desc', taskDay: "2022/07/19", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task10', taskDesc: 'task4 desc', taskDay: "2022/07/19", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task11', taskDesc: 'task5 desc', taskDay: "2022/07/19", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/20", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Vardenis', taskImportance: 5 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/20", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 4 },
-        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/20", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskImportance: 1 },
-        { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/20", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/20", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Vardenis', taskImportance: 4 },
-        { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/20", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/20", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task9', taskDesc: 'task3 desc', taskDay: "2022/07/20", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task10', taskDesc: 'task4 desc', taskDay: "2022/07/20", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task11', taskDesc: 'task5 desc', taskDay: "2022/07/20", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/21", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Vardenis', taskImportance: 5 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/21", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 4 },
-        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/21", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/21", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/21", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/21", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Vardenis', taskImportance: 5 },
-        { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/21", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Vardenis', taskImportance: 4 },
-        { taskName: 'task9', taskDesc: 'task3 desc', taskDay: "2022/07/21", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Vardenis', taskImportance: 1 },
-        { taskName: 'task10', taskDesc: 'task4 desc', taskDay: "2022/07/21", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Vardenis', taskImportance: 4 },
-        { taskName: 'task11', taskDesc: 'task5 desc', taskDay: "2022/07/21", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Vardenis', taskImportance: 5 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/22", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Vardenis', taskImportance: 5 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/22", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 4 },
-        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/22", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/22", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/22", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/22", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Vardenis', taskImportance: 5 },
-        { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/22", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Vardenis', taskImportance: 4 },
-        { taskName: 'task9', taskDesc: 'task3 desc', taskDay: "2022/07/22", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task10', taskDesc: 'task4 desc', taskDay: "2022/07/22", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task11', taskDesc: 'task5 desc', taskDay: "2022/07/22", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/18", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/18", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 1 },
-        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/18", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/18", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskImportance: 4 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/18", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/18", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/18", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Vardenis', taskImportance: 5 },
-        { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/18", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Vardenis', taskImportance: 4 },
-        { taskName: 'task9', taskDesc: 'task3 desc', taskDay: "2022/07/18", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task10', taskDesc: 'task4 desc', taskDay: "2022/07/18", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Vardenis', taskImportance: 5 },
-        { taskName: 'task11', taskDesc: 'task5 desc', taskDay: "2022/07/18", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/18", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: ':)', taskDesc: 'task6 desc', taskDay: "2022/07/18", taskHourStart: 11.75, taskHourEnd: 12, taskTarget: 'Vardenis', taskImportance: 1 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 11.75, taskHourEnd: 12, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 11.75, taskHourEnd: 12, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 11.75, taskHourEnd: 12, taskTarget: 'Vardenis', taskImportance: 5 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 11.75, taskHourEnd: 12, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/18", taskHourStart: 13, taskHourEnd: 13.75, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 13, taskHourEnd: 13.25, taskTarget: 'Vardenis', taskImportance: 5 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 13, taskHourEnd: 13.75, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 13, taskHourEnd: 13.75, taskTarget: 'Vardenis', taskImportance: 1 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 13, taskHourEnd: 13.5, taskTarget: 'Vardenis', taskImportance: 4 },
-        { taskName: ':)', taskDesc: 'task6 desc', taskDay: "2022/07/18", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Vardenis', taskImportance: 5 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Vardenis', taskImportance: 1 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/18", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Vardenis', taskImportance: 4 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Vardenis', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Vardenis', taskImportance: 1 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Vardenis', taskImportance: 3 },
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/19", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Bonilla', taskImportance: 5 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/19", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Bonilla', taskImportance: 4 },
-        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/19", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/19", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/19", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/19", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Bonilla', taskImportance: 5 },
-        { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/19", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Bonilla', taskImportance: 4 },
-        { taskName: 'task9', taskDesc: 'task3 desc', taskDay: "2022/07/19", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: ':)', taskDesc: 'task4 desc', taskDay: "2022/07/19", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task11', taskDesc: 'task5 desc', taskDay: "2022/07/19", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/20", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Bonilla', taskImportance: 5 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/20", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Bonilla', taskImportance: 4 },
-        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/20", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Bonilla', taskImportance: 1 },
-        { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/20", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/20", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Bonilla', taskImportance: 4 },
-        { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/20", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/20", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task9', taskDesc: 'task3 desc', taskDay: "2022/07/20", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task10', taskDesc: 'task4 desc', taskDay: "2022/07/20", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task11', taskDesc: 'task5 desc', taskDay: "2022/07/20", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/21", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Bonilla', taskImportance: 5 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/21", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Bonilla', taskImportance: 4 },
-        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/21", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: ':)', taskDesc: 'task4 desc', taskDay: "2022/07/21", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/21", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/21", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Bonilla', taskImportance: 5 },
-        { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/21", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Bonilla', taskImportance: 4 },
-        { taskName: 'task9', taskDesc: 'task3 desc', taskDay: "2022/07/21", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Bonilla', taskImportance: 1 },
-        { taskName: 'task10', taskDesc: 'task4 desc', taskDay: "2022/07/21", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Bonilla', taskImportance: 4 },
-        { taskName: 'task11', taskDesc: 'task5 desc', taskDay: "2022/07/21", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Bonilla', taskImportance: 5 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/22", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Bonilla', taskImportance: 5 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/22", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Bonilla', taskImportance: 4 },
-        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/22", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/22", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/22", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/22", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Bonilla', taskImportance: 5 },
-        { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/22", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Bonilla', taskImportance: 4 },
-        { taskName: 'task9', taskDesc: 'task3 desc', taskDay: "2022/07/22", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task10', taskDesc: 'task4 desc', taskDay: "2022/07/22", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: ':)', taskDesc: 'task5 desc', taskDay: "2022/07/22", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/18", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/18", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Bonilla', taskImportance: 1 },
-        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/18", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/18", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Bonilla', taskImportance: 4 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/18", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/18", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/18", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Bonilla', taskImportance: 5 },
-        { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/18", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Bonilla', taskImportance: 4 },
-        { taskName: 'task9', taskDesc: 'task3 desc', taskDay: "2022/07/18", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task10', taskDesc: 'task4 desc', taskDay: "2022/07/18", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Bonilla', taskImportance: 5 },
-        { taskName: 'task11', taskDesc: 'task5 desc', taskDay: "2022/07/18", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/18", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/18", taskHourStart: 11.75, taskHourEnd: 12, taskTarget: 'Bonilla', taskImportance: 1 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 11.75, taskHourEnd: 12, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 11.75, taskHourEnd: 12, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 11.75, taskHourEnd: 12, taskTarget: 'Bonilla', taskImportance: 5 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 11.75, taskHourEnd: 12, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/18", taskHourStart: 13, taskHourEnd: 13.75, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 13, taskHourEnd: 13.25, taskTarget: 'Bonilla', taskImportance: 5 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 13, taskHourEnd: 13.75, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 13, taskHourEnd: 13.75, taskTarget: 'Bonilla', taskImportance: 1 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 13, taskHourEnd: 13.5, taskTarget: 'Bonilla', taskImportance: 4 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/18", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Bonilla', taskImportance: 5 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Bonilla', taskImportance: 1 },
-        { taskName: ':)', taskDesc: 'task6 desc', taskDay: "2022/07/18", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Bonilla', taskImportance: 4 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Bonilla', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Bonilla', taskImportance: 1 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Bonilla', taskImportance: 3 },
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/19", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Pavardenis', taskImportance: 5 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/19", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Pavardenis', taskImportance: 4 },
-        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/19", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Pavardenis', taskImportance: 3 },
-        { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/19", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/19", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Pavardenis', taskImportance: 3 },
-        { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/19", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Pavardenis', taskImportance: 5 },
-        { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/19", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Pavardenis', taskImportance: 4 },
-        { taskName: 'task9', taskDesc: 'task3 desc', taskDay: "2022/07/19", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Pavardenis', taskImportance: 3 },
-        { taskName: 'task10', taskDesc: 'task4 desc', taskDay: "2022/07/19", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task11', taskDesc: 'task5 desc', taskDay: "2022/07/19", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Pavardenis', taskImportance: 3 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/20", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Pavardenis', taskImportance: 5 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/20", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Pavardenis', taskImportance: 4 },
-        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/20", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Pavardenis', taskImportance: 1 },
-        { taskName: ':)', taskDesc: 'task4 desc', taskDay: "2022/07/20", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/20", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Pavardenis', taskImportance: 4 },
-        { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/20", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Pavardenis', taskImportance: 3 },
-        { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/20", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task9', taskDesc: 'task3 desc', taskDay: "2022/07/20", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Pavardenis', taskImportance: 3 },
-        { taskName: 'task10', taskDesc: 'task4 desc', taskDay: "2022/07/20", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task11', taskDesc: 'task5 desc', taskDay: "2022/07/20", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Pavardenis', taskImportance: 3 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/21", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Pavardenis', taskImportance: 5 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/21", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Pavardenis', taskImportance: 4 },
-        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/21", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Pavardenis', taskImportance: 3 },
-        { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/21", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/21", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Pavardenis', taskImportance: 3 },
-        { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/21", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Pavardenis', taskImportance: 5 },
-        { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/21", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Pavardenis', taskImportance: 4 },
-        { taskName: 'task9', taskDesc: 'task3 desc', taskDay: "2022/07/21", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Pavardenis', taskImportance: 1 },
-        { taskName: 'task10', taskDesc: 'task4 desc', taskDay: "2022/07/21", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Pavardenis', taskImportance: 4 },
-        { taskName: 'task11', taskDesc: 'task5 desc', taskDay: "2022/07/21", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Pavardenis', taskImportance: 5 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/22", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Pavardenis', taskImportance: 5 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/22", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Pavardenis', taskImportance: 4 },
-        { taskName: ':)', taskDesc: 'task3 desc', taskDay: "2022/07/22", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/22", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task5', taskDesc: 'task5 desc', taskDay: "2022/07/22", taskHourStart: 11.5, taskHourEnd: 11.75, taskTarget: 'Pavardenis', taskImportance: 3 },
-        { taskName: 'task6', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 14, taskHourEnd: 15, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task7', taskDesc: 'task1 desc', taskDay: "2022/07/22", taskHourStart: 15, taskHourEnd: 16, taskTarget: 'Pavardenis', taskImportance: 5 },
-        { taskName: 'task8', taskDesc: 'task2 desc', taskDay: "2022/07/22", taskHourStart: 16, taskHourEnd: 16.25, taskTarget: 'Pavardenis', taskImportance: 4 },
-        { taskName: 'task9', taskDesc: 'task3 desc', taskDay: "2022/07/22", taskHourStart: 16.25, taskHourEnd: 16.5, taskTarget: 'Pavardenis', taskImportance: 3 },
-        { taskName: 'task10', taskDesc: 'task4 desc', taskDay: "2022/07/22", taskHourStart: 16.5, taskHourEnd: 16.75, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task11', taskDesc: 'task5 desc', taskDay: "2022/07/22", taskHourStart: 16.75, taskHourEnd: 17, taskTarget: 'Pavardenis', taskImportance: 3 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 10.5, taskHourEnd: 10.75, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/18", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/18", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Pavardenis', taskImportance: 1 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 13, taskHourEnd: 13.25, taskTarget: 'Pavardenis', taskImportance: 5 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 13, taskHourEnd: 13.75, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 13, taskHourEnd: 13.75, taskTarget: 'Pavardenis', taskImportance: 1 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 13, taskHourEnd: 13.5, taskTarget: 'Pavardenis', taskImportance: 4 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/18", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Pavardenis', taskImportance: 5 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Pavardenis', taskImportance: 3 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 13.75, taskHourEnd: 14, taskTarget: 'Pavardenis', taskImportance: 1 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/18", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/19", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Pavardenis', taskImportance: 4 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/20", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Pavardenis', taskImportance: 2 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/21", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Pavardenis', taskImportance: 1 },
-        { taskName: 'task12', taskDesc: 'task6 desc', taskDay: "2022/07/22", taskHourStart: 10.75, taskHourEnd: 11, taskTarget: 'Pavardenis', taskImportance: 3 },
+        //{ taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/26", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Vardenis', taskImportance: 5, taskStatus: 'ongoing' },
+        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/26", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 4, taskStatus: 'ongoing' },
+        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/26", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskImportance: 3, taskStatus: 'ongoing' },
+        { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/26", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskImportance: 2, taskStatus: 'ongoing' },
+
       ],
       people: [
-        { name: "Vardenis", shiftStart: 7.75, shiftEnd: 17, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
-        { name: "Pavardenis", shiftStart: 9, shiftEnd: 19, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
-        { name: "Bonilla", shiftStart: 10, shiftEnd: 19, breakStart: 11, breakEnd: 13, workDays: [true, true, true, true, true, false, true] },
-        { name: "Hobbs", shiftStart: 7, shiftEnd: 16, breakStart: 10, breakEnd: 11, workDays: [true, false, true, true, true, false, false] }
+        { name: "Vardenis", shiftStart: 7.75, shiftEnd: 17, hasBreak: true, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
+        { name: "Pavardenis", shiftStart: 9, shiftEnd: 19, hasBreak: true, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
+        { name: "Bonilla", shiftStart: 10, shiftEnd: 19, hasBreak: true, breakStart: 11, breakEnd: 13, workDays: [true, true, true, true, true, false, true] },
+        { name: "Hobbs", shiftStart: 7, shiftEnd: 16, hasBreak: false, breakStart: null, breakEnd: null, workDays: [true, false, true, true, true, false, false] }
       ],
       selectedHour: new Date().getHours(),
       selectedDate: new Date(),
@@ -251,7 +32,6 @@ export default {
       filteredTasksByUsers: [],
       filteredTasks: [],
       currentWeek: [],
-      itemTaskInfo: [],
       taskEditorKey: 30,
       weekDayStrArr: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       // Veikia su 0.25, 0.5 ir 1
@@ -279,8 +59,10 @@ export default {
       let result = [];
       this.people.forEach((person, index) => {
         result[index] = [];
-        for (let i = person.breakStart; i < person.breakEnd; i = i + this.timeScale) {
-          result[index].push(i);
+        if (person.hasBreak) {
+          for (let i = person.breakStart; i < person.breakEnd; i = i + this.timeScale) {
+            result[index].push(i);
+          }
         }
       });
       return result;
@@ -336,8 +118,19 @@ export default {
         let hours = i - (i % 1);
         timeArray.push(minutes > 10 ? `${hours}:${minutes}` : `${hours}:0${minutes}`);
       }
+      timeArray.push('00:00')
       return timeArray;
-    }
+    },
+    // Sugeneruoja 2d array, pagal kurią galime žinoti ar langelis turi užduotį. Šios funckijos pagalba persiunčiame langeliams reikalinga info
+    generatedTaskInfoForItems() {
+      let taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[this.selectedPersonIndex].length).fill({ name: null, importance: null, status: null}));
+      for (let i = 0; i < 7; i++) {
+        this.filteredTasks[i].forEach(task => {
+          taskInfoArray[i] = this.updateColumnTaskInfo(taskInfoArray[i], task);
+        })
+      }
+      return taskInfoArray;
+    },
   },
   mounted() {
     window.onresize = () => {
@@ -369,7 +162,8 @@ export default {
         taskHourStart: startsAt,
         taskHourEnd: endsAt,
         taskTarget: this.people[this.selectedPersonIndex].name,
-        taskImportance: importance
+        taskImportance: importance,
+        taskStatus: 'ongoing'
       }
       this.taskArray.push(object);
       this.filterTaskByUsers();
@@ -394,9 +188,15 @@ export default {
         taskHourStart: startsAt,
         taskHourEnd: endsAt,
         taskTarget: this.people[this.selectedPersonIndex].name,
-        taskImportance: importance
+        taskImportance: importance,
+        taskStatus: 'ongoing'
       };
       this.selectedHour = startsAt;
+      this.filterTaskByUsers();
+      this.taskEditorKey = this.taskEditorKey * (-1);
+    },
+    finishTask(taskToFinish) {
+      this.taskArray[this.taskArray.indexOf(taskToFinish)].taskStatus = 'finished';
       this.filterTaskByUsers();
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
@@ -456,7 +256,6 @@ export default {
           }
         }
       });
-      this.generateTaskInfoForItems();
     },
     filterTaskByUsers() {
       this.filteredTasksByUsers = this.taskArray.filter(task => task.taskTarget === this.people[this.selectedPersonIndex].name);
@@ -473,21 +272,11 @@ export default {
       });
       return result;
     },
-    // Sugeneruoja 2d array, pagal kurią galime žinoti ar langelis turi užduotį.
-    generateTaskInfoForItems() {
-      let taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[this.selectedPersonIndex].length).fill({ name: null, importance: null }));
-      for (let i = 0; i < 7; i++) {
-        this.filteredTasks[i].forEach(task => {
-          taskInfoArray[i] = this.updateColumnTaskInfo(taskInfoArray[i], task);
-        })
-      }
-      this.itemTaskInfo = taskInfoArray;
-    },
     updateColumnTaskInfo(taskArray, task) {
       let taskHourEndIndex = (task.taskHourEnd - this.people[this.selectedPersonIndex].shiftStart) / this.timeScale;
       let taskHourStartIndex = (task.taskHourStart - this.people[this.selectedPersonIndex].shiftStart) / this.timeScale;
       for (let i = taskHourStartIndex; i < taskHourEndIndex; i++) {
-        taskArray[i] = { name: task.taskName, importance: task.taskImportance }
+        taskArray[i] = { name: task.taskName, importance: task.taskImportance, status: task.taskStatus }
       }
       return taskArray;
     }
@@ -496,7 +285,8 @@ export default {
 </script>
 
 <template>
-  <PersonSelector :peopleList='people' :selectedIndex='selectedPersonIndex' @personChange="changePerson" />
+  <PersonSelector :peopleList='people' :selectedIndex='selectedPersonIndex' :timeScale='timeScale'
+    :formattedTime='formatTime' @personChange="changePerson" />
   <div class="container">
     <div class="gridContainer">
       <div class="gridAndDateContainer">
@@ -518,8 +308,8 @@ export default {
             </div>
             <template v-for="dayIndex in getWorkDaysNumb">
               <SchedulerItem v-if="getBreakTimeArray[selectedPersonIndex].includes(i)" :noWork='true' />
-              <SchedulerItem v-else :dateObj='{ day: dayIndex, hour: i }' :taskInfo='itemTaskInfo[dayIndex][hourIndex]'
-                @timeSelected="timeSelection" />
+              <SchedulerItem v-else :dateObj='{ day: dayIndex, hour: i }'
+                :taskInfo='generatedTaskInfoForItems[dayIndex][hourIndex]' @timeSelected="timeSelection" />
             </template>
           </template>
         </div>
@@ -527,7 +317,7 @@ export default {
       <TaskEditor :key="taskEditorKey" :resolution='getResolutionHeight' :date='selectedDateFormatting'
         :tasks='filteredTasks[selectedDay - 1]' :hour='selectedHour' :formattedTime='formatTime'
         :breakTime='getBreakTimeArray[selectedPersonIndex]' :shiftTime='getShiftTimeArray[selectedPersonIndex]'
-        :timeScale='timeScale' @NewTask="createNewTask" @taskDeletion="deleteTask" @taskEdit='editTask' />
+        :timeScale='timeScale' @NewTask="createNewTask" @finishTheTask="finishTask" @taskDeletion="deleteTask" @taskEdit='editTask' />
     </div>
   </div>
 </template>

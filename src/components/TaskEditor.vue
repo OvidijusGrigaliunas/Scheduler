@@ -37,17 +37,17 @@ export default {
     getTaskImportanceText() {
       switch (this.foundTask.taskImportance) {
         case 1:
-          return 'Very low';
+          return 'very low';
         case 2:
-          return 'Low';
+          return 'low';
         case 3:
-          return 'Moderate';
+          return 'moderate';
         case 4:
-          return 'High';
+          return 'high';
         case 5:
-          return 'Very high';
+          return 'very high';
         default:
-          return 'Unimportant';
+          return 'unimportant';
       }
     },
     getTaskInfo() {
@@ -57,7 +57,8 @@ export default {
           taskDesc: this.foundTask.taskDesc,
           taskHourStart: this.foundTask.taskHourStart,
           taskHourEnd: this.foundTask.taskHourEnd - this.timeScale,
-          taskImportance: this.foundTask.taskImportance
+          taskImportance: this.foundTask.taskImportance,
+          taskStatus: this.foundTask.taskStatus
         }
       }
       return {
@@ -65,7 +66,8 @@ export default {
         taskDesc: '',
         taskHourStart: this.hour,
         taskHourEnd: this.hour,
-        taskImportance: 3
+        taskImportance: 3,
+        taskStatus: ''
       }
     },
     setTextAreaHeight() {
@@ -84,7 +86,7 @@ export default {
       return { height: textAreaHeight };
     },
     setTaskTextHeight() {
-      let textAreaHeight = this.resolution * 0.8;
+      let textAreaHeight = this.resolution * 0.75;
       if (textAreaHeight <= 400) {
         let exponent = Math.pow((textAreaHeight / 70), -1) * 2;
         textAreaHeight = textAreaHeight * Math.pow(0.9, exponent);
@@ -250,10 +252,15 @@ export default {
         <h1>{{ formattedTime[getTaskInfo.taskHourStart / timeScale] }} - {{ formattedTime[getTaskInfo.taskHourEnd /
             timeScale + 1]
         }}</h1>
+        <h1>Status: {{ getTaskInfo.taskStatus }}</h1>
         <h1>Importance: {{ getTaskImportanceText }}</h1>
         <p>{{ getTaskInfo.taskDesc }}</p>
       </div>
-      <button type="button" @click="showEditScreen()">Edit task</button><br class="lineBreak"><br class="lineBreak">
+      <template v-if="foundTask.taskStatus === 'ongoing'">
+        <button type="button" @click="$emit('finishTheTask', foundTask)">Finish task</button><br class="lineBreak"><br
+          class="lineBreak">
+        <button type="button" @click="showEditScreen()">Edit task</button><br class="lineBreak"><br class="lineBreak">
+      </template>
       <button type="button" @click="$emit('taskDeletion', foundTask)">Delete task</button>
     </div>
   </div>
@@ -267,6 +274,8 @@ export default {
   color: white;
   border: solid #555B6E;
   border-width: 0px 1px 1px 1px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .taskDate {
@@ -292,7 +301,7 @@ h1 {
   width: 80%;
   margin: auto;
   overflow-x: hidden;
-
+  overflow-y: auto;
 }
 
 .taskContainer h2 {

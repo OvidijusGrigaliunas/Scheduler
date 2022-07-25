@@ -6,21 +6,24 @@ export default {
     noWork: Boolean,
   },
   methods: {
-    taskImportanceColor() {
-      switch (this.taskInfo.importance) {
-        case 1:
-          return { background: "#43AA8B" };
-        case 2:
-          return { background: "#90BE6D" };
-        case 3:
-          return { background: "#F9C74F" };
-        case 4:
-          return { background: "#F3722C" };
-        case 5:
-          return { background: "#F94144" };
-        default:
-          return { background: "#faf9f9" };
+    tileColor() {
+      if (this.taskInfo.status != 'finished') {
+        switch (this.taskInfo.importance) {
+          case 1:
+            return { background: "#43AA8B" };
+          case 2:
+            return { background: "#90BE6D" };
+          case 3:
+            return { background: "#F9C74F" };
+          case 4:
+            return { background: "#F3722C" };
+          case 5:
+            return { background: "#F94144" };
+          default:
+            return { background: "#faf9f9" };
+        }
       }
+      return { background: "#db88cc" };
     },
   },
 };
@@ -28,8 +31,7 @@ export default {
 
 <template>
   <div v-if="noWork" class="item break"></div>
-  <div v-else class="item" :style="taskImportanceColor()"
-    @click="$emit('timeSelected', this.dateObj.day, this.dateObj.hour)">
+  <div v-else class="item" :style="tileColor()" @click="$emit('timeSelected', this.dateObj.day, this.dateObj.hour)">
     <h2>{{ taskInfo.name }}</h2>
   </div>
 </template>

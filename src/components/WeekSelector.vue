@@ -1,6 +1,25 @@
 <script>
 export default {
   props: { weekRange: Array },
+  data() {
+    return {
+      showDateSel: false,
+      yearRange: [],
+      month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      monthLength: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+      selectedYear: new Date().getFullYear,
+      selectedMonth: new Date().getMonth,
+      selectedDay: new Date().getDate
+    }
+  },
+  created() {
+    let yearLimit = new Date();
+    console.log(yearLimit)
+    for (let i = 2022; i < yearLimit; i++) {
+      this.yearRange.push(i)
+    }
+    console.log(this.yearRange)
+  },
   computed: {
     weekRangeFormat() {
       let result = this.weekRange[0].getFullYear() + "/"
@@ -17,6 +36,12 @@ export default {
       result = month < 10 ? `${result}0${month}/` : `${result}${month}/`;
       result = day < 10 ? `${result}0${day}` : `${result}${day}`;
       return result;
+    },
+    getMonthLength() {
+      if (((this.selectedYear % 4 == 0) && (this.selectedYear % 100 != 0)) || (this.selectedYear % 400 == 0)) {
+        return [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+      }
+      return [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     }
   },
 }
@@ -27,11 +52,22 @@ export default {
     <p>
       <i class="arrow left" @click="$emit('weekChange', -7)"></i>
     </p>
-    <h1>{{ weekRangeFormat }}</h1>
+    <div>
+      <h1 @click="showDateSel = !showDateSel">{{ weekRangeFormat }}</h1>
+      <div class="selectDay" v-if="showDateSel === true">
+        <label for="tname">Select date</label><br>
+        <select v-model.number="selectedYear">
+          <template v-for="year in yearRange">
+            <option :value='year'>{{
+                year
+            }}</option>
+          </template>
+        </select>
+      </div>
+    </div>
     <p>
       <i class="arrow right" @click="$emit('weekChange', 7)"></i>
     </p>
-
   </div>
 </template>
 <style scoped>
@@ -47,8 +83,28 @@ export default {
   color: white;
 }
 
+.selectDay {
+  position: absolute;
+  margin-left: -50%;
+  width: 200%;
+  z-index: 90;
+  background-color: red;
+}
+
+input {
+  width: 80%;
+  border: 1px solid;
+  border-radius: 0.25em;
+  padding: 0.25em 0.5em;
+  font-size: 1.25rem;
+}
+
 .selectionContainer p {
   font-size: 20px;
+}
+
+h1:hover {
+  cursor: pointer;
 }
 
 .selectionContainer h1 {
