@@ -13,13 +13,13 @@ export default {
       taskArray: [
         // Jei rašo nuo 10:00 iki 15:00, tai reiškia , kad nuo 15:00 jau laisvas
         //{ taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/26", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Vardenis', taskImportance: 5, taskStatus: 'ongoing' },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/26", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 4, taskStatus: 'ongoing' },
+        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/26", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 4, taskStatus: 'finished' },
         { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/26", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskImportance: 3, taskStatus: 'ongoing' },
         { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/26", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskImportance: 2, taskStatus: 'ongoing' },
 
       ],
       people: [
-        { name: "Vardenis", shiftStart: 7.75, shiftEnd: 17, hasBreak: true, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
+        { name: "Vardenis", shiftStart: 8, shiftEnd: 17, hasBreak: true, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
         { name: "Pavardenis", shiftStart: 9, shiftEnd: 19, hasBreak: true, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
         { name: "Bonilla", shiftStart: 10, shiftEnd: 19, hasBreak: true, breakStart: 11, breakEnd: 13, workDays: [true, true, true, true, true, false, true] },
         { name: "Hobbs", shiftStart: 7, shiftEnd: 16, hasBreak: false, breakStart: null, breakEnd: null, workDays: [true, false, true, true, true, false, false] }
@@ -27,6 +27,8 @@ export default {
       selectedHour: new Date().getHours(),
       selectedDate: new Date(),
       selectedDay: new Date().getDay(),
+      linePosition: 0,
+      showLine: true,
       selectedPersonIndex: 0,
       windowHeight: window.screen.availHeight - 197,
       filteredTasksByUsers: [],
@@ -40,7 +42,7 @@ export default {
       // su vertėmis didesnėmis negu 1 neveikia
       // Pagal viską turėtų veikti su 0.1 ir 0.2 (6min ir 12min), bet vertės gaunamos su daug skaičių po kablelio.
       // Turi veikti su 1/2^x vertėmis, tik reikėtų pataisyti laiko formativimą truputi
-      // Jei timeScale yra 0 susidaro infinite loop
+      // Jei timeScale yra 0 susidaro endless loop
       timeScale: 0.25
     }
   },
@@ -85,7 +87,6 @@ export default {
         gridTemplateColumns: '9.1% repeat(' + this.getWorkDaysNumb.length + ',' + 91 / this.getWorkDaysNumb.length + '%)'
       }
     },
-
     selectedDateFormatting() {
       let result = `${this.selectedDate.getFullYear()}/`;
       let month = this.selectedDate.getMonth() + 1;
@@ -103,7 +104,6 @@ export default {
       }
       return height;
     },
-
     formatTime() {
       let timeArray = [];
       // 60 * (i % 1) atitinka minutes. Iš i % 1 galime gauti 0, 0.25, 0.5, 0.75 (priklauso nuo timeScale). Šitas vertes padauginus iš 60 gauname minučių skaičių.
@@ -123,7 +123,7 @@ export default {
     },
     // Sugeneruoja 2d array, pagal kurią galime žinoti ar langelis turi užduotį. Šios funckijos pagalba persiunčiame langeliams reikalinga info
     generatedTaskInfoForItems() {
-      let taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[this.selectedPersonIndex].length).fill({ name: null, importance: null, status: null}));
+      let taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[this.selectedPersonIndex].length).fill({ name: null, importance: null, status: null }));
       for (let i = 0; i < 7; i++) {
         this.filteredTasks[i].forEach(task => {
           taskInfoArray[i] = this.updateColumnTaskInfo(taskInfoArray[i], task);
@@ -136,13 +136,37 @@ export default {
     window.onresize = () => {
       this.windowHeight = window.screen.availHeight - 197;
     }
+    setInterval(this.showCurTime, 30000);
   },
   created() {
     this.taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[0].length).fill({ name: null, importance: null }));
     this.createWeek(this.selectedDate);
     this.filterTaskByUsers();
+    this.showCurTime();
+  },
+  watch: {
+    people: {
+      handler() {
+        this.showCurTime()
+      },
+      deep: true
+    }
   },
   methods: {
+    showCurTime() {
+      let lineCurrentTime = new Date();
+      let end = this.getShiftTimeArray[this.selectedPersonIndex][this.getShiftTimeArray[this.selectedPersonIndex].length - 1];
+      let start = this.getShiftTimeArray[this.selectedPersonIndex][0];
+      let position = ((lineCurrentTime.getHours() - start) * 60 + lineCurrentTime.getMinutes()) / this.timeScale;
+      if (lineCurrentTime.getHours() + lineCurrentTime.getMinutes() / 60 < end + this.timeScale && lineCurrentTime.getHours() + lineCurrentTime.getMinutes() / 60 > start) {
+        this.showLine = true;
+        this.linePosition = {
+          marginTop: position + "px"
+        };
+      } else {
+        this.showLine = false;
+      }
+    },
     // Keičiant vartotoją dažnai pasirinkta valanda išeidavo iš darbo laiko ribų
     // Ši funkcija tai pataiso
     getSelectedHour() {
@@ -240,6 +264,7 @@ export default {
       this.getSelectedHour();
       this.filterTaskByUsers();
       this.taskEditorKey = this.taskEditorKey * (-1);
+      this.showCurTime();
     },
     filterTasksByWeek() {
       let formattedWeek = this.dateFormatting(this.currentWeek);
@@ -279,6 +304,13 @@ export default {
         taskArray[i] = { name: task.taskName, importance: task.taskImportance, status: task.taskStatus }
       }
       return taskArray;
+    },
+    changeDate(year, month, day) {
+      this.selectedDate = new Date(year, month - 1, day);
+      this.selectedDay = this.selectedDate.getDay() != 0 ? this.selectedDate.getDay() : 7;
+      this.createWeek(this.selectedDate);
+      this.filterTasksByWeek();
+      this.taskEditorKey = this.taskEditorKey * (-1);
     }
   }
 }
@@ -291,7 +323,7 @@ export default {
     <div class="gridContainer">
       <div class="gridAndDateContainer">
         <div class="selectContainer">
-          <WeekSelector :weekRange='currentWeek' @weekChange="changeWeek" />
+          <WeekSelector :weekRange='currentWeek' @weekChange="changeWeek" @changeDate="changeDate" />
         </div>
         <div class="grid" :style="getWeekGridStyle">
           <div class="time blankRectangle"></div>
@@ -302,6 +334,7 @@ export default {
           </template>
         </div>
         <div class="grid" :style="getGridStyle">
+          <div v-show="showLine" class="timeLine" :style="linePosition"></div>
           <template v-for='(i, hourIndex) in getShiftTimeArray[selectedPersonIndex]'>
             <div class="time">
               <h1>{{ formatTime[i / timeScale] }}</h1>
@@ -317,7 +350,8 @@ export default {
       <TaskEditor :key="taskEditorKey" :resolution='getResolutionHeight' :date='selectedDateFormatting'
         :tasks='filteredTasks[selectedDay - 1]' :hour='selectedHour' :formattedTime='formatTime'
         :breakTime='getBreakTimeArray[selectedPersonIndex]' :shiftTime='getShiftTimeArray[selectedPersonIndex]'
-        :timeScale='timeScale' @NewTask="createNewTask" @finishTheTask="finishTask" @taskDeletion="deleteTask" @taskEdit='editTask' />
+        :timeScale='timeScale' @NewTask="createNewTask" @finishTheTask="finishTask" @taskDeletion="deleteTask"
+        @taskEdit='editTask' />
     </div>
   </div>
 </template>
@@ -337,6 +371,7 @@ export default {
   width: 70%;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  overflow: auto;
 }
 
 .container {
@@ -359,10 +394,19 @@ export default {
   user-select: none;
 }
 
+.timeLine {
+  position: absolute;
+  height: 3px;
+  width: 90.8%;
+  margin-left: 9.2%;
+  background-color: red;
+  z-index: 5;
+}
+
 .grid {
   display: grid;
   width: 100%;
-  row-gap: 0;
+  align-content: flex-start;
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -374,7 +418,7 @@ export default {
 
 .time {
   width: 100%;
-  height: 50px;
+  height: 60px;
   border: solid #555B6E;
   border-width: 1px;
   text-align: center;
@@ -389,7 +433,7 @@ export default {
 }
 
 .time h1 {
-  line-height: 40px;
+  line-height: 55px;
   font-size: 20px;
 }
 
@@ -408,14 +452,12 @@ export default {
 
 @media (max-width: 800px) {
   .time h1 {
-    line-height: 36px;
     font-size: 16px;
   }
 }
 
 @media (max-width: 600px) {
   .time h1 {
-    line-height: 30px;
     font-size: 10px;
   }
 }

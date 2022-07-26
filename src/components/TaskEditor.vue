@@ -136,7 +136,9 @@ export default {
       let timeCut = [];
       let timeShiftWithoutBreaks = [...this.shiftTime];
       // Pašalina laikus, kurie priklauso breakTime
-      timeShiftWithoutBreaks.splice(timeShiftWithoutBreaks.indexOf(this.breakTime[0]), this.breakTime.length);
+      if (this.breakTime[0] <= timeShiftWithoutBreaks[timeShiftWithoutBreaks.length - 1]) {
+        timeShiftWithoutBreaks.splice(timeShiftWithoutBreaks.indexOf(this.breakTime[0]), this.breakTime.length);
+      }
       // Apkarpome iki mūsų užduoties pabaigos (jei ne editinam, tada pasirinktas laikas įmamas)
       timeCut[0] = [...timeShiftWithoutBreaks];
       timeCut[0].length = timeCut[0].indexOf(this.getTaskInfo.taskHourEnd) + 1;
@@ -214,9 +216,9 @@ export default {
     <div v-if="!hasTasksEditor || showTaskEdit">
       <!--- Užduoties kūrimas/keitimas  --->
       <label for="tname">Task name:</label><br>
-      <input type="text" v-model="tName"><br>
+      <input id="tname" type="text" v-model="tName"><br>
       <label for="taskStartsAt">Task starts:</label><br>
-      <select v-model.number="selectedTimeStart">
+      <select id="taskStartsAt" v-model.number="selectedTimeStart">
         <template v-for="n in cutShiftTimeForSelect[0]">
           <option :value="n">{{
               formattedTime[n / timeScale]
@@ -232,15 +234,15 @@ export default {
         </template>
       </select><br>
       <label for="importanceSelect">Importance level:</label><br>
-      <select v-model.number="selectedImportance">
+      <select id="importanceSelect" v-model.number="selectedImportance">
         <option :value='1'>Very low</option>
         <option :value='2'>Low</option>
         <option :value='3'>Moderate</option>
         <option :value='4'>High</option>
         <option :value='5'>Very high</option>
       </select><br>
-      <label>Task description:</label><br>
-      <textarea :style="setTextAreaHeight" type="text" v-model="tDesc"></textarea><br class="lineBreak"><br
+      <label for="tdesc">Task description:</label><br>
+      <textarea id="tdesc" :style="setTextAreaHeight" type="text" v-model="tDesc"></textarea><br class="lineBreak"><br
         class="lineBreak">
       <button v-if="!showTaskEdit" @click="newTask">Create new task</button>
       <button v-else @click="saveEdit">Save edit</button>

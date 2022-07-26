@@ -40,7 +40,7 @@ export default {
 .item {
   display: inline-block;
   width: 100%;
-  height: 50px;
+  height: 60px;
   border: solid #555b6e;
   border-width: 1px;
   cursor: pointer;
@@ -55,21 +55,21 @@ export default {
 
 .item h2 {
   font-size: 14px;
-  margin-top: 2px;
+  margin-top: 10px;
   font-weight: 550;
 }
 
 @media only screen and (max-width: 800px) {
   .item h2 {
     font-size: 10px;
-    margin-top: 5px;
+    margin-top: 16px;
   }
 }
 
 @media only screen and (max-width: 450px) {
   .item h2 {
     font-size: 8px;
-    margin-top: 6px;
+    margin-top: 20px;
   }
 }
 </style>
