@@ -82,9 +82,15 @@ export default {
       return { gridTemplateColumns: '9.1% repeat(' + this.getWorkDaysNumb.length + ',' + 91 / this.getWorkDaysNumb.length + '%)' }
     },
     getGridStyle() {
+      if (this.getWorkDaysNumb.length > 0) {
+        return {
+          height: this.getResolutionHeight + 'px',
+          gridTemplateColumns: '9.1% repeat(' + this.getWorkDaysNumb.length + ',' + 91 / this.getWorkDaysNumb.length + '%)'
+        }
+      }
       return {
         height: this.getResolutionHeight + 'px',
-        gridTemplateColumns: '9.1% repeat(' + this.getWorkDaysNumb.length + ',' + 91 / this.getWorkDaysNumb.length + '%)'
+        gridTemplateColumns: '9.1%'
       }
     },
     selectedDateFormatting() {
