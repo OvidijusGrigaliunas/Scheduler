@@ -98,7 +98,6 @@ export default {
               </template>
             </select><br>
           </template>
-
         </div>
       </Transition>
     </div>

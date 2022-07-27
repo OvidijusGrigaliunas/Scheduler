@@ -16,7 +16,6 @@ export default {
         { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/26", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 4, taskStatus: 'finished' },
         { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/26", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskImportance: 3, taskStatus: 'ongoing' },
         { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/26", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskImportance: 2, taskStatus: 'ongoing' },
-
       ],
       people: [
         { name: "Vardenis", shiftStart: 8, shiftEnd: 17, hasBreak: true, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
@@ -97,7 +96,7 @@ export default {
       let result = `${this.selectedDate.getFullYear()}/`;
       let month = this.selectedDate.getMonth() + 1;
       let day = this.selectedDate.getDate();
-      // Su if nustatome ar reikia pridėti 0 pradžioje,
+      // Nustatome ar reikia pridėti 0 pradžioje,
       // kad gautume yyyy/mm/dd datos formatą
       result = month < 10 ? `${result}0${month}/` : `${result}${month}/`;
       result = day < 10 ? `${result}0${day}` : `${result}${day}`;
@@ -243,12 +242,9 @@ export default {
     },
     // Sudarome savaitę pagal pasirinktą diena
     createWeek(date) {
-      let currentWeekDay = date.getDay();
       // kai yra sekmadienis, vertė būna 0
       // tokiu atveju 0 reikia pasiversti į 7
-      if (currentWeekDay === 0) {
-        currentWeekDay = 7;
-      }
+      let currentWeekDay = date.getDay() != 0 ? date.getDay() : 7;
       for (let i = 0; i < 7; i++) {
         // "i + 1 - currentWeekDay" reikalingas, kad savaitės dienos eitų iš eilės
         // (Monday, tuesday ir t.t.)
@@ -275,7 +271,7 @@ export default {
     filterTasksByWeek() {
       let formattedWeek = this.dateFormatting(this.currentWeek);
       // Naudojame 2d array, kad galėtume lengvai paskirstyti užduotis į
-      // dienas.
+      // savaitės dienas.
       for (let i = 0; i < 7; i++) {
         this.filteredTasks[i] = [];
       }
@@ -329,7 +325,8 @@ export default {
     <div class="gridContainer">
       <div class="gridAndDateContainer">
         <div class="selectContainer">
-          <WeekSelector :weekRange='currentWeek' @weekChange="changeWeek" @changeDate="changeDate" />
+          <WeekSelector :weekRange='currentWeek' :person="people[selectedPersonIndex]" @weekChange="changeWeek"
+            @changeDate="changeDate" />
         </div>
         <div class="grid" :style="getWeekGridStyle">
           <div class="time blankRectangle"></div>
@@ -405,7 +402,7 @@ export default {
   height: 3px;
   width: 90.8%;
   margin-left: 9.2%;
-  background-color: red;
+  background-color: rgb(190, 4, 60);
   z-index: 5;
 }
 

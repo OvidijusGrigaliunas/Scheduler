@@ -1,6 +1,6 @@
 <script>
 export default {
-  props: { weekRange: Array },
+  props: { weekRange: Array, person: Object },
   data() {
     return {
       showDateSel: false,
@@ -9,20 +9,30 @@ export default {
       dayFormatted: ['01', '02', '03', '04', '05', '06', '07', '08', '09'],
       selectedYear: new Date().getFullYear(),
       selectedMonth: new Date().getMonth() + 1,
-      selectedDay: new Date().getDate()
+      selectedDay: new Date().getDate(),
+      showError: false
+    }
+  },
+  watch: {
+    // Jei pakeičiamas asmuo, paslepia tekstą error
+    person: {
+      handler() {
+        this.showError = false;
+      },
+      deep: true
     }
   },
   created() {
-    let yearLimit = new Date().getFullYear() + 10;
-    for (let i = 2022; i < yearLimit; i++) {
-      this.yearRange.push(i)
+    let yearLimit = new Date().getFullYear() + 2;
+    for (let i = 2022; i <= yearLimit; i++) {
+      this.yearRange.push(i);
     }
   },
   computed: {
     weekRangeFormat() {
-      let result = this.weekRange[0].getFullYear() + "/"
+      let result = this.weekRange[0].getFullYear() + "/";
       let month = this.weekRange[0].getMonth() + 1;
-      let day = this.weekRange[0].getDate()
+      let day = this.weekRange[0].getDate();
       // Su if nustatome ar reikia pridėti 0 pradžioje,
       // kad gautume yyyy/mm/dd datos formatą
       result = month < 10 ? `${result}0${month}/` : `${result}${month}/`;
@@ -37,9 +47,20 @@ export default {
     },
     getMonthLength() {
       if (((this.selectedYear % 4 == 0) && (this.selectedYear % 100 != 0)) || (this.selectedYear % 400 == 0)) {
-        return [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        return [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
       }
-      return [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+      return [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    },
+    dateChange() {
+      let selectedDate = new Date(this.selectedYear, this.selectedMonth - 1, this.selectedDay);
+      selectedDate = selectedDate.getDay() != 0 ? selectedDate.getDay() - 1 : 6;
+      // Tikriname ar tą dieną dirba darbuotojas
+      if (this.person.workDays[selectedDate] === true) {
+        this.showError = false;
+        this.$emit('changeDate', this.selectedYear, this.selectedMonth, this.selectedDay)
+      } else {
+        this.showError = true;
+      }
     }
   },
 }
@@ -79,7 +100,8 @@ export default {
               }}</option>
             </template>
           </select><br>
-          <button @click="$emit('changeDate', selectedYear, selectedMonth, selectedDay)">Change date</button>
+          <p v-show="showError">{{ person.name }} doesn't work on this day</p>
+          <button @click="dateChange">Change date</button>
         </div>
       </Transition>
     </div>

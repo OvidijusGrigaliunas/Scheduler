@@ -46,6 +46,7 @@ export default {
   cursor: pointer;
   text-align: center;
   overflow: hidden;
+  color: black;
 }
 
 .break {

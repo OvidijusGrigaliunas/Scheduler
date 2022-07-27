@@ -19,11 +19,9 @@ export default {
       selectedImportance: 3,
       selectedTimeStart: 5,
       selectedTimeEnd: 5
-
     }
   },
   created() {
-    // Su mounted kartais kelios funkcijos buvo atkartojamos 2 kartus, nes per vėlai atsinaujindavo foundTask
     this.findTask();
     // Šitos dvi eilutės nustato pradines vertes, kad būtų patogiau naudotis puslapių
     this.selectedTimeStart = this.hour;
