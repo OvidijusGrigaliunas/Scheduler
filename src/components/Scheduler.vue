@@ -12,10 +12,10 @@ export default {
     return {
       taskArray: [
         // Jei rašo nuo 10:00 iki 15:00, tai reiškia , kad nuo 15:00 jau laisvas
-        //{ taskName: 'task1', taskDesc: 'task1 desc', taskDay: "2022/07/26", taskHourStart: 8, taskHourEnd: 9, taskTarget: 'Vardenis', taskImportance: 5, taskStatus: 'ongoing' },
-        { taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/26", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskImportance: 4, taskStatus: 'finished' },
-        { taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/26", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskImportance: 3, taskStatus: 'ongoing' },
-        { taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/26", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskImportance: 2, taskStatus: 'ongoing' },
+        { id: 1, taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/26", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'finished' },
+        { id: 2, taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/26", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskColor: '#407d70', taskStatus: 'ongoing' },
+        { id: 3, taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/26", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskColor: '#e0263c', taskStatus: 'ongoing' },
+        { id: 4, taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/26", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskColor: '#e0263c', taskStatus: 'deleted' },
       ],
       people: [
         { name: "Vardenis", shiftStart: 8, shiftEnd: 17, hasBreak: true, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
@@ -183,43 +183,52 @@ export default {
         this.taskEditorKey = this.taskEditorKey * (-1);
       }
     },
-    createNewTask(name, desc, startsAt, importance, endsAt) {
+    createNewTask(name, desc, startsAt, endsAt, color) {
+      let taskid = this.taskArray[this.taskArray.length - 1].id + 1
       let object = {
+        id: taskid,
         taskName: name,
         taskDesc: desc,
         taskDay: this.selectedDateFormatting,
         taskHourStart: startsAt,
         taskHourEnd: endsAt,
         taskTarget: this.people[this.selectedPersonIndex].name,
-        taskImportance: importance,
+        taskColor: color,
         taskStatus: 'ongoing'
       }
       this.taskArray.push(object);
       this.filterTaskByUsers();
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
-    deleteTask(taskToDelete) {
+    deleteTask(taskToDeleteID) {
       let arrLength = this.taskArray.length;
       for (let i = 0; i < arrLength; i++) {
-        if (taskToDelete === this.taskArray[i]) {
-          this.taskArray.splice(i, 1);
+        if (taskToDeleteID === this.taskArray[i].id) {
+          this.taskArray[i].taskStatus = 'deleted';
           break;
         }
       }
       this.filterTaskByUsers();
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
-    editTask(taskToChange, name, desc, startsAt, importance, endsAt) {
-      this.taskArray[this.taskArray.indexOf(taskToChange)] = {
-        taskName: name,
-        taskDesc: desc,
-        taskDay: this.selectedDateFormatting,
-        taskHourStart: startsAt,
-        taskHourEnd: endsAt,
-        taskTarget: this.people[this.selectedPersonIndex].name,
-        taskImportance: importance,
-        taskStatus: 'ongoing'
-      };
+    editTask(taskToChangeID, name, desc, startsAt, endsAt, color) {
+      let arrLength = this.taskArray.length;
+      for (let i = 0; i < arrLength; i++) {
+        if (taskToChangeID === this.taskArray[i].id) {
+          this.taskArray[i] = {
+            id: this.taskArray[i].id,
+            taskName: name,
+            taskDesc: desc,
+            taskDay: this.selectedDateFormatting,
+            taskHourStart: startsAt,
+            taskHourEnd: endsAt,
+            taskTarget: this.people[this.selectedPersonIndex].name,
+            taskColor: color,
+            taskStatus: 'ongoing'
+          };
+          break;
+        }
+      }
       this.selectedHour = startsAt;
       this.filterTaskByUsers();
       this.taskEditorKey = this.taskEditorKey * (-1);
@@ -285,7 +294,7 @@ export default {
       });
     },
     filterTaskByUsers() {
-      this.filteredTasksByUsers = this.taskArray.filter(task => task.taskTarget === this.people[this.selectedPersonIndex].name);
+      this.filteredTasksByUsers = this.taskArray.filter(task => task.taskTarget === this.people[this.selectedPersonIndex].name && task.taskStatus != 'deleted');
       this.filterTasksByWeek();
     },
     dateFormatting(week) {
@@ -303,7 +312,7 @@ export default {
       let taskHourEndIndex = (task.taskHourEnd - this.people[this.selectedPersonIndex].shiftStart) / this.timeScale;
       let taskHourStartIndex = (task.taskHourStart - this.people[this.selectedPersonIndex].shiftStart) / this.timeScale;
       for (let i = taskHourStartIndex; i < taskHourEndIndex; i++) {
-        taskArray[i] = { name: task.taskName, importance: task.taskImportance, status: task.taskStatus }
+        taskArray[i] = { name: task.taskName, color: task.taskColor, status: task.taskStatus };
       }
       return taskArray;
     },
