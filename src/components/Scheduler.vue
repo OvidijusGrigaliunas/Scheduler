@@ -6,16 +6,15 @@ import PersonSelector from './PersonSelector.vue';
 </script>
 
 <script>
-// Čia yra parent, visi kiti jo child
 export default {
   data() {
     return {
       taskArray: [
         // Jei rašo nuo 10:00 iki 15:00, tai reiškia , kad nuo 15:00 jau laisvas
-        { id: 1, taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/07/26", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'finished' },
-        { id: 2, taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/07/26", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskColor: '#407d70', taskStatus: 'ongoing' },
-        { id: 3, taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/26", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskColor: '#e0263c', taskStatus: 'ongoing' },
-        { id: 4, taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/07/26", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskColor: '#e0263c', taskStatus: 'deleted' },
+        { id: 1, taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/08/01", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'finished' },
+        { id: 2, taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/08/01", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskColor: '#407d70', taskStatus: 'ongoing' },
+        { id: 3, taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/08/01", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskColor: '#e0263c', taskStatus: 'ongoing' },
+        { id: 4, taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/08/01", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskColor: '#e0263c', taskStatus: 'deleted' },
       ],
       people: [
         { name: "Vardenis", shiftStart: 8, shiftEnd: 17, hasBreak: true, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
@@ -23,7 +22,7 @@ export default {
         { name: "Bonilla", shiftStart: 10, shiftEnd: 19, hasBreak: true, breakStart: 11, breakEnd: 13, workDays: [true, true, true, true, true, false, true] },
         { name: "Hobbs", shiftStart: 7, shiftEnd: 16, hasBreak: false, breakStart: null, breakEnd: null, workDays: [true, false, true, true, true, false, false] }
       ],
-      selectedHour: new Date().getHours(),
+      selectedHour: null,
       selectedDate: new Date(),
       selectedDay: new Date().getDay(),
       linePosition: 0,
@@ -141,9 +140,15 @@ export default {
     window.onresize = () => {
       this.windowHeight = window.screen.availHeight - 197;
     }
-    setInterval(this.showCurTime, 30000);
+    setInterval(this.showCurTime, 15000);
   },
   created() {
+    let minutes = new Date().getMinutes();
+    if (minutes >= 30) {
+      this.selectedHour = minutes >= 45 ? new Date().getHours() + 0.75 : new Date().getHours() + 0.5;
+    } else {
+      this.selectedHour = minutes <= 15 ? new Date().getHours() : new Date().getHours() + 0.25;
+    }
     this.taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[0].length).fill({ name: null, importance: null }));
     this.createWeek(this.selectedDate);
     this.filterTaskByUsers();
@@ -162,8 +167,9 @@ export default {
       let lineCurrentTime = new Date();
       let end = this.getShiftTimeArray[this.selectedPersonIndex][this.getShiftTimeArray[this.selectedPersonIndex].length - 1];
       let start = this.getShiftTimeArray[this.selectedPersonIndex][0];
-      let position = ((lineCurrentTime.getHours() - start) * 60 + lineCurrentTime.getMinutes()) / this.timeScale;
-      if (lineCurrentTime.getHours() + lineCurrentTime.getMinutes() / 60 < end + this.timeScale && lineCurrentTime.getHours() + lineCurrentTime.getMinutes() / 60 > start) {
+      let position = lineCurrentTime.getHours() + lineCurrentTime.getMinutes() / 60 + lineCurrentTime.getSeconds() / 3600;
+      if (position < end + this.timeScale && position > start) {
+        position = (position - start) * 60 / this.timeScale
         this.showLine = true;
         this.linePosition = {
           marginTop: position + "px"
@@ -184,7 +190,7 @@ export default {
       }
     },
     createNewTask(name, desc, startsAt, endsAt, color) {
-      let taskid = this.taskArray[this.taskArray.length - 1].id + 1
+      let taskid = this.taskArray[this.taskArray.length - 1].id + 1;
       let object = {
         id: taskid,
         taskName: name,
@@ -354,6 +360,7 @@ export default {
             <template v-for="dayIndex in getWorkDaysNumb">
               <SchedulerItem v-if="getBreakTimeArray[selectedPersonIndex].includes(i)" :noWork='true' />
               <SchedulerItem v-else :dateObj='{ day: dayIndex, hour: i }'
+                :class="{ selected: selectedDay === dayIndex + 1 && selectedHour === i }"
                 :taskInfo='generatedTaskInfoForItems[dayIndex][hourIndex]' @timeSelected="timeSelection" />
             </template>
           </template>
@@ -404,6 +411,11 @@ export default {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.selected {
+  border: dashed #555b6e;
+  border-width: 3px;
 }
 
 .timeLine {

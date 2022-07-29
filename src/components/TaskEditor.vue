@@ -351,7 +351,7 @@ export default {
       if (this.breakTime[0] <= timeShiftWithoutBreaks[timeShiftWithoutBreaks.length - 1]) {
         timeShiftWithoutBreaks.splice(timeShiftWithoutBreaks.indexOf(this.breakTime[0]), this.breakTime.length);
       }
-      // Apkarpome iki mūsų užduoties pabaigos (jei ne editinam, tada pasirinktas laikas įmamas)
+      // Apkarpome iki mūsų užduoties pabaigos (jei ne editinam, tada įmamas pasirinkto langelio laikas)
       timeCut[0] = [...timeShiftWithoutBreaks];
       timeCut[0].length = timeCut[0].indexOf(this.getTaskInfo.taskHourEnd) + 1;
       // Jei yra daugiau task juostoje prieš pasirinktą laiką,
@@ -419,7 +419,6 @@ export default {
     }
   },
 }
-
 </script>
 <template>
   <div class="taskList">
@@ -456,7 +455,7 @@ export default {
         </ul>
       </div>
       <label for="tdesc">Task description:</label><br>
-      <textarea id="tdesc" type="text" v-model="tDesc"></textarea><br class="lineBreak"><br class="lineBreak">
+      <textarea id="tdesc" type="text" v-model="tDesc"></textarea><br><br>
       <button v-if="!showTaskEdit" @click="newTask">Create new task</button>
       <button v-else @click="saveEdit">Save edit</button>
     </div>
@@ -471,9 +470,8 @@ export default {
         <p>{{ getTaskInfo.taskDesc }}</p>
       </div>
       <template v-if="foundTask.taskStatus === 'ongoing'">
-        <button type="button" @click="$emit('finishTheTask', foundTask)">Finish task</button><br class="lineBreak"><br
-          class="lineBreak">
-        <button type="button" @click="showEditScreen()">Edit task</button><br class="lineBreak"><br class="lineBreak">
+        <button type="button" @click="$emit('finishTheTask', foundTask)">Finish task</button><br><br>
+        <button type="button" @click="showEditScreen()">Edit task</button><br><br>
       </template>
       <button type="button" @click="$emit('taskDeletion', foundTask.id)">Delete task</button>
     </div>
@@ -555,7 +553,6 @@ h1 {
 }
 
 .colorPallete li {
-
   list-style: none;
   width: 15px;
   height: 15px;
@@ -582,29 +579,6 @@ input {
   border-radius: 0.25em;
   padding: 0.25em 0.5em;
   font-size: 1.25rem;
-}
-
-select {
-  width: 80%;
-  border: 1px solid;
-  border-radius: 0.25em;
-  padding: 0.25em 0.5em;
-  font-size: 1.25rem;
-  cursor: pointer;
-  line-height: 1.1;
-  background-color: #fff;
-  background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
-}
-
-button {
-  width: 80%;
-  border: 1px solid;
-  border-radius: 0.25em;
-  padding: 0.25em 0.5em;
-  font-size: 1.25rem;
-  cursor: pointer;
-  line-height: 1.1;
-  background-color: #fff;
 }
 
 button:hover {
@@ -663,10 +637,6 @@ button:hover {
 
   textarea {
     font-size: 0.8rem;
-  }
-
-  .lineBreak {
-    display: none;
   }
 }
 

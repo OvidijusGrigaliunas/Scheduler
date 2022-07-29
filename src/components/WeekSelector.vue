@@ -166,30 +166,6 @@ h1:hover {
   margin-top: 7px;
 }
 
-button {
-  width: 80%;
-  border: 1px solid;
-  border-radius: 0.25em;
-  padding: 0.25em 0.5em;
-  font-size: 1.25rem;
-  cursor: pointer;
-  line-height: 1.1;
-  background-color: #fff;
-
-}
-
-Select {
-  border: 1px solid;
-  border-radius: 0.25em;
-  padding: 0.25em 0.5em;
-  font-size: 1.5em;
-  cursor: pointer;
-  line-height: 1.1;
-  background-color: #fff;
-  background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
-  margin: 5px 0 5px 0;
-}
-
 .yearSelect {
   width: 40%;
 }

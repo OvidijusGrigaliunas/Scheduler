@@ -127,14 +127,7 @@ export default {
 
 select {
   width: 25%;
-  border: 1px solid;
-  border-radius: 0.25em;
-  padding: 0.25em 0.5em;
   font-size: 0.8rem;
-  cursor: pointer;
-  line-height: 1.1;
-  background-color: #fff;
-  background-image: linear-gradient(to top, #f9f9f9, #fff 33%);
 }
 
 .nameDiv {
@@ -144,7 +137,6 @@ select {
   border: 1px solid #555b6e;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
   border-radius: 20px;
-
 }
 
 .settings {
