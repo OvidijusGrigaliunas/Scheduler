@@ -14,7 +14,6 @@ export default {
         { id: 1, taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/08/01", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'finished' },
         { id: 2, taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/08/01", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskColor: '#407d70', taskStatus: 'ongoing' },
         { id: 3, taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/08/01", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskColor: '#e0263c', taskStatus: 'ongoing' },
-        { id: 4, taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/08/01", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskColor: '#e0263c', taskStatus: 'deleted' },
       ],
       people: [
         { name: "Vardenis", shiftStart: 8, shiftEnd: 17, hasBreak: true, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
@@ -127,7 +126,7 @@ export default {
     },
     // Sugeneruoja 2d array, pagal kurią galime žinoti ar langelis turi užduotį. Šios funckijos pagalba persiunčiame langeliams reikalinga info
     generatedTaskInfoForItems() {
-      let taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[this.selectedPersonIndex].length).fill({ name: null, importance: null, status: null }));
+      let taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[this.selectedPersonIndex].length).fill({ name: null, color: '#fff', status: null }));
       for (let i = 0; i < 7; i++) {
         this.filteredTasks[i].forEach(task => {
           taskInfoArray[i] = this.updateColumnTaskInfo(taskInfoArray[i], task);
@@ -149,7 +148,6 @@ export default {
     } else {
       this.selectedHour = minutes <= 15 ? new Date().getHours() : new Date().getHours() + 0.25;
     }
-    this.taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[0].length).fill({ name: null, importance: null }));
     this.createWeek(this.selectedDate);
     this.filterTaskByUsers();
     this.showCurTime();
@@ -210,7 +208,7 @@ export default {
       let arrLength = this.taskArray.length;
       for (let i = 0; i < arrLength; i++) {
         if (taskToDeleteID === this.taskArray[i].id) {
-          this.taskArray[i].taskStatus = 'deleted';
+          this.taskArray.splice(i, 1);
           break;
         }
       }
@@ -300,7 +298,7 @@ export default {
       });
     },
     filterTaskByUsers() {
-      this.filteredTasksByUsers = this.taskArray.filter(task => task.taskTarget === this.people[this.selectedPersonIndex].name && task.taskStatus != 'deleted');
+      this.filteredTasksByUsers = this.taskArray.filter(task => task.taskTarget === this.people[this.selectedPersonIndex].name);
       this.filterTasksByWeek();
     },
     dateFormatting(week) {
@@ -344,6 +342,7 @@ export default {
             @changeDate="changeDate" />
         </div>
         <div class="grid" :style="getWeekGridStyle">
+          <!-- Pirmoji grid juosta. Start -->
           <div class="time blankRectangle"></div>
           <template v-for="(bool, index) in people[selectedPersonIndex].workDays">
             <div v-if="bool === true" class="weekDay">
@@ -351,6 +350,8 @@ export default {
             </div>
           </template>
         </div>
+        <!-- Pirmoji grid juosta. End -->
+        <!-- Užduočių grid. Start -->
         <div class="grid" :style="getGridStyle">
           <div v-show="showLine" class="timeLine" :style="linePosition"></div>
           <template v-for='(i, hourIndex) in getShiftTimeArray[selectedPersonIndex]'>
@@ -358,13 +359,17 @@ export default {
               <h1>{{ formatTime[i / timeScale] }}</h1>
             </div>
             <template v-for="dayIndex in getWorkDaysNumb">
+              <!-- Jei tuo metu nedirba, mums užtenka noWork -->
               <SchedulerItem v-if="getBreakTimeArray[selectedPersonIndex].includes(i)" :noWork='true' />
-              <SchedulerItem v-else :dateObj='{ day: dayIndex, hour: i }'
+              <SchedulerItem v-else :day="dayIndex" :hour="i"
                 :class="{ selected: selectedDay === dayIndex + 1 && selectedHour === i }"
-                :taskInfo='generatedTaskInfoForItems[dayIndex][hourIndex]' @timeSelected="timeSelection" />
+                :color='generatedTaskInfoForItems[dayIndex][hourIndex].color'
+                :name="generatedTaskInfoForItems[dayIndex][hourIndex].name" @timeSelected="timeSelection"
+                :status='generatedTaskInfoForItems[dayIndex][hourIndex].status' />
             </template>
           </template>
         </div>
+        <!-- Užduočių grid. End -->
       </div>
       <TaskEditor :key="taskEditorKey" :resolution='getResolutionHeight' :date='selectedDateFormatting'
         :tasks='filteredTasks[selectedDay - 1]' :hour='selectedHour' :formattedTime='formatTime'

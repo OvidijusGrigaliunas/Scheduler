@@ -18,7 +18,7 @@ export default {
       selectedImportance: 3,
       selectedTimeStart: 5,
       selectedTimeEnd: 5,
-      taskColor: '#EA80FC',
+      taskColor: '#ffffff',
       showColorPallete: false,
       colorPallete: [
         '#FFEBEE',
@@ -370,46 +370,36 @@ export default {
   },
   methods: {
     requirementsCheck() {
-      let errorList = [];
-      if (this.tName.length === 0 || this.tDesc.length === 0) {
-        errorList.push('Please fill in all fields');
+      if (this.tName.length === 0) {
+        return false
       }
-      if (this.tDesc.length > 1024) {
-        errorList.push('Description - maximum characters allowed: 1024');
-      }
-      if (this.tName.length > 64) {
-        errorList.push('Name - maximum characters allowed: 64');
+      if (this.tDesc.length > 1024 || this.tName.length > 32) {
+        return false
       }
       if (this.selectedTimeStart >= this.selectedTimeEnd) {
-        errorList.push("Task can't end before it starts");
+        return false
       }
-      return errorList;
+      return true;
     },
     newTask() {
-      let errorList = this.requirementsCheck();
-      if (errorList.length > 0) {
-        alert(errorList.join('. '));
-      } else {
+      if (this.requirementsCheck()) {
         this.$emit('NewTask', this.tName, this.tDesc, this.selectedTimeStart, this.selectedTimeEnd, this.taskColor);
       }
     },
     saveEdit() {
-      let errorList = this.requirementsCheck();
-      if (errorList.length > 0) {
-        alert(errorList.join('. '));
-      } else {
+      if (this.requirementsCheck()) {
         this.$emit('taskEdit', this.foundTask.id, this.tName, this.tDesc, this.selectedTimeStart, this.selectedTimeEnd, this.taskColor);
       }
     },
     findTask() {
-      // Suranda užduotį pagal pasirinkto langelio laiką,
+      // Suranda užduotį pagal pasirinkto langelio laiką.
       this.foundTask = this.tasks.find(task =>
         task.taskHourStart <= this.hour &&
-        task.taskHourEnd - this.timeScale >= this.hour &&
-        task.taskStatus != 'deleted'
+        task.taskHourEnd - this.timeScale >= this.hour
       );
     },
     showEditScreen() {
+      // Nukopijuojame pradinės užduoties vertes, kad būtų patogiau keisti ją.
       this.showTaskEdit = true;
       this.tName = this.getTaskInfo.taskName;
       this.tDesc = this.getTaskInfo.taskDesc;
@@ -426,9 +416,13 @@ export default {
       <h1>{{ date }}</h1>
     </div>
     <div class="formContainer" v-if="!hasTasksEditor || showTaskEdit">
-      <!--- Užduoties kūrimas/keitimas  --->
+      <!--- Užduoties kūrimas/keitimas. Start --->
+      <!--- Užduoties pavadinimas --->
       <label for="tname">Task name:</label><br>
       <input id="tname" type="text" v-model="tName"><br>
+      <p style="color: #ffaa00; font-size: 16px;" v-if="tName.length === 0">This field can't be empty</p>
+      <p style="color: #ffaa00; font-size: 16px;" v-if="tName.length > 32">Name can't be longer than 32 characters.</p>
+      <!--- Užduoties pradžios pasirinkimas --->
       <label for="taskStartsAt">Task starts:</label><br>
       <select id="taskStartsAt" v-model.number="selectedTimeStart">
         <template v-for="n in cutShiftTimeForSelect[0]">
@@ -437,6 +431,7 @@ export default {
           }}</option>
         </template>
       </select><br>
+      <!--- Užduoties pabaigos pasirinkimas --->
       <label for="taskEndsAt">Task ends:</label><br>
       <select v-model.number="selectedTimeEnd">
         <template v-for="n in cutShiftTimeForSelect[1]">
@@ -445,30 +440,45 @@ export default {
           }}</option>
         </template>
       </select><br>
+      <p style="color: #ffaa00; font-size: 16px;" v-if="selectedTimeStart >= selectedTimeEnd"> Task can't end before it
+        starts
+      </p>
+      <!--- Užduoties spalvos pasirinkimas --->
       <label for="colorPicker">Task color:</label><br>
-      <button @click="showColorPallete = !showColorPallete"
-        :style="{ background: taskColor }">Pick color</button><br>
+      <button @click="showColorPallete = !showColorPallete" :style="{ background: taskColor }">Pick color</button><br>
+      <!--- Spalvų paletė --->
       <div v-if="showColorPallete" class="colorPallete">
         <ul role="listbox">
           <li v-for="color in colorPallete" @click="taskColor = color" :style="{ background: color }" role="option">
           </li>
         </ul>
       </div>
+      <!--- Užduoties aprašymas --->
       <label for="tdesc">Task description:</label><br>
-      <textarea id="tdesc" type="text" v-model="tDesc"></textarea><br><br>
+      <textarea id="tdesc" type="text" v-model="tDesc"></textarea><br>
+      <p style="color: #ffaa00; font-size: 16px;" v-if="tDesc.length > 1024">Description can't be longer than 1024
+        characters.
+      </p>
+      <!--- Užduoties create/edit mygtukai --->
       <button v-if="!showTaskEdit" @click="newTask">Create new task</button>
       <button v-else @click="saveEdit">Save edit</button>
     </div>
+    <!--- Užduoties kūrimas/keitimas. End --->
     <div v-else>
-      <!--- Informacija apie užduotį  --->
+      <!--- Informacija apie užduotį. Start --->
       <div class="taskContainer">
+        <!--- Užduoties pavadinimas --->
         <h2 style="font-size: 40px">{{ getTaskInfo.taskName }}</h2>
+        <!--- Užduoties pradžios - pabaigos laikas --->
         <h1>{{ formattedTime[getTaskInfo.taskHourStart / timeScale] }} - {{ formattedTime[getTaskInfo.taskHourEnd /
             timeScale + 1]
         }}</h1>
+        <!--- Užduoties būsena --->
         <h1>Status: {{ getTaskInfo.taskStatus }}</h1>
+        <!--- Užduoties aprašymas --->
         <p>{{ getTaskInfo.taskDesc }}</p>
       </div>
+      <!--- Informacija apie užduotį. End --->
       <template v-if="foundTask.taskStatus === 'ongoing'">
         <button type="button" @click="$emit('finishTheTask', foundTask)">Finish task</button><br><br>
         <button type="button" @click="showEditScreen()">Edit task</button><br><br>

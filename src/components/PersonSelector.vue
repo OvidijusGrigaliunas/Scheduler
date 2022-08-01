@@ -44,8 +44,10 @@ export default {
     <div class="nameDiv">
       <h1 @click="showSettings = !showSettings" class="currentName">{{ peopleList[selectedIndex].name }}</h1>
       <Transition name="slide">
+        <!-- Nustatymų langelis. Start -->
         <div v-if="showSettings" class="settings">
           <h1>Selected days</h1>
+          <!-- Darbo dienų pasirinkimas. Start -->
           <div class="grid">
             <p>M</p>
             <p>T</p>
@@ -59,6 +61,8 @@ export default {
                 :true-value="true" :false-value="false" />
             </template>
           </div>
+          <!-- Darbo dienų pasirinkimas. End -->
+          <!-- Darbo valandų pasirinkimas. Start -->
           <h1>Show time</h1>
           <label>From: </label>
           <select v-model.number="peopleList[this.selectedIndex].shiftStart">
@@ -76,6 +80,8 @@ export default {
               }}</option>
             </template>
           </select><br><br>
+          <!-- Darbo valandų pasirinkimas. End -->
+          <!-- Pertraukos pasirinkimas. Start -->
           <h1>Break time</h1>
           <label>Has break: </label>
           <input class="regular-checkbox" type="checkbox" v-model="peopleList[this.selectedIndex].hasBreak"
@@ -99,6 +105,8 @@ export default {
             </select><br>
           </template>
         </div>
+        <!-- Pertraukos pasirinkimas. End -->
+        <!-- Nustatymų langelis. End  -->
       </Transition>
     </div>
     <div class="nameDiv">

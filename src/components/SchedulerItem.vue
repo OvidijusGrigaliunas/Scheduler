@@ -1,17 +1,21 @@
 <script>
 export default {
   props: {
-    dateObj: Object,
-    taskInfo: Object,
+    hour: Number,
+    day: Number,
+    name: String,
+    color: String,
     noWork: Boolean,
+    status: String,
   },
 };
 </script>
 
 <template>
   <div v-if="noWork" class="item break"></div>
-  <div v-else class="item" :style="{background: this.taskInfo.color}" @click="$emit('timeSelected', this.dateObj.day, this.dateObj.hour)">
-    <h2>{{ taskInfo.name }}</h2>
+  <div v-else class="item" :class="{ finished: status === 'finished' }" :style="{ background: color }"
+    @click="$emit('timeSelected', this.day, this.hour)">
+    <h2>{{ name }}</h2>
   </div>
 </template>
 
@@ -20,12 +24,17 @@ export default {
   display: inline-block;
   width: 100%;
   height: 60px;
-  border: solid #555b6e;
+  border: dashed #555b6e;
   border-width: 1px;
   cursor: pointer;
   text-align: center;
   overflow: hidden;
   color: black;
+}
+
+.finished {
+  border-style: double;
+  border-width: 3px;
 }
 
 .break {

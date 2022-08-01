@@ -46,6 +46,7 @@ export default {
       return result;
     },
     getMonthLength() {
+      //ar keliamieji metai
       if (((this.selectedYear % 4 == 0) && (this.selectedYear % 100 != 0)) || (this.selectedYear % 400 == 0)) {
         return [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
       }
@@ -74,6 +75,8 @@ export default {
     <div>
       <h1 @click="showDateSel = !showDateSel">{{ weekRangeFormat }}</h1>
       <Transition name="slide">
+        <!-- Datos pasirinkimas. Start -->
+        <!-- Metų pasirinkimas -->
         <div class="selectDay" v-if="showDateSel === true">
           <h2> Select date</h2>
           <select class="yearSelect" v-model.number="selectedYear">
@@ -83,6 +86,7 @@ export default {
               }}</option>
             </template>
           </select>
+          <!-- Mėnesio pasirinkimas -->
           <select class="monthDaySelect" v-model="selectedMonth">
             <template v-for="(month, index) in month">
               <option :value='index + 1'>{{
@@ -90,6 +94,7 @@ export default {
               }}</option>
             </template>
           </select>
+          <!-- Dienos pasirinkimas -->
           <select class="monthDaySelect" v-model="selectedDay">
             <template v-for="day in getMonthLength[selectedMonth - 1]">
               <option v-if="day > 9" :value='day'>{{
@@ -103,6 +108,7 @@ export default {
           <p v-show="showError">{{ person.name }} doesn't work on this day</p>
           <button @click="dateChange">Change date</button>
         </div>
+        <!-- Datos pasirinkimas. End -->
       </Transition>
     </div>
     <p>
