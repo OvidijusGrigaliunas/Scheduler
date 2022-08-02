@@ -420,8 +420,8 @@ export default {
       <!--- Užduoties pavadinimas --->
       <label for="tname">Task name:</label><br>
       <input id="tname" type="text" v-model="tName"><br>
-      <p style="color: #ffaa00; font-size: 16px;" v-if="tName.length === 0">This field can't be empty</p>
-      <p style="color: #ffaa00; font-size: 16px;" v-if="tName.length > 32">Name can't be longer than 32 characters.</p>
+      <p class="errorMsg" v-if="tName.length === 0">This field can't be empty</p>
+      <p class="errorMsg" v-if="tName.length > 32">Name can't be longer than 32 characters.</p>
       <!--- Užduoties pradžios pasirinkimas --->
       <label for="taskStartsAt">Task starts:</label><br>
       <select id="taskStartsAt" v-model.number="selectedTimeStart">
@@ -440,7 +440,7 @@ export default {
           }}</option>
         </template>
       </select><br>
-      <p style="color: #ffaa00; font-size: 16px;" v-if="selectedTimeStart >= selectedTimeEnd"> Task can't end before it
+      <p class="errorMsg" v-if="selectedTimeStart >= selectedTimeEnd"> Task can't end before it
         starts
       </p>
       <!--- Užduoties spalvos pasirinkimas --->
@@ -456,7 +456,7 @@ export default {
       <!--- Užduoties aprašymas --->
       <label for="tdesc">Task description:</label><br>
       <textarea id="tdesc" type="text" v-model="tDesc"></textarea><br>
-      <p style="color: #ffaa00; font-size: 16px;" v-if="tDesc.length > 1024">Description can't be longer than 1024
+      <p class="errorMsg" v-if="tDesc.length > 1024">Description can't be longer than 1024
         characters.
       </p>
       <!--- Užduoties create/edit mygtukai --->
@@ -480,7 +480,7 @@ export default {
       </div>
       <!--- Informacija apie užduotį. End --->
       <template v-if="foundTask.taskStatus === 'ongoing'">
-        <button type="button" @click="$emit('finishTheTask', foundTask)">Finish task</button><br><br>
+        <button type="button" @click="$emit('finishTheTask', foundTask.id)">Finish task</button><br><br>
         <button type="button" @click="showEditScreen()">Edit task</button><br><br>
       </template>
       <button type="button" @click="$emit('taskDeletion', foundTask.id)">Delete task</button>
@@ -501,6 +501,11 @@ export default {
 
 .formContainer {
   height: 590px;
+}
+
+.errorMsg {
+  color: #ffaa00;
+  font-size: 16px;
 }
 
 .taskDate {

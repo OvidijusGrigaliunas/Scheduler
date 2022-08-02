@@ -11,16 +11,16 @@ export default {
     return {
       taskArray: [
         // Jei rašo nuo 10:00 iki 15:00, tai reiškia , kad nuo 15:00 jau laisvas
-        { id: 1, taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/08/01", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'finished' },
-        { id: 2, taskName: 'task3', taskDesc: 'task3 desc', taskDay: "2022/08/01", taskHourStart: 10, taskHourEnd: 10.5, taskTarget: 'Vardenis', taskColor: '#407d70', taskStatus: 'ongoing' },
-        { id: 3, taskName: 'task4', taskDesc: 'task4 desc', taskDay: "2022/08/01", taskHourStart: 11, taskHourEnd: 11.5, taskTarget: 'Vardenis', taskColor: '#e0263c', taskStatus: 'ongoing' },
+        //{ id: 0, taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/08/01", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'finished' },
       ],
       people: [
-        { name: "Vardenis", shiftStart: 8, shiftEnd: 17, hasBreak: true, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
+        { name: "Vardenis", shiftStart: 0, shiftEnd: 24, hasBreak: true, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, true, true] },
         { name: "Pavardenis", shiftStart: 9, shiftEnd: 19, hasBreak: true, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
         { name: "Bonilla", shiftStart: 10, shiftEnd: 19, hasBreak: true, breakStart: 11, breakEnd: 13, workDays: [true, true, true, true, true, false, true] },
         { name: "Hobbs", shiftStart: 7, shiftEnd: 16, hasBreak: false, breakStart: null, breakEnd: null, workDays: [true, false, true, true, true, false, false] }
       ],
+      idStack: [],
+      hashMap: {},
       selectedHour: null,
       selectedDate: new Date(),
       selectedDay: new Date().getDay(),
@@ -142,6 +142,79 @@ export default {
     setInterval(this.showCurTime, 15000);
   },
   created() {
+    for (let i = 2000; i > 0; i--) {
+      this.idStack.push(i);
+    }
+    for (let i = 0; i < 96; i++) {
+      let taskID = this.idStack.pop();
+      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/01", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+      this.hashTask(taskID, this.taskArray.length - 1)
+    }
+    for (let i = 0; i < 96; i++) {
+      let taskID = this.idStack.pop();
+      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/02", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+      this.hashTask(taskID, this.taskArray.length - 1)
+    }
+    for (let i = 0; i < 96; i++) {
+      let taskID = this.idStack.pop();
+      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/03", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+      this.hashTask(taskID, this.taskArray.length - 1)
+    }
+    for (let i = 0; i < 96; i++) {
+      let taskID = this.idStack.pop();
+      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/04", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+      this.hashTask(taskID, this.taskArray.length - 1)
+    }
+    for (let i = 0; i < 96; i++) {
+      let taskID = this.idStack.pop();
+      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/05", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+      this.hashTask(taskID, this.taskArray.length - 1)
+    }
+    for (let i = 0; i < 96; i++) {
+      let taskID = this.idStack.pop();
+      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/06", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+      this.hashTask(taskID, this.taskArray.length - 1);
+    }
+    for (let i = 0; i < 96; i++) {
+      let taskID = this.idStack.pop();
+      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/07", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+      this.hashTask(taskID, this.taskArray.length - 1)
+    }
+    for (let i = 0; i < 96; i++) {
+      let taskID = this.idStack.pop();
+      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/08", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+      this.hashTask(taskID, this.taskArray.length - 1)
+    }
+    for (let i = 0; i < 96; i++) {
+      let taskID = this.idStack.pop();
+      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/09", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+      this.hashTask(taskID, this.taskArray.length - 1)
+    }
+    for (let i = 0; i < 96; i++) {
+      let taskID = this.idStack.pop();
+      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/10", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+      this.hashTask(taskID, this.taskArray.length - 1)
+    }
+    for (let i = 0; i < 96; i++) {
+      let taskID = this.idStack.pop();
+      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/11", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+      this.hashTask(taskID, this.taskArray.length - 1)
+    }
+    for (let i = 0; i < 96; i++) {
+      let taskID = this.idStack.pop();
+      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/12", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+      this.hashTask(taskID, this.taskArray.length - 1)
+    }
+    for (let i = 0; i < 96; i++) {
+      let taskID = this.idStack.pop();
+      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/13", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+      this.hashTask(taskID, this.taskArray.length - 1);
+    }
+    for (let i = 0; i < 96; i++) {
+      let taskID = this.idStack.pop();
+      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/14", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+      this.hashTask(taskID, this.taskArray.length - 1)
+    }
     let minutes = new Date().getMinutes();
     if (minutes >= 30) {
       this.selectedHour = minutes >= 45 ? new Date().getHours() + 0.75 : new Date().getHours() + 0.5;
@@ -188,7 +261,7 @@ export default {
       }
     },
     createNewTask(name, desc, startsAt, endsAt, color) {
-      let taskid = this.taskArray[this.taskArray.length - 1].id + 1;
+      let taskid = this.idStack.pop();
       let object = {
         id: taskid,
         taskName: name,
@@ -200,45 +273,46 @@ export default {
         taskColor: color,
         taskStatus: 'ongoing'
       }
-      this.taskArray.push(object);
+      // jei taskid jau yra užregistruotas hashMap,
+      // mes tiesiog naują objektą įterpiame į tą vietą
+      if (this.hashMap[taskid]) {
+        this.taskArray[this.hashMap[taskid]] = object;
+      } else {
+        // o jei ne, užpushinime objektą į galą ir tada naudojame hashTask funkciją
+        this.taskArray.push(object);
+        this.hashTask(taskid, this.taskArray.length - 1);
+      }
       this.filterTaskByUsers();
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
     deleteTask(taskToDeleteID) {
-      let arrLength = this.taskArray.length;
-      for (let i = 0; i < arrLength; i++) {
-        if (taskToDeleteID === this.taskArray[i].id) {
-          this.taskArray.splice(i, 1);
-          break;
-        }
-      }
+      this.taskArray[this.hashMap[taskToDeleteID]] = {};
+      this.idStack.push(taskToDeleteID)
       this.filterTaskByUsers();
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
+    // Padeda surandant index užduoties. Nebereikia loopinti per taskArray, kad jį rastume
+    hashTask(taskID, index) {
+      this.hashMap[taskID] = index;
+    },
     editTask(taskToChangeID, name, desc, startsAt, endsAt, color) {
-      let arrLength = this.taskArray.length;
-      for (let i = 0; i < arrLength; i++) {
-        if (taskToChangeID === this.taskArray[i].id) {
-          this.taskArray[i] = {
-            id: this.taskArray[i].id,
-            taskName: name,
-            taskDesc: desc,
-            taskDay: this.selectedDateFormatting,
-            taskHourStart: startsAt,
-            taskHourEnd: endsAt,
-            taskTarget: this.people[this.selectedPersonIndex].name,
-            taskColor: color,
-            taskStatus: 'ongoing'
-          };
-          break;
-        }
-      }
+      this.taskArray[this.hashMap[taskToChangeID]] = {
+        id: taskToChangeID,
+        taskName: name,
+        taskDesc: desc,
+        taskDay: this.selectedDateFormatting,
+        taskHourStart: startsAt,
+        taskHourEnd: endsAt,
+        taskTarget: this.people[this.selectedPersonIndex].name,
+        taskColor: color,
+        taskStatus: 'ongoing'
+      };
       this.selectedHour = startsAt;
       this.filterTaskByUsers();
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
-    finishTask(taskToFinish) {
-      this.taskArray[this.taskArray.indexOf(taskToFinish)].taskStatus = 'finished';
+    finishTask(taskToFinishID) {
+      this.taskArray[this.hashMap[taskToFinishID]].taskStatus = 'finished';
       this.filterTaskByUsers();
       this.taskEditorKey = this.taskEditorKey * (-1);
     },
