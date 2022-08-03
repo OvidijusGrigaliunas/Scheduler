@@ -21,6 +21,7 @@ export default {
       ],
       idStack: [],
       hashMap: {},
+      hashMapPerson: {},
       selectedHour: null,
       selectedDate: new Date(),
       selectedDay: new Date().getDay(),
@@ -31,7 +32,6 @@ export default {
       filteredTasksByUsers: [],
       filteredTasks: [],
       currentWeek: [],
-      taskEditorKey: 30,
       weekDayStrArr: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       // Veikia su 0.25, 0.5 ir 1
       // Jei 0.25, laiko tarpai yra 15min
@@ -142,78 +142,26 @@ export default {
     setInterval(this.showCurTime, 15000);
   },
   created() {
-    for (let i = 2000; i > 0; i--) {
+    for (let i = 10000; i > 0; i--) {
       this.idStack.push(i);
     }
     for (let i = 0; i < 96; i++) {
-      let taskID = this.idStack.pop();
-      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/01", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-      this.hashTask(taskID, this.taskArray.length - 1)
-    }
-    for (let i = 0; i < 96; i++) {
-      let taskID = this.idStack.pop();
-      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/02", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-      this.hashTask(taskID, this.taskArray.length - 1)
-    }
-    for (let i = 0; i < 96; i++) {
-      let taskID = this.idStack.pop();
-      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/03", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-      this.hashTask(taskID, this.taskArray.length - 1)
-    }
-    for (let i = 0; i < 96; i++) {
-      let taskID = this.idStack.pop();
-      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/04", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-      this.hashTask(taskID, this.taskArray.length - 1)
-    }
-    for (let i = 0; i < 96; i++) {
-      let taskID = this.idStack.pop();
-      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/05", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-      this.hashTask(taskID, this.taskArray.length - 1)
-    }
-    for (let i = 0; i < 96; i++) {
-      let taskID = this.idStack.pop();
-      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/06", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-      this.hashTask(taskID, this.taskArray.length - 1);
-    }
-    for (let i = 0; i < 96; i++) {
-      let taskID = this.idStack.pop();
-      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/07", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-      this.hashTask(taskID, this.taskArray.length - 1)
-    }
-    for (let i = 0; i < 96; i++) {
-      let taskID = this.idStack.pop();
-      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/08", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-      this.hashTask(taskID, this.taskArray.length - 1)
-    }
-    for (let i = 0; i < 96; i++) {
-      let taskID = this.idStack.pop();
-      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/09", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-      this.hashTask(taskID, this.taskArray.length - 1)
-    }
-    for (let i = 0; i < 96; i++) {
-      let taskID = this.idStack.pop();
-      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/10", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-      this.hashTask(taskID, this.taskArray.length - 1)
-    }
-    for (let i = 0; i < 96; i++) {
-      let taskID = this.idStack.pop();
-      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/11", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-      this.hashTask(taskID, this.taskArray.length - 1)
-    }
-    for (let i = 0; i < 96; i++) {
-      let taskID = this.idStack.pop();
-      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/12", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-      this.hashTask(taskID, this.taskArray.length - 1)
-    }
-    for (let i = 0; i < 96; i++) {
-      let taskID = this.idStack.pop();
-      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/13", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-      this.hashTask(taskID, this.taskArray.length - 1);
-    }
-    for (let i = 0; i < 96; i++) {
-      let taskID = this.idStack.pop();
-      this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: "2022/08/14", taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-      this.hashTask(taskID, this.taskArray.length - 1)
+      for (let j = 1; j < 10; j++) {
+        let taskID = this.idStack.pop();
+        this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: `2022/08/0${j}`, taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+        this.hashTask(taskID, this.taskArray.length - 1)
+        taskID = this.idStack.pop();
+        this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: `2022/08/0${j}`, taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Pavardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+        this.hashTask(taskID, this.taskArray.length - 1)
+      }
+      for (let j = 10; j < 32; j++) {
+        let taskID = this.idStack.pop();
+        this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: `2022/08/${j}`, taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+        this.hashTask(taskID, this.taskArray.length - 1)
+        taskID = this.idStack.pop();
+        this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: `2022/08/${j}`, taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Pavardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
+        this.hashTask(taskID, this.taskArray.length - 1)
+      }
     }
     let minutes = new Date().getMinutes();
     if (minutes >= 30) {
@@ -236,10 +184,10 @@ export default {
   methods: {
     showCurTime() {
       let lineCurrentTime = new Date();
-      let end = this.getShiftTimeArray[this.selectedPersonIndex][this.getShiftTimeArray[this.selectedPersonIndex].length - 1];
+      let end = this.getShiftTimeArray[this.selectedPersonIndex][this.getShiftTimeArray[this.selectedPersonIndex].length - 1] + this.timeScale;
       let start = this.getShiftTimeArray[this.selectedPersonIndex][0];
       let position = lineCurrentTime.getHours() + lineCurrentTime.getMinutes() / 60 + lineCurrentTime.getSeconds() / 3600;
-      if (position < end + this.timeScale && position > start) {
+      if (position < end && position > start) {
         position = (position - start) * 60 / this.timeScale
         this.showLine = true;
         this.linePosition = {
@@ -257,7 +205,6 @@ export default {
         this.getBreakTimeArray[this.selectedPersonIndex].includes(this.selectedHour)
       ) {
         this.selectedHour = this.people[this.selectedPersonIndex].shiftStart;
-        this.taskEditorKey = this.taskEditorKey * (-1);
       }
     },
     createNewTask(name, desc, startsAt, endsAt, color) {
@@ -277,26 +224,28 @@ export default {
       // mes tiesiog naują objektą įterpiame į tą vietą
       if (this.hashMap[taskid]) {
         this.taskArray[this.hashMap[taskid]] = object;
+        this.filteredTasksByUsers[this.selectedPersonIndex][this.hashMapPerson[taskid]] = object;
       } else {
         // o jei ne, užpushinime objektą į galą ir tada naudojame hashTask funkciją
         this.taskArray.push(object);
+        this.filteredTasksByUsers[this.selectedPersonIndex].push(object);
+        this.hashMapPerson[taskid] = this.filteredTasksByUsers[this.selectedPersonIndex].length - 1;
         this.hashTask(taskid, this.taskArray.length - 1);
       }
-      this.filterTaskByUsers();
-      this.taskEditorKey = this.taskEditorKey * (-1);
+      this.filterTasksByWeek();
     },
     deleteTask(taskToDeleteID) {
       this.taskArray[this.hashMap[taskToDeleteID]] = {};
+      this.filteredTasksByUsers[this.selectedPersonIndex][this.hashMapPerson[taskToDeleteID]] = {};
       this.idStack.push(taskToDeleteID)
-      this.filterTaskByUsers();
-      this.taskEditorKey = this.taskEditorKey * (-1);
+      this.filterTasksByWeek();
     },
     // Padeda surandant index užduoties. Nebereikia loopinti per taskArray, kad jį rastume
     hashTask(taskID, index) {
       this.hashMap[taskID] = index;
     },
     editTask(taskToChangeID, name, desc, startsAt, endsAt, color) {
-      this.taskArray[this.hashMap[taskToChangeID]] = {
+      let object = {
         id: taskToChangeID,
         taskName: name,
         taskDesc: desc,
@@ -307,20 +256,20 @@ export default {
         taskColor: color,
         taskStatus: 'ongoing'
       };
+      this.filteredTasksByUsers[this.selectedPersonIndex][this.hashMapPerson[taskToChangeID]] = object;
+      this.taskArray[this.hashMap[taskToChangeID]] = object;
       this.selectedHour = startsAt;
-      this.filterTaskByUsers();
-      this.taskEditorKey = this.taskEditorKey * (-1);
+      this.filterTasksByWeek();
     },
     finishTask(taskToFinishID) {
       this.taskArray[this.hashMap[taskToFinishID]].taskStatus = 'finished';
-      this.filterTaskByUsers();
-      this.taskEditorKey = this.taskEditorKey * (-1);
+      this.filteredTasksByUsers[this.selectedPersonIndex][this.hashMapPerson[taskToFinishID]].taskStatus = 'finished';
+      this.filterTasksByWeek();
     },
     timeSelection(dateIndex, hour) {
       this.selectedDay = dateIndex + 1;
       this.selectedHour = hour;
       this.selectedDate = this.currentWeek[dateIndex];
-      this.taskEditorKey = this.taskEditorKey * (-1);
     },
     addDays(date, days) {
       let newDate = new Date(date);
@@ -343,7 +292,6 @@ export default {
       this.selectedDate = this.addDays(this.selectedDate, direction);
       this.createWeek(this.selectedDate);
       this.filterTasksByWeek(this.currentWeek);
-      this.taskEditorKey = this.taskEditorKey * (-1);
     },
     changePerson(direction) {
       let newIndex = this.selectedPersonIndex + direction;
@@ -351,8 +299,7 @@ export default {
       // pradžią ar pabaigą. Jei direction -1 - pabaiga, jei 1 - pradžia;
       this.selectedPersonIndex = this.people[newIndex] ? newIndex : this.people.length - newIndex * direction;
       this.getSelectedHour();
-      this.filterTaskByUsers();
-      this.taskEditorKey = this.taskEditorKey * (-1);
+      this.filterTasksByWeek();
       this.showCurTime();
     },
     filterTasksByWeek() {
@@ -362,7 +309,7 @@ export default {
       for (let i = 0; i < 7; i++) {
         this.filteredTasks[i] = [];
       }
-      this.filteredTasksByUsers.forEach(task => {
+      this.filteredTasksByUsers[this.selectedPersonIndex].forEach(task => {
         for (let i = 0; i < 7; i++) {
           if (task.taskDay === formattedWeek[i]) {
             this.filteredTasks[i].push(task);
@@ -372,7 +319,16 @@ export default {
       });
     },
     filterTaskByUsers() {
-      this.filteredTasksByUsers = this.taskArray.filter(task => task.taskTarget === this.people[this.selectedPersonIndex].name);
+      let userHashMap = {}
+      this.people.forEach((person, index) => {
+        userHashMap[person.name] = index;
+        this.filteredTasksByUsers[index] = [];
+      });
+      for (let i = 0; i < this.taskArray.length; i++) {
+        let person = this.taskArray[i].taskTarget;
+        this.filteredTasksByUsers[userHashMap[person]].push(this.taskArray[i]);
+        this.hashMapPerson[this.taskArray[i].id] = this.filteredTasksByUsers[userHashMap[person]].length - 1;
+      }
       this.filterTasksByWeek();
     },
     dateFormatting(week) {
@@ -399,7 +355,6 @@ export default {
       this.selectedDay = this.selectedDate.getDay() != 0 ? this.selectedDate.getDay() : 7;
       this.createWeek(this.selectedDate);
       this.filterTasksByWeek();
-      this.taskEditorKey = this.taskEditorKey * (-1);
     }
   }
 }
@@ -445,8 +400,8 @@ export default {
         </div>
         <!-- Užduočių grid. End -->
       </div>
-      <TaskEditor :key="taskEditorKey" :resolution='getResolutionHeight' :date='selectedDateFormatting'
-        :tasks='filteredTasks[selectedDay - 1]' :hour='selectedHour' :formattedTime='formatTime'
+      <TaskEditor :resolution='getResolutionHeight' :date='selectedDateFormatting' :hour='selectedHour'
+        :tasks='filteredTasks[selectedDay - 1]' :formattedTime='formatTime'
         :breakTime='getBreakTimeArray[selectedPersonIndex]' :shiftTime='getShiftTimeArray[selectedPersonIndex]'
         :timeScale='timeScale' @NewTask="createNewTask" @finishTheTask="finishTask" @taskDeletion="deleteTask"
         @taskEdit='editTask' />

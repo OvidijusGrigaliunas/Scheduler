@@ -13,6 +13,7 @@ export default {
     return {
       showTaskEdit: false,
       foundTask: [],
+      taskArray: [],
       tName: '',
       tDesc: '',
       selectedImportance: 3,
@@ -278,11 +279,37 @@ export default {
       ]
     }
   },
+  watch: {
+    date() {
+      this.findTask();
+      this.selectedTimeStart = this.hour;
+      this.selectedTimeEnd = this.hour + this.timeScale;
+      this.showTaskEdit = false;
+      this.tName = '';
+      this.tDesc = '';
+      this.taskColor = '#ffffff';
+    },
+    hour() {
+      this.findTask();
+      this.selectedTimeStart = this.hour;
+      this.selectedTimeEnd = this.hour + this.timeScale;
+      this.showTaskEdit = false;
+      this.tName = '';
+      this.tDesc = '';
+      this.taskColor = '#ffffff';
+    },
+    tasks() {
+      this.findTask();
+      this.selectedTimeStart = this.hour;
+      this.selectedTimeEnd = this.hour + this.timeScale;
+      this.showTaskEdit = false;
+      this.tName = '';
+      this.tDesc = '';
+      this.taskColor = '#ffffff';
+    }
+  },
   created() {
     this.findTask();
-    // Šitos dvi eilutės nustato pradines vertes, kad būtų patogiau naudotis puslapių
-    this.selectedTimeStart = this.hour;
-    this.selectedTimeEnd = this.hour + this.timeScale;
   },
   computed: {
     hasTasksEditor() {
@@ -384,6 +411,7 @@ export default {
     newTask() {
       if (this.requirementsCheck()) {
         this.$emit('NewTask', this.tName, this.tDesc, this.selectedTimeStart, this.selectedTimeEnd, this.taskColor);
+
       }
     },
     saveEdit() {
