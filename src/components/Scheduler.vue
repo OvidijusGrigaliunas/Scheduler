@@ -20,8 +20,8 @@ export default {
         { name: "Hobbs", shiftStart: 7, shiftEnd: 16, hasBreak: false, breakStart: null, breakEnd: null, workDays: [true, false, true, true, true, false, false] }
       ],
       idStack: [],
-      hashMap: {},
-      hashMapPerson: {},
+      userTasksHashMap: {},
+      taskInfoForItems: [],
       selectedHour: null,
       selectedDate: new Date(),
       selectedDay: new Date().getDay(),
@@ -29,8 +29,6 @@ export default {
       showLine: true,
       selectedPersonIndex: 0,
       windowHeight: window.screen.availHeight - 197,
-      filteredTasksByUsers: [],
-      filteredTasks: [],
       currentWeek: [],
       weekDayStrArr: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       // Veikia su 0.25, 0.5 ir 1
@@ -39,7 +37,7 @@ export default {
       // su vertėmis didesnėmis negu 1 neveikia
       // Pagal viską turėtų veikti su 0.1 ir 0.2 (6min ir 12min), bet vertės gaunamos su daug skaičių po kablelio.
       // Turi veikti su 1/2^x vertėmis, tik reikėtų pataisyti laiko formativimą truputi
-      // Jei timeScale yra 0 susidaro endless loop
+      // Jei timeScale yra 0 susidaro infinite loop
       timeScale: 0.25
     }
   },
@@ -121,19 +119,17 @@ export default {
         let hours = i - (i % 1);
         timeArray.push(minutes > 10 ? `${hours}:${minutes}` : `${hours}:0${minutes}`);
       }
-      timeArray.push('00:00')
+      timeArray.push('00:00');
       return timeArray;
     },
-    // Sugeneruoja 2d array, pagal kurią galime žinoti ar langelis turi užduotį. Šios funckijos pagalba persiunčiame langeliams reikalinga info
-    generatedTaskInfoForItems() {
-      let taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[this.selectedPersonIndex].length).fill({ name: null, color: '#fff', status: null }));
-      for (let i = 0; i < 7; i++) {
-        this.filteredTasks[i].forEach(task => {
-          taskInfoArray[i] = this.updateColumnTaskInfo(taskInfoArray[i], task);
-        })
+    generatedTaskColumnForEditor() {
+      let person = this.people[this.selectedPersonIndex].name;
+      let arr = [];
+      for (let [key, index] of Object.entries(this.userTasksHashMap[person][this.selectedDateFormatting])) {
+        arr.push(this.taskArray[index]);
       }
-      return taskInfoArray;
-    },
+      return arr;
+    }
   },
   mounted() {
     window.onresize = () => {
@@ -149,18 +145,14 @@ export default {
       for (let j = 1; j < 10; j++) {
         let taskID = this.idStack.pop();
         this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: `2022/08/0${j}`, taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-        this.hashTask(taskID, this.taskArray.length - 1)
         taskID = this.idStack.pop();
         this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: `2022/08/0${j}`, taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Pavardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-        this.hashTask(taskID, this.taskArray.length - 1)
       }
-      for (let j = 10; j < 32; j++) {
+      for (let j = 10; j < 31; j++) {
         let taskID = this.idStack.pop();
         this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: `2022/08/${j}`, taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-        this.hashTask(taskID, this.taskArray.length - 1)
         taskID = this.idStack.pop();
         this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: `2022/08/${j}`, taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Pavardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },)
-        this.hashTask(taskID, this.taskArray.length - 1)
       }
     }
     let minutes = new Date().getMinutes();
@@ -170,7 +162,8 @@ export default {
       this.selectedHour = minutes <= 15 ? new Date().getHours() : new Date().getHours() + 0.25;
     }
     this.createWeek(this.selectedDate);
-    this.filterTaskByUsers();
+    this.generateHashDate();
+    this.groupTasksByPersonAndDate();
     this.showCurTime();
   },
   watch: {
@@ -220,29 +213,46 @@ export default {
         taskColor: color,
         taskStatus: 'ongoing'
       }
+      let person = this.people[this.selectedPersonIndex].name;
+      let index;
       // jei taskid jau yra užregistruotas hashMap,
       // mes tiesiog naują objektą įterpiame į tą vietą
-      if (this.hashMap[taskid]) {
-        this.taskArray[this.hashMap[taskid]] = object;
-        this.filteredTasksByUsers[this.selectedPersonIndex][this.hashMapPerson[taskid]] = object;
+      if (this.userTasksHashMap[person][this.selectedDateFormatting][taskid]) {
+        index = this.userTasksHashMap[person][this.selectedDateFormatting][taskid];
+        this.taskArray[index] = object;
       } else {
         // o jei ne, užpushinime objektą į galą ir tada naudojame hashTask funkciją
+        index = this.taskArray.length;
         this.taskArray.push(object);
-        this.filteredTasksByUsers[this.selectedPersonIndex].push(object);
-        this.hashMapPerson[taskid] = this.filteredTasksByUsers[this.selectedPersonIndex].length - 1;
-        this.hashTask(taskid, this.taskArray.length - 1);
+        this.hashTask(person, this.selectedDateFormatting, taskid, index);
       }
-      this.filterTasksByWeek();
+      this.updateTaskInfoForItems(this.taskArray[index]);
     },
     deleteTask(taskToDeleteID) {
-      this.taskArray[this.hashMap[taskToDeleteID]] = {};
-      this.filteredTasksByUsers[this.selectedPersonIndex][this.hashMapPerson[taskToDeleteID]] = {};
-      this.idStack.push(taskToDeleteID)
-      this.filterTasksByWeek();
+      let index = this.userTasksHashMap[this.people[this.selectedPersonIndex].name][this.selectedDateFormatting][taskToDeleteID]
+      this.updateTaskInfoForItems(this.taskArray[index], true);
+      this.taskArray[index] = {};
+      this.idStack.push(taskToDeleteID);
     },
     // Padeda surandant index užduoties. Nebereikia loopinti per taskArray, kad jį rastume
-    hashTask(taskID, index) {
-      this.hashMap[taskID] = index;
+    hashTask(person, date, taskID, index) {
+      if (this.userTasksHashMap[person] && this.userTasksHashMap[person][date]) {
+        this.userTasksHashMap[person][date][taskID] = index;
+      } else {
+        this.userTasksHashMap[person] = Object.assign({ [date]: {} }, this.userTasksHashMap[person]);
+        this.userTasksHashMap[person][date][taskID] = index;
+      }
+    },
+    // Naudojama keičiant žmogų arba datą.
+    // Kad nebūtu undefined, sukuriame tuščia datos raktą
+    generateHashDate() {
+      let person = this.people[this.selectedPersonIndex].name;
+      let week = this.dateFormatting(this.currentWeek);
+      for (let i = 0; i < 7; i++) {
+        if (!this.userTasksHashMap[person] || !this.userTasksHashMap[person][week[i]]) {
+          this.userTasksHashMap[person] = Object.assign({ [week[i]]: {} }, this.userTasksHashMap[person]);
+        }
+      }
     },
     editTask(taskToChangeID, name, desc, startsAt, endsAt, color) {
       let object = {
@@ -256,15 +266,15 @@ export default {
         taskColor: color,
         taskStatus: 'ongoing'
       };
-      this.filteredTasksByUsers[this.selectedPersonIndex][this.hashMapPerson[taskToChangeID]] = object;
-      this.taskArray[this.hashMap[taskToChangeID]] = object;
+      let index = this.userTasksHashMap[this.people[this.selectedPersonIndex].name][this.selectedDateFormatting][taskToChangeID];
+      this.taskArray[index] = object;
       this.selectedHour = startsAt;
-      this.filterTasksByWeek();
+      this.updateTaskInfoForItems(this.taskArray[index]);
     },
     finishTask(taskToFinishID) {
-      this.taskArray[this.hashMap[taskToFinishID]].taskStatus = 'finished';
-      this.filteredTasksByUsers[this.selectedPersonIndex][this.hashMapPerson[taskToFinishID]].taskStatus = 'finished';
-      this.filterTasksByWeek();
+      let index = this.userTasksHashMap[this.people[this.selectedPersonIndex].name][this.selectedDateFormatting][taskToFinishID]
+      this.taskArray[index].taskStatus = 'finished';
+      this.updateTaskInfoForItems(this.taskArray[index]);
     },
     timeSelection(dateIndex, hour) {
       this.selectedDay = dateIndex + 1;
@@ -291,7 +301,8 @@ export default {
     changeWeek(direction) {
       this.selectedDate = this.addDays(this.selectedDate, direction);
       this.createWeek(this.selectedDate);
-      this.filterTasksByWeek(this.currentWeek);
+      this.generateHashDate();
+      this.generateTaskInfoForItems();
     },
     changePerson(direction) {
       let newIndex = this.selectedPersonIndex + direction;
@@ -299,37 +310,20 @@ export default {
       // pradžią ar pabaigą. Jei direction -1 - pabaiga, jei 1 - pradžia;
       this.selectedPersonIndex = this.people[newIndex] ? newIndex : this.people.length - newIndex * direction;
       this.getSelectedHour();
-      this.filterTasksByWeek();
       this.showCurTime();
+      this.generateHashDate();
+      this.generateTaskInfoForItems();
     },
-    filterTasksByWeek() {
-      let formattedWeek = this.dateFormatting(this.currentWeek);
-      // Naudojame 2d array, kad galėtume lengvai paskirstyti užduotis į
-      // savaitės dienas.
-      for (let i = 0; i < 7; i++) {
-        this.filteredTasks[i] = [];
-      }
-      this.filteredTasksByUsers[this.selectedPersonIndex].forEach(task => {
-        for (let i = 0; i < 7; i++) {
-          if (task.taskDay === formattedWeek[i]) {
-            this.filteredTasks[i].push(task);
-            break;
-          }
-        }
-      });
-    },
-    filterTaskByUsers() {
+    groupTasksByPersonAndDate() {
       let userHashMap = {}
       this.people.forEach((person, index) => {
         userHashMap[person.name] = index;
-        this.filteredTasksByUsers[index] = [];
       });
       for (let i = 0; i < this.taskArray.length; i++) {
         let person = this.taskArray[i].taskTarget;
-        this.filteredTasksByUsers[userHashMap[person]].push(this.taskArray[i]);
-        this.hashMapPerson[this.taskArray[i].id] = this.filteredTasksByUsers[userHashMap[person]].length - 1;
+        this.hashTask(person, this.taskArray[i].taskDay, this.taskArray[i].id, i)
       }
-      this.filterTasksByWeek();
+      this.generateTaskInfoForItems();
     },
     dateFormatting(week) {
       let result = [];
@@ -342,19 +336,48 @@ export default {
       });
       return result;
     },
-    updateColumnTaskInfo(taskArray, task) {
+    // Sugeneruoja 2d array, pagal kurią galime žinoti ar langelis turi užduotį. Šios funckijos pagalba persiunčiame langeliams reikalinga info
+    generateTaskInfoForItems() {
+      let taskInfoArray = new Array(7).fill().map(() => new Array(this.getShiftTimeArray[this.selectedPersonIndex].length).fill({ name: null, color: '#fff', status: null }));
+      let person = this.people[this.selectedPersonIndex].name;
+      let week = this.dateFormatting(this.currentWeek);
+      for (let i = 0; i < 7; i++) {
+        taskInfoArray[i] = this.generateColumnTaskInfo(this.userTasksHashMap[person][week[i]], taskInfoArray[i]);
+      }
+      this.taskInfoForItems = taskInfoArray;
+    },
+    // Atnaujina 2d array. Naudojama, kai yra užduoties duomenis yra keičiami (pvz.: delete, edit, create)
+    updateTaskInfoForItems(task, deleted = false) {
       let taskHourEndIndex = (task.taskHourEnd - this.people[this.selectedPersonIndex].shiftStart) / this.timeScale;
       let taskHourStartIndex = (task.taskHourStart - this.people[this.selectedPersonIndex].shiftStart) / this.timeScale;
-      for (let i = taskHourStartIndex; i < taskHourEndIndex; i++) {
-        taskArray[i] = { name: task.taskName, color: task.taskColor, status: task.taskStatus };
+      if (deleted === false) {
+        for (let i = taskHourStartIndex; i < taskHourEndIndex; i++) {
+          this.taskInfoForItems[this.selectedDay - 1][i] = { name: task.taskName, color: task.taskColor, status: task.taskStatus };
+        }
+      } else {
+        for (let i = taskHourStartIndex; i < taskHourEndIndex; i++) {
+          this.taskInfoForItems[this.selectedDay - 1][i] = { name: null, color: '#ffffff', status: null };
+        }
       }
-      return taskArray;
+    },
+    generateColumnTaskInfo(taskArrayMap, taskInfoArray) {
+      let taskArrayColumn = taskInfoArray;
+      for (let [key, value] of Object.entries(taskArrayMap)) {
+        let task = this.taskArray[value];
+        let taskHourEndIndex = (task.taskHourEnd - this.people[this.selectedPersonIndex].shiftStart) / this.timeScale;
+        let taskHourStartIndex = (task.taskHourStart - this.people[this.selectedPersonIndex].shiftStart) / this.timeScale;
+        for (let i = taskHourStartIndex; i < taskHourEndIndex; i++) {
+          taskArrayColumn[i] = { name: task.taskName, color: task.taskColor, status: task.taskStatus };
+        }
+      }
+      return taskArrayColumn;
     },
     changeDate(year, month, day) {
       this.selectedDate = new Date(year, month - 1, day);
       this.selectedDay = this.selectedDate.getDay() != 0 ? this.selectedDate.getDay() : 7;
       this.createWeek(this.selectedDate);
-      this.filterTasksByWeek();
+      this.generateHashDate();
+      this.generateTaskInfoForItems();
     }
   }
 }
@@ -392,16 +415,15 @@ export default {
               <SchedulerItem v-if="getBreakTimeArray[selectedPersonIndex].includes(i)" :noWork='true' />
               <SchedulerItem v-else :day="dayIndex" :hour="i"
                 :class="{ selected: selectedDay === dayIndex + 1 && selectedHour === i }"
-                :color='generatedTaskInfoForItems[dayIndex][hourIndex].color'
-                :name="generatedTaskInfoForItems[dayIndex][hourIndex].name" @timeSelected="timeSelection"
-                :status='generatedTaskInfoForItems[dayIndex][hourIndex].status' />
+                :color='taskInfoForItems[dayIndex][hourIndex].color' :name="taskInfoForItems[dayIndex][hourIndex].name"
+                @timeSelected="timeSelection" :status='taskInfoForItems[dayIndex][hourIndex].status' />
             </template>
           </template>
         </div>
         <!-- Užduočių grid. End -->
       </div>
       <TaskEditor :resolution='getResolutionHeight' :date='selectedDateFormatting' :hour='selectedHour'
-        :tasks='filteredTasks[selectedDay - 1]' :formattedTime='formatTime'
+        :tasks='generatedTaskColumnForEditor' :formattedTime='formatTime'
         :breakTime='getBreakTimeArray[selectedPersonIndex]' :shiftTime='getShiftTimeArray[selectedPersonIndex]'
         :timeScale='timeScale' @NewTask="createNewTask" @finishTheTask="finishTask" @taskDeletion="deleteTask"
         @taskEdit='editTask' />
