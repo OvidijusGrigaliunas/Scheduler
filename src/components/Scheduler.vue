@@ -14,10 +14,42 @@ export default {
                 //{ id: 0, taskName: 'task2', taskDesc: 'task2 desc', taskDay: "2022/08/01", taskHourStart: 9, taskHourEnd: 10, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'finished' },
             ],
             people: [
-                { name: "Vardenis", shiftStart: 0, shiftEnd: 24, hasBreak: true, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, true, true] },
-                { name: "Pavardenis", shiftStart: 9, shiftEnd: 19, hasBreak: true, breakStart: 12, breakEnd: 13, workDays: [true, true, true, true, true, false, false] },
-                { name: "Bonilla", shiftStart: 10, shiftEnd: 19, hasBreak: true, breakStart: 11, breakEnd: 13, workDays: [true, true, true, true, true, false, true] },
-                { name: "Hobbs", shiftStart: 7, shiftEnd: 16, hasBreak: false, breakStart: null, breakEnd: null, workDays: [true, false, true, true, true, false, false] }
+                {
+                    name: "Vardenis",
+                    shiftStart: 0,
+                    shiftEnd: 24,
+                    hasBreak: true,
+                    breakStart: 12,
+                    breakEnd: 13,
+                    workDays: [true, true, true, true, true, true, true]
+                },
+                {
+                    name: "Pavardenis",
+                    shiftStart: 9,
+                    shiftEnd: 19,
+                    hasBreak: true,
+                    breakStart: 12,
+                    breakEnd: 13,
+                    workDays: [true, true, true, true, true, false, false]
+                },
+                {
+                    name: "Bonilla",
+                    shiftStart: 10,
+                    shiftEnd: 19,
+                    hasBreak: true,
+                    breakStart: 11,
+                    breakEnd: 13,
+                    workDays: [true, true, true, true, true, false, true]
+                },
+                {
+                    name: "Hobbs",
+                    shiftStart: 7,
+                    shiftEnd: 16,
+                    hasBreak: false,
+                    breakStart: null,
+                    breakEnd: null,
+                    workDays: [true, false, true, true, true, false, false]
+                }
             ],
             idStack: [],
             userTasksHashMap: {},
@@ -74,13 +106,15 @@ export default {
             return result;
         },
         getWeekGridStyle() {
-            return { gridTemplateColumns: '9.1% repeat(' + this.getWorkDaysNumb.length + ',' + 91 / this.getWorkDaysNumb.length + '%)' }
+            let workDaysNumb = this.getWorkDaysNumb.length;
+            return {gridTemplateColumns: '9.1% repeat(' + workDaysNumb + ',' + 91 / workDaysNumb + '%)'}
         },
         getGridStyle() {
-            if (this.getWorkDaysNumb.length > 0) {
+            let workDaysNumb = this.getWorkDaysNumb.length;
+            if (workDaysNumb > 0) {
                 return {
                     height: this.getResolutionHeight + 'px',
-                    gridTemplateColumns: '9.1% repeat(' + this.getWorkDaysNumb.length + ',' + 91 / this.getWorkDaysNumb.length + '%)'
+                    gridTemplateColumns: '9.1% repeat(' + workDaysNumb + ',' + 91 / workDaysNumb + '%)'
                 }
             }
             return {
@@ -108,7 +142,7 @@ export default {
         formatTime() {
             let timeArray = [];
             // 60 * (i % 1) atitinka minutes. Iš i % 1 galime gauti 0, 0.25, 0.5, 0.75 (priklauso nuo timeScale). Šitas vertes padauginus iš 60 gauname minučių skaičių.
-            // Jei tas skaičius yra mažesnis už 10, prie minučių reikia pridėti 0, kad būtų tvarkingai pateiktas laikas. 
+            // Jei tas skaičius yra mažesnis už 10, prie minučių reikia pridėti 0, kad būtų tvarkingai pateiktas laikas.
             for (let i = 0; i < 10; i = i + this.timeScale) {
                 let minutes = 60 * (i % 1);
                 let hours = i - (i % 1);
@@ -131,32 +165,87 @@ export default {
             return arr;
         }
     },
-    mounted() {
-        window.onresize = () => {
-            this.windowHeight = window.screen.availHeight - 197;
-        }
-        setInterval(this.showCurTime, 15000);
-    },
     created() {
-        for (let i = 15000; i > 0; i--) {
+        for (let i = 10000; i > 0; i--) {
             this.idStack.push(i);
         }
+        // sugeneruoja 8928 tasks
         for (let i = 0; i < 96; i++) {
             for (let j = 1; j < 10; j++) {
                 let taskID = this.idStack.pop();
-                this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: `2022/08/0${j}`, taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },);
+                this.taskArray.push({
+                    id: taskID,
+                    taskName: 'taskm' + i,
+                    taskDesc: 'task2 desc',
+                    taskDay: `2022/08/0${j}`,
+                    taskHourStart: i * this.timeScale,
+                    taskHourEnd: this.timeScale + i * this.timeScale,
+                    taskTarget: 'Vardenis',
+                    taskColor: '#34ebc3',
+                    taskStatus: 'ongoing'
+                },);
                 taskID = this.idStack.pop();
-                this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: `2022/08/0${j}`, taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Pavardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },);
+                this.taskArray.push({
+                    id: taskID,
+                    taskName: 'taskm' + i,
+                    taskDesc: 'task2 desc',
+                    taskDay: `2022/08/0${j}`,
+                    taskHourStart: i * this.timeScale,
+                    taskHourEnd: this.timeScale + i * this.timeScale,
+                    taskTarget: 'Pavardenis',
+                    taskColor: '#34ebc3',
+                    taskStatus: 'ongoing'
+                },);
                 taskID = this.idStack.pop();
-                this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: `2022/08/0${j}`, taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Hobbs', taskColor: '#34ebc3', taskStatus: 'ongoing' },);
+                this.taskArray.push({
+                    id: taskID,
+                    taskName: 'taskm' + i,
+                    taskDesc: 'task2 desc',
+                    taskDay: `2022/08/0${j}`,
+                    taskHourStart: i * this.timeScale,
+                    taskHourEnd: this.timeScale + i * this.timeScale,
+                    taskTarget: 'Hobbs',
+                    taskColor: '#34ebc3',
+                    taskStatus: 'ongoing'
+                },);
             }
             for (let j = 10; j < 31; j++) {
                 let taskID = this.idStack.pop();
-                this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: `2022/08/${j}`, taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Vardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },);
+                this.taskArray.push({
+                    id: taskID,
+                    taskName: 'taskm' + i,
+                    taskDesc: 'task2 desc',
+                    taskDay: `2022/08/${j}`,
+                    taskHourStart: i * this.timeScale,
+                    taskHourEnd: this.timeScale + i * this.timeScale,
+                    taskTarget: 'Vardenis',
+                    taskColor: '#34ebc3',
+                    taskStatus: 'ongoing'
+                },);
                 taskID = this.idStack.pop();
-                this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: `2022/08/${j}`, taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Pavardenis', taskColor: '#34ebc3', taskStatus: 'ongoing' },);
+                this.taskArray.push({
+                    id: taskID,
+                    taskName: 'taskm' + i,
+                    taskDesc: 'task2 desc',
+                    taskDay: `2022/08/${j}`,
+                    taskHourStart: i * this.timeScale,
+                    taskHourEnd: this.timeScale + i * this.timeScale,
+                    taskTarget: 'Pavardenis',
+                    taskColor: '#34ebc3',
+                    taskStatus: 'ongoing'
+                },);
                 taskID = this.idStack.pop();
-                this.taskArray.push({ id: taskID, taskName: 'taskm' + i, taskDesc: 'task2 desc', taskDay: `2022/08/0${j}`, taskHourStart: i * this.timeScale, taskHourEnd: this.timeScale + i * this.timeScale, taskTarget: 'Hobbs', taskColor: '#34ebc3', taskStatus: 'ongoing' },);
+                this.taskArray.push({
+                    id: taskID,
+                    taskName: 'taskm' + i,
+                    taskDesc: 'task2 desc',
+                    taskDay: `2022/08/0${j}`,
+                    taskHourStart: i * this.timeScale,
+                    taskHourEnd: this.timeScale + i * this.timeScale,
+                    taskTarget: 'Hobbs',
+                    taskColor: '#34ebc3',
+                    taskStatus: 'ongoing'
+                },);
             }
         }
         let minutes = new Date().getMinutes();
@@ -169,6 +258,10 @@ export default {
         this.generateHashDate();
         this.groupTasksByPersonAndDate();
         this.showCurTime();
+        window.onresize = () => {
+            this.windowHeight = window.screen.availHeight - 197;
+        }
+        setInterval(this.showCurTime, 15000);
     },
     watch: {
         people: {
@@ -243,7 +336,7 @@ export default {
             if (this.userTasksHashMap[person] && this.userTasksHashMap[person][date]) {
                 this.userTasksHashMap[person][date][taskID] = index;
             } else {
-                this.userTasksHashMap[person] = Object.assign({ [date]: {} }, this.userTasksHashMap[person]);
+                this.userTasksHashMap[person] = Object.assign({[date]: {}}, this.userTasksHashMap[person]);
                 this.userTasksHashMap[person][date][taskID] = index;
             }
         },
@@ -254,7 +347,7 @@ export default {
             let week = this.dateFormatting(this.currentWeek);
             for (let i = 0; i < 7; i++) {
                 if (!this.userTasksHashMap[person] || !this.userTasksHashMap[person][week[i]]) {
-                    this.userTasksHashMap[person] = Object.assign({ [week[i]]: {} }, this.userTasksHashMap[person]);
+                    this.userTasksHashMap[person] = Object.assign({[week[i]]: {}}, this.userTasksHashMap[person]);
                 }
             }
         },
@@ -295,7 +388,7 @@ export default {
         createWeek(date) {
             // kai yra sekmadienis, vertė būna 0
             // tokiu atveju 0 reikia pasiversti į 7
-            let currentWeekDay = date.getDay() != 0 ? date.getDay() : 7;
+            let currentWeekDay = date.getDay() !== 0 ? date.getDay() : 7;
             for (let i = 0; i < 7; i++) {
                 // "i + 1 - currentWeekDay" reikalingas, kad savaitės dienos eitų iš eilės
                 // (Monday, tuesday ir t.t.)
@@ -339,7 +432,11 @@ export default {
         },
         // Sugeneruoja 2d array, pagal kurią galime žinoti ar langelis turi užduotį. Šios funckijos pagalba persiunčiame langeliams reikalinga info
         generateTaskInfoForItems() {
-            let taskInfoArray = new Array(7).fill(null).map(() => new Array(this.getShiftTimeArray[this.selectedPersonIndex].length).fill({ name: null, color: '#fff', status: null }));
+            let taskInfoArray = new Array(7).fill(null).map(() => new Array(this.getShiftTimeArray[this.selectedPersonIndex].length).fill({
+                name: null,
+                color: '#fff',
+                status: null
+            }));
             let person = this.people[this.selectedPersonIndex].name;
             let week = this.dateFormatting(this.currentWeek);
             for (let i = 0; i < 7; i++) {
@@ -353,11 +450,15 @@ export default {
             let taskHourStartIndex = (task.taskHourStart - this.people[this.selectedPersonIndex].shiftStart) / this.timeScale;
             if (deleted === false) {
                 for (let i = taskHourStartIndex; i < taskHourEndIndex; i++) {
-                    this.taskInfoForItems[this.selectedDay - 1][i] = { name: task.taskName, color: task.taskColor, status: task.taskStatus };
+                    this.taskInfoForItems[this.selectedDay - 1][i] = {
+                        name: task.taskName,
+                        color: task.taskColor,
+                        status: task.taskStatus
+                    };
                 }
             } else {
                 for (let i = taskHourStartIndex; i < taskHourEndIndex; i++) {
-                    this.taskInfoForItems[this.selectedDay - 1][i] = { name: null, color: '#ffffff', status: null };
+                    this.taskInfoForItems[this.selectedDay - 1][i] = {name: null, color: '#ffffff', status: null};
                 }
             }
         },
@@ -368,14 +469,14 @@ export default {
                 let taskHourEndIndex = (task.taskHourEnd - this.people[this.selectedPersonIndex].shiftStart) / this.timeScale;
                 let taskHourStartIndex = (task.taskHourStart - this.people[this.selectedPersonIndex].shiftStart) / this.timeScale;
                 for (let i = taskHourStartIndex; i < taskHourEndIndex; i++) {
-                    taskArrayColumn[i] = { name: task.taskName, color: task.taskColor, status: task.taskStatus };
+                    taskArrayColumn[i] = {name: task.taskName, color: task.taskColor, status: task.taskStatus};
                 }
             }
             return taskArrayColumn;
         },
         changeDate(year, month, day) {
             this.selectedDate = new Date(year, month - 1, day);
-            this.selectedDay = this.selectedDate.getDay() != 0 ? this.selectedDate.getDay() : 7;
+            this.selectedDay = this.selectedDate.getDay() !== 0 ? this.selectedDate.getDay() : 7;
             this.createWeek(this.selectedDate);
             this.generateHashDate();
             this.generateTaskInfoForItems();
@@ -386,13 +487,13 @@ export default {
 
 <template>
     <PersonSelector :peopleList='people' :selectedIndex='selectedPersonIndex' :timeScale='timeScale'
-        :formattedTime='formatTime' @personChange="changePerson" />
+                    :formattedTime='formatTime' @personChange="changePerson"/>
     <div class="container">
         <div class="gridContainer">
             <div class="gridAndDateContainer">
                 <div class="selectContainer">
                     <WeekSelector :weekRange='currentWeek' :person="people[selectedPersonIndex]"
-                        @weekChange="changeWeek" @changeDate="changeDate" />
+                                  @weekChange="changeWeek" @changeDate="changeDate"/>
                 </div>
                 <div class="grid" :style="getWeekGridStyle">
                     <!-- Pirmoji grid juosta. Start -->
@@ -413,22 +514,25 @@ export default {
                         </div>
                         <template v-for="dayIndex in getWorkDaysNumb">
                             <!-- Jei tuo metu nedirba, mums užtenka noWork -->
-                            <SchedulerItem v-if="getBreakTimeArray[selectedPersonIndex].includes(i)" :noWork='true' />
+                            <SchedulerItem v-if="getBreakTimeArray[selectedPersonIndex].includes(i)" :noWork='true'/>
                             <SchedulerItem v-else :day="dayIndex" :hour="i"
-                                :class="{ selected: selectedDay === dayIndex + 1 && selectedHour === i }"
-                                :color='taskInfoForItems[dayIndex][hourIndex].color'
-                                :name="taskInfoForItems[dayIndex][hourIndex].name" @timeSelected="timeSelection"
-                                :status='taskInfoForItems[dayIndex][hourIndex].status' />
+                                           :class="{ selected: selectedDay === dayIndex + 1 && selectedHour === i }"
+                                           :color='taskInfoForItems[dayIndex][hourIndex].color'
+                                           :name="taskInfoForItems[dayIndex][hourIndex].name"
+                                           @timeSelected="timeSelection"
+                                           :status='taskInfoForItems[dayIndex][hourIndex].status'/>
                         </template>
                     </template>
                 </div>
                 <!-- Užduočių grid. End -->
             </div>
             <TaskEditor :resolution='getResolutionHeight' :date='selectedDateFormatting' :hour='selectedHour'
-                :tasks='generatedTaskColumnForEditor' :formattedTime='formatTime'
-                :breakTime='getBreakTimeArray[selectedPersonIndex]' :shiftTime='getShiftTimeArray[selectedPersonIndex]'
-                :timeScale='timeScale' @NewTask="createNewTask" @finishTheTask="finishTask" @taskDeletion="deleteTask"
-                @taskEdit='editTask' />
+                        :tasks='generatedTaskColumnForEditor' :formattedTime='formatTime'
+                        :breakTime='getBreakTimeArray[selectedPersonIndex]'
+                        :shiftTime='getShiftTimeArray[selectedPersonIndex]'
+                        :timeScale='timeScale' @NewTask="createNewTask" @finishTheTask="finishTask"
+                        @taskDeletion="deleteTask"
+                        @taskEdit='editTask'/>
         </div>
     </div>
 </template>
@@ -455,8 +559,7 @@ export default {
     margin: auto;
     overflow-x: hidden;
     width: 100%;
-    border: solid #555B6E;
-    border-width: 1px 1px 1px 1px;
+    border: solid 1px #555B6E;
 }
 
 .selectContainer {
@@ -472,8 +575,7 @@ export default {
 }
 
 .selected {
-    border: dashed #555b6e;
-    border-width: 3px;
+    border: dashed 3px #555b6e;
 }
 
 .timeLine {
@@ -501,8 +603,7 @@ export default {
 .time {
     width: 100%;
     height: 60px;
-    border: solid #555B6E;
-    border-width: 1px;
+    border: solid 1px #555B6E;
     text-align: center;
     font-weight: bold;
     background-color: #78a1bb;
@@ -522,8 +623,7 @@ export default {
 .weekDay {
     width: 100%;
     height: 30px;
-    border: solid #555B6E;
-    border-width: 1px;
+    border: solid 1px #555B6E;
     text-align: center;
     font-size: 18px;
     font-weight: bold;

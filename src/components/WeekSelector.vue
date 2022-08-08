@@ -1,6 +1,6 @@
 <script>
 export default {
-    props: { weekRange: Array, person: Object },
+    props: {weekRange: Array, person: Object},
     data() {
         return {
             showDateSel: false,
@@ -51,10 +51,12 @@ export default {
                 return [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
             }
             return [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-        },
+        }
+    },
+    methods: {
         dateChange() {
             let selectedDate = new Date(this.selectedYear, this.selectedMonth - 1, this.selectedDay);
-            selectedDate = selectedDate.getDay() != 0 ? selectedDate.getDay() - 1 : 6;
+            selectedDate = selectedDate.getDay() !== 0 ? selectedDate.getDay() - 1 : 6;
             // Tikriname ar tą dieną dirba darbuotojas
             if (this.person.workDays[selectedDate] === true) {
                 this.showError = false;
@@ -63,7 +65,7 @@ export default {
                 this.showError = true;
             }
         }
-    },
+    }
 }
 
 </script>
@@ -83,7 +85,8 @@ export default {
                         <template v-for="year in yearRange">
                             <option :value='year'>{{
                                     year
-                            }}</option>
+                                }}
+                            </option>
                         </template>
                     </select>
                     <!-- Mėnesio pasirinkimas -->
@@ -91,7 +94,8 @@ export default {
                         <template v-for="(month, index) in month">
                             <option :value='index + 1'>{{
                                     month
-                            }}</option>
+                                }}
+                            </option>
                         </template>
                     </select>
                     <!-- Dienos pasirinkimas -->
@@ -99,10 +103,12 @@ export default {
                         <template v-for="day in getMonthLength[selectedMonth - 1]">
                             <option v-if="day > 9" :value='day'>{{
                                     day
-                            }}</option>
+                                }}
+                            </option>
                             <option v-else :value='day'>{{
                                     dayFormatted[day - 1]
-                            }}</option>
+                                }}
+                            </option>
                         </template>
                     </select><br>
                     <p v-show="showError">{{ person.name }} doesn't work on this day</p>
@@ -125,7 +131,7 @@ export default {
     text-align: center;
     background-color: #78a1bb;
     border: solid #555B6E;
-    border-width: 0 0px 1px 1px;
+    border-width: 0 0 1px 1px;
     color: white;
 }
 
@@ -137,9 +143,8 @@ export default {
     margin-top: 10px;
     background-color: #78a1bb;
     border: 1px solid #555b6e;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0 -15px 10px -12px rgba(0, 0, 0, 0.05);
     border-radius: 20px;
-    padding-bottom: 6px;
     padding: 5px;
 }
 

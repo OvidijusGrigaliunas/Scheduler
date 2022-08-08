@@ -26,8 +26,8 @@ export default {
         findNeighbour(direction) {
             if (!this.peopleList[this.selectedIndex + direction]) {
                 return this.peopleList[
-                    this.peopleList.length - (this.selectedIndex + direction) * direction
-                ].name;
+                this.peopleList.length - (this.selectedIndex + direction) * direction
+                    ].name;
             }
             return this.peopleList[this.selectedIndex + direction].name;
         },
@@ -58,8 +58,7 @@ export default {
                         <p>Sn</p>
                         <template v-for="(bool, index) in peopleList[this.selectedIndex].workDays">
                             <input class="regular-checkbox" type="checkbox"
-                                v-model="peopleList[this.selectedIndex].workDays[index]" :true-value="true"
-                                :false-value="false" />
+                                   v-model="peopleList[this.selectedIndex].workDays[index]"/>
                         </template>
                     </div>
                     <!-- Darbo dienų pasirinkimas. End -->
@@ -70,16 +69,18 @@ export default {
                         <template v-for="n in getShiftTimeStartRange">
                             <option :value='n * timeScale - timeScale'>{{
                                     formattedTime[n - 1]
-                            }}</option>
+                                }}
+                            </option>
                         </template>
                     </select>
                     <label> to: </label>
                     <select v-model.number="peopleList[this.selectedIndex].shiftEnd">
                         <template v-for="n in 24 / timeScale">
                             <option v-if="n * timeScale > peopleList[this.selectedIndex].shiftStart"
-                                :value='n * timeScale'>{{
-                                        formattedTime[n]
-                                }}</option>
+                                    :value='n * timeScale'>{{
+                                    formattedTime[n]
+                                }}
+                            </option>
                         </template>
                     </select><br><br>
                     <!-- Darbo valandų pasirinkimas. End -->
@@ -87,23 +88,25 @@ export default {
                     <h1>Break time</h1>
                     <label>Has break: </label>
                     <input class="regular-checkbox" type="checkbox" v-model="peopleList[this.selectedIndex].hasBreak"
-                        :true-value="true" :false-value="false" /><br>
+                    /><br>
                     <template v-if="peopleList[this.selectedIndex].hasBreak">
                         <label>From: </label>
                         <select v-model.number="peopleList[this.selectedIndex].breakStart">
                             <template v-for="n in getBreakTimeStartRange">
                                 <option :value='n * timeScale - timeScale'>{{
                                         formattedTime[n - 1]
-                                }}</option>
+                                    }}
+                                </option>
                             </template>
                         </select>
                         <label> to: </label>
                         <select v-model.number="peopleList[this.selectedIndex].breakEnd">
                             <template v-for="n in 24 / timeScale">
                                 <option v-if="n * timeScale > peopleList[this.selectedIndex].breakStart"
-                                    :value='n * timeScale'>{{
-                                            formattedTime[n]
-                                    }}</option>
+                                        :value='n * timeScale'>{{
+                                        formattedTime[n]
+                                    }}
+                                </option>
                             </template>
                         </select><br>
                     </template>
@@ -146,7 +149,7 @@ select {
     margin-left: 20%;
     background-color: #78a1bb;
     border: 1px solid #555b6e;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0 -15px 10px -12px rgba(0, 0, 0, 0.05);
     border-radius: 20px;
 }
 
@@ -157,7 +160,7 @@ select {
     margin-left: -75%;
     background-color: #78a1bb;
     border: 1px solid #555b6e;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0 -15px 10px -12px rgba(0, 0, 0, 0.05);
     border-radius: 20px;
     margin-top: 1px;
     padding-bottom: 6px;
@@ -190,7 +193,7 @@ select {
     -webkit-appearance: none;
     background-color: #fafafa;
     border: 1px solid #cacece;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0 -15px 10px -12px rgba(0, 0, 0, 0.05);
     padding: 9px;
     border-radius: 10px;
     display: inline-block;
@@ -200,14 +203,14 @@ select {
 
 .regular-checkbox:active,
 .regular-checkbox:checked:active {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0 1px 3px rgba(0, 0, 0, 0.1);
 
 }
 
 .regular-checkbox:checked {
     background-color: #e9ecee;
     border: 1px solid #adb8c0;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05), inset 15px 10px -12px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0 -15px 10px -12px rgba(0, 0, 0, 0.05), inset 15px 10px -12px rgba(255, 255, 255, 0.1);
     color: #99a1a7;
 }
 
@@ -215,7 +218,7 @@ select {
     content: '\2714';
     font-size: 14px;
     position: absolute;
-    top: 0px;
+    top: 0;
     left: 3px;
     color: #258cdb;
 }

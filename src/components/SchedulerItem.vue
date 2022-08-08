@@ -14,7 +14,7 @@ export default {
 <template>
     <div v-if="noWork" class="item break"></div>
     <div v-else class="item" :class="{ finished: status === 'finished' }" :style="{ background: color }"
-        @click="$emit('timeSelected', this.day, this.hour)">
+         @click="$emit('timeSelected', this.day, this.hour)">
         <h2>{{ name }}</h2>
     </div>
 </template>
@@ -24,8 +24,7 @@ export default {
     display: inline-block;
     width: 100%;
     height: 60px;
-    border: dashed #555b6e;
-    border-width: 1px;
+    border: dashed 1px #555b6e;
     cursor: pointer;
     text-align: center;
     overflow: hidden;
