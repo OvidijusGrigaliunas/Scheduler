@@ -12,7 +12,6 @@ export default {
     data() {
         return {
             showTaskEdit: false,
-            foundTask: [],
             tName: '',
             tDesc: '',
             selectedImportance: 3,
@@ -20,7 +19,8 @@ export default {
             selectedTimeEnd: 5,
             taskColor: '#ff7f50',
             showColorPallete: false,
-            colorPallete: ['#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed', '#ff69b4', '#ba55d3', '#cd5c5c', '#ffa500', '#40e0d0']
+            colorPallete: ['#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed', '#ff69b4', '#ba55d3', '#cd5c5c', '#ffa500', '#40e0d0'],
+            taskInfo: {}
         }
     },
     watch: {
@@ -43,33 +43,12 @@ export default {
         },
         hasTasksEditor() {
             this.showTaskEdit = false;
-            return this.foundTask != null;
-        },
-        getTaskInfo() {
-            if (this.foundTask) {
-                return {
-                    taskName: this.foundTask.taskName,
-                    taskDesc: this.foundTask.taskDesc,
-                    taskHourStart: this.foundTask.taskHourStart,
-                    taskHourEnd: this.foundTask.taskHourEnd - this.timeScale,
-                    taskStatus: this.foundTask.taskStatus,
-                    taskColor: this.foundTask.taskColor
-                }
-            }
-            return {
-                taskName: '',
-                taskDesc: '',
-                taskHourStart: this.hour,
-                taskHourEnd: this.hour,
-                taskStatus: '',
-                taskColor: '#ff7f50'
-            }
+            return this.taskInfo.id != null;
         },
         getTaskHourStartEndLimit() {
-
             let lowestStart = this.shiftTime[0];
             let highestEnd = this.shiftTime[this.shiftTime.length - 1];
-            let startingValue = this.getTaskInfo.taskHourStart;
+            let startingValue = this.taskInfo.taskHourStart;
             for (let i = 0; i < this.tasks.length; i++) {
                 if (this.tasks[i].taskHourEnd < startingValue + this.timeScale) {
                     if (this.tasks[i].taskHourEnd > lowestStart) {
@@ -96,7 +75,7 @@ export default {
             }
             // Apkarpome iki mūsų užduoties pabaigos (jei ne editinam, tada įmamas pasirinkto langelio laikas)
             timeCut[0] = [...timeShiftWithoutBreaks];
-            timeCut[0].length = timeCut[0].indexOf(this.getTaskInfo.taskHourEnd) + 1;
+            timeCut[0].length = timeCut[0].indexOf(this.taskInfo.taskHourEnd) + 1;
             // Jei yra daugiau task juostoje prieš pasirinktą laiką,
             // mes vėl jį apkarpome nuo artimiausio task pabaigos
             if (this.getTaskHourStartEndLimit[0] != this.shiftTime[0]) {
@@ -104,7 +83,7 @@ export default {
             }
             // Antroji dalis, praktiškai tas pats, tik apkarpome nuo priešingos pusės
             timeCut[1] = [...timeShiftWithoutBreaks];
-            timeCut[1] = timeCut[1].slice(timeCut[1].indexOf(this.getTaskInfo.taskHourStart));
+            timeCut[1] = timeCut[1].slice(timeCut[1].indexOf(this.taskInfo.taskHourStart));
             if (this.getTaskHourStartEndLimit[1] != this.shiftTime[this.shiftTime.length - 1]) {
                 timeCut[1].splice(timeCut[1].indexOf(this.getTaskHourStartEndLimit[1]) + 1, timeCut[1].length);
             }
@@ -131,25 +110,51 @@ export default {
         },
         saveEdit() {
             if (this.requirementsCheck()) {
-                this.$emit('taskEdit', this.foundTask.id, this.tName, this.tDesc, this.selectedTimeStart, this.selectedTimeEnd, this.taskColor);
+                this.$emit('taskEdit', this.taskInfo.id, this.tName, this.tDesc, this.selectedTimeStart, this.selectedTimeEnd, this.taskColor);
             }
         },
         findTask() {
             // Suranda užduotį pagal pasirinkto langelio laiką.
-            this.foundTask = this.tasks.find(task =>
+            let foundTask = this.tasks.find(task =>
                 task.taskHourStart <= this.hour &&
                 task.taskHourEnd - this.timeScale >= this.hour
             );
+            let task = this.getTaskInfo(foundTask);
+            if (JSON.stringify(this.taskInfo) !== JSON.stringify(task)) {
+                this.taskInfo = task;
+            }
         },
         showEditScreen() {
             // Nukopijuojame pradinės užduoties vertes, kad būtų patogiau keisti ją.
             this.showTaskEdit = true;
-            this.tName = this.getTaskInfo.taskName;
-            this.tDesc = this.getTaskInfo.taskDesc;
-            this.selectedTimeStart = this.getTaskInfo.taskHourStart;
-            this.selectedTimeEnd = this.getTaskInfo.taskHourEnd + this.timeScale;
-            this.taskColor = this.getTaskInfo.taskColor;
-        }
+            this.tName = this.taskInfo.taskName;
+            this.tDesc = this.taskInfo.taskDesc;
+            this.selectedTimeStart = this.taskInfo.taskHourStart;
+            this.selectedTimeEnd = this.taskInfo.taskHourEnd + this.timeScale;
+            this.taskColor = this.taskInfo.taskColor;
+        },
+        getTaskInfo(task) {
+            if (task) {
+                return {
+                    id: task.id,
+                    taskName: task.taskName,
+                    taskDesc: task.taskDesc,
+                    taskHourStart: task.taskHourStart,
+                    taskHourEnd: task.taskHourEnd - this.timeScale,
+                    taskStatus: task.taskStatus,
+                    taskColor: task.taskColor
+                }
+            }
+            return {
+                id: null,
+                taskName: '',
+                taskDesc: '',
+                taskHourStart: this.hour,
+                taskHourEnd: this.hour,
+                taskStatus: '',
+                taskColor: '#ff7f50'
+            }
+        },
     },
 }
 </script>
@@ -213,23 +218,23 @@ export default {
             <!--- Informacija apie užduotį. Start --->
             <div class="taskContainer">
                 <!--- Užduoties pavadinimas --->
-                <h2 style="font-size: 40px">{{ getTaskInfo.taskName }}</h2>
+                <h2 style="font-size: 40px">{{ taskInfo.taskName }}</h2>
                 <!--- Užduoties pradžios - pabaigos laikas --->
-                <h1>{{ formattedTime[getTaskInfo.taskHourStart / timeScale] }} - {{
-                        formattedTime[getTaskInfo.taskHourEnd /
+                <h1>{{ formattedTime[taskInfo.taskHourStart / timeScale] }} - {{
+                        formattedTime[taskInfo.taskHourEnd /
                         timeScale + 1]
                 }}</h1>
                 <!--- Užduoties būsena --->
-                <h1>Status: {{ getTaskInfo.taskStatus }}</h1>
+                <h1>Status: {{ taskInfo.taskStatus }}</h1>
                 <!--- Užduoties aprašymas --->
-                <p>{{ getTaskInfo.taskDesc }}</p>
+                <p>{{ taskInfo.taskDesc }}</p>
             </div>
             <!--- Informacija apie užduotį. End --->
-            <template v-if="foundTask.taskStatus === 'ongoing'">
-                <button type="button" @click="$emit('finishTheTask', foundTask.id)">Finish task</button><br><br>
+            <template v-if="taskInfo.taskStatus === 'ongoing'">
+                <button type="button" @click="$emit('finishTheTask', taskInfo.id)">Finish task</button><br><br>
                 <button type="button" @click="showEditScreen()">Edit task</button><br><br>
             </template>
-            <button type="button" @click="$emit('taskDeletion', foundTask.id)">Delete task</button>
+            <button type="button" @click="$emit('taskDeletion', taskInfo.id)">Delete task</button>
         </div>
     </div>
 </template>
