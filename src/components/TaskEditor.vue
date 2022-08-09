@@ -170,7 +170,7 @@ export default {
             <!--- Užduoties pradžios pasirinkimas --->
             <label for="taskStartsAt">Task starts:</label><br>
             <select id="taskStartsAt" v-model.number="selectedTimeStart">
-                <template v-for="n in cutShiftTimeForSelect[0]">
+                <template v-bind:key='n' v-for="n in cutShiftTimeForSelect[0]">
                     <option :value="n">{{
                             formattedTime[n / timeScale]
                         }}
@@ -180,7 +180,7 @@ export default {
             <!--- Užduoties pabaigos pasirinkimas --->
             <label for="taskEndsAt">Task ends:</label><br>
             <select v-model.number="selectedTimeEnd">
-                <template v-for="n in cutShiftTimeForSelect[1]">
+                <template v-bind:key='n' v-for="n in cutShiftTimeForSelect[1]">
                     <option :value='n + timeScale'>{{
                             formattedTime[n / timeScale + 1]
                         }}
@@ -199,7 +199,8 @@ export default {
             <!--- Spalvų paletė --->
             <div v-if="showColorPalette" class="colorPalette">
                 <ul role="listbox">
-                    <li v-for="color in colorPalette" @click="taskColor = color" :style="{ background: color }"
+                    <li v-bind:key='color' v-for="color in colorPalette" @click="taskColor = color"
+                        :style="{ background: color }"
                         role="option">
                     </li>
                 </ul>

@@ -1,10 +1,10 @@
 <script setup>
-import Scheduler from './components/Scheduler.vue';
+import TheScheduler from './components/TheScheduler.vue';
 </script>
 
 <template>
     <main>
-        <Scheduler />
+        <TheScheduler />
     </main>
 </template>
 

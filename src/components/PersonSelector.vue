@@ -56,9 +56,9 @@ export default {
                         <p>F</p>
                         <p>S</p>
                         <p>Sn</p>
-                        <template v-for="(bool, index) in peopleList[this.selectedIndex].workDays">
+                        <template :key='index' v-for="index in 7">
                             <input class="regular-checkbox" type="checkbox"
-                                   v-model="peopleList[this.selectedIndex].workDays[index]"/>
+                                   v-model="peopleList[this.selectedIndex].workDays[index-1]"/>
                         </template>
                     </div>
                     <!-- Darbo dienų pasirinkimas. End -->
@@ -66,7 +66,7 @@ export default {
                     <h1>Show time</h1>
                     <label>From: </label>
                     <select v-model.number="peopleList[this.selectedIndex].shiftStart">
-                        <template v-for="n in getShiftTimeStartRange">
+                        <template :key='n' v-for="n in getShiftTimeStartRange">
                             <option :value='n * timeScale - timeScale'>{{
                                     formattedTime[n - 1]
                                 }}
@@ -75,7 +75,7 @@ export default {
                     </select>
                     <label> to: </label>
                     <select v-model.number="peopleList[this.selectedIndex].shiftEnd">
-                        <template v-for="n in 24 / timeScale">
+                        <template :key='n' v-for="n in 24 / timeScale">
                             <option v-if="n * timeScale > peopleList[this.selectedIndex].shiftStart"
                                     :value='n * timeScale'>{{
                                     formattedTime[n]
@@ -92,7 +92,7 @@ export default {
                     <template v-if="peopleList[this.selectedIndex].hasBreak">
                         <label>From: </label>
                         <select v-model.number="peopleList[this.selectedIndex].breakStart">
-                            <template v-for="n in getBreakTimeStartRange">
+                            <template :key='n' v-for="n in getBreakTimeStartRange">
                                 <option :value='n * timeScale - timeScale'>{{
                                         formattedTime[n - 1]
                                     }}
@@ -101,7 +101,7 @@ export default {
                         </select>
                         <label> to: </label>
                         <select v-model.number="peopleList[this.selectedIndex].breakEnd">
-                            <template v-for="n in 24 / timeScale">
+                            <template :key='n' v-for="n in 24 / timeScale">
                                 <option v-if="n * timeScale > peopleList[this.selectedIndex].breakStart"
                                         :value='n * timeScale'>{{
                                         formattedTime[n]

@@ -82,7 +82,7 @@ export default {
                 <div class="selectDay" v-if="showDateSel === true">
                     <h2> Select date</h2>
                     <select class="yearSelect" v-model.number="selectedYear">
-                        <template v-for="year in yearRange">
+                        <template :key="year" v-for="year in yearRange">
                             <option :value='year'>{{
                                     year
                                 }}
@@ -91,7 +91,7 @@ export default {
                     </select>
                     <!-- Mėnesio pasirinkimas -->
                     <select class="monthDaySelect" v-model="selectedMonth">
-                        <template v-for="(month, index) in month">
+                        <template :key="month" v-for="(month, index) in month">
                             <option :value='index + 1'>{{
                                     month
                                 }}
@@ -100,7 +100,7 @@ export default {
                     </select>
                     <!-- Dienos pasirinkimas -->
                     <select class="monthDaySelect" v-model="selectedDay">
-                        <template v-for="day in getMonthLength[selectedMonth - 1]">
+                        <template :key="day" v-for="day in getMonthLength[selectedMonth - 1]">
                             <option v-if="day > 9" :value='day'>{{
                                     day
                                 }}
