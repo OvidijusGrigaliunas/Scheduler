@@ -1,3 +1,2 @@
-#Scheduler
-Profesinės praktikos užduotis.
-Naudota VUE javascript framework.
+## Scheduler
+Profesinės praktikos užduotis.<br/>  Naudota VUE javascript framework.
