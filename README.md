@@ -1,3 +1,3 @@
 #Scheduler
-Profisinės praktikos užduotis.
+Profesinės praktikos užduotis.
 Naudota VUE javascript framework.
